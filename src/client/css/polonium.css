@@ -3,6 +3,7 @@
 	--primary-colour:       #b853ca;
 	--primary-colour-light: #B2EBF2;
 	--primary-colour-dark:  #0097A7;
+	--font-dark:            gray;
 }
 
 
@@ -34,7 +35,6 @@ html, body {
 
 
 
-
 .container {
 	display: grid;
 	grid-gap: 55px 0px;
@@ -50,17 +50,27 @@ form.main-input {
 
 }
 
+i.burger-menu {
+	grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row: 1;
+}
+
+i.burger-menu:hover {
+	font-weight: bold;
+}
+
 .main-head {
 	grid-column: 1;
 	grid-row:    1;
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: 1fr 9fr;
 
 }
 
 .main-head h1.brand {
-	grid-column-start: 1;
-	grid-column-end: 2;
+	grid-column-start: 2;
+	grid-column-end: 3;
 	grid-row:    1;
 }
 
@@ -73,12 +83,14 @@ form.main-input {
 
 .website input {
 	padding: 10px 6px;
-	border: 1px solid gray;
+	border: none;
+	border-bottom: 1px solid var(--primary-colour-dark);;
 }
 
 .website input:focus {
 	outline:none;
-	border: 2px solid var(--primary-colour-dark);
+	border: none;
+	border-bottom: 2px solid var(--primary-colour-dark);
 }
 
 .password {
@@ -90,12 +102,14 @@ form.main-input {
 
 .password input {
 	padding: 10px 6px;
-	border: 1px solid gray;
+	border: none;
+	border-bottom: 1px solid var(--primary-colour-dark);;
 }
 
 .password input:focus {
 	outline:none;
-	border: 2px solid var(--primary-colour-dark);
+	border: none;
+	border-bottom: 2px solid var(--primary-colour-dark);
 }
 
 .submit {
@@ -106,14 +120,19 @@ form.main-input {
 	width: 100%;
 	padding: 6px;
 	background: none;
-	border: 1px solid black;
+	border: 1px solid var(--primary-colour-dark);
 }
 
 .submit:focus {
+	border: none;
 	border: 2px solid var(--primary-colour-dark);
 	outline: none;
 }
 
 .active {
 	background: var(--primary-colour-light);
+}
+
+::placeholder {
+	color: var(--font-dark);
 }

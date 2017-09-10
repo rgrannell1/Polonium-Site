@@ -22,6 +22,7 @@ components.Header = {
 	view: vnode => {
 
 		return m('header.main-head',
+			m('i.burger-menu', m('p', '☰')),
 			m('h1.brand', 'Polonium')
 		)
 
