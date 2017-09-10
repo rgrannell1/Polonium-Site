@@ -6,8 +6,16 @@
 	--font-dark:            gray;
 }
 
+html {
+	font-family:  'Roboto', sans-serif;
+}
 
 
+
+
+/*
+	Navbar styling.
+*/
 
 .main-head {
 	padding:    0px 12px;
@@ -16,9 +24,6 @@
 	color: white;
 }
 
-* {
-	font-family:  'Roboto', sans-serif;
-}
 
 h1.brand {
 	font-size: 1.3em;
@@ -27,8 +32,6 @@ h1.brand {
 
 html, body {
     margin: 0;
-    height: 100%;
-    font-weight: lighter;
 }
 
 
@@ -74,6 +77,15 @@ i.burger-menu:hover {
 	grid-row:    1;
 }
 
+
+
+
+
+
+/*
+	site input styling.
+*/
+
 .website {
 	grid-column-start: 2;
 	grid-column-end: 7;
@@ -87,11 +99,22 @@ i.burger-menu:hover {
 	border-bottom: 1px solid var(--primary-colour-dark);;
 }
 
+.website input::placeholder {
+	color: var(--font-dark);
+}
 .website input:focus {
 	outline:none;
 	border: none;
 	border-bottom: 2px solid var(--primary-colour-dark);
 }
+
+
+
+
+
+/*
+	password input styling.
+*/
 
 .password {
 	grid-column-start: 2;
@@ -106,19 +129,34 @@ i.burger-menu:hover {
 	border-bottom: 1px solid var(--primary-colour-dark);;
 }
 
+.password input::placeholder {
+	color: var(--font-dark);
+}
+
 .password input:focus {
 	outline:none;
 	border: none;
 	border-bottom: 2px solid var(--primary-colour-dark);
 }
 
+
+
+
+
+
+/*
+	Password button styles
+*/
+
 .submit {
 	margin-top:12px;
+	width: 100%;
+	padding: 6px;
+
 	grid-column-start: 2;
 	grid-column-end: 5;
 	grid-row:    4;
-	width: 100%;
-	padding: 6px;
+
 	background: none;
 	border: 1px solid var(--primary-colour-dark);
 }
@@ -129,10 +167,6 @@ i.burger-menu:hover {
 	outline: none;
 }
 
-.active {
+.submit.active {
 	background: var(--primary-colour-light);
-}
-
-::placeholder {
-	color: var(--font-dark);
 }
