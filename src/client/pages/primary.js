@@ -95,6 +95,9 @@ components.SubmitButton = {
 
 						return utils.promise.timeout(( ) => {
 
+							console.log( document.getElementById('hidden') )
+							document.execCommand('copy', false, document.getElementById('hidden').select( ))
+
 							vnode.state.text  = 'Copied to Clipboard'
 							vnode.state.class = 'submit completed'
 							m.redraw( )
@@ -135,7 +138,8 @@ components.main = {
 					m(components.PasswordInput, { }),
 					m(components.SubmitButton,  { })
 
-				)
+				),
+				m('input', {id: 'hidden', style: 'display:none',value: 'asdasdjkjj'}, 'asdasdasdasd')
 			)
 		)
 	}
