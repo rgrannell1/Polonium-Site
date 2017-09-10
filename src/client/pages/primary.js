@@ -64,13 +64,16 @@ components.PasswordInput = {
 components.SubmitButton = {
 	view: vnode => {
 
-		var classes = ['submit']
-		var text    = vnode.state.text
+		var text = vnode.state.text
 			? vnode.state.text
 			: 'Get Site Password'
 
+		var bclass = vnode.state.class
+			? vnode.state.class
+			: 'submit'
+
 		return m('input', {
-			class: classes.join(' '),
+			class: bclass,
 			type: 'button',
 			value: text,
 			onclick: ( ) => {
@@ -92,7 +95,7 @@ components.SubmitButton = {
 
 						return utils.promise.timeout(( ) => {
 
-							vnode.state.text  = 'Completed!'
+							vnode.state.text  = 'Copied to Clipboard'
 							vnode.state.class = 'submit completed'
 							m.redraw( )
 
@@ -103,7 +106,7 @@ components.SubmitButton = {
 
 						return utils.promise.timeout(( ) => {
 
-							vnode.state.text  = 'Get Site Password.'
+							vnode.state.text  = 'Get Site Password'
 							vnode.state.class = 'submit'
 							m.redraw( )
 
