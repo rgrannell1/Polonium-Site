@@ -4,29 +4,18 @@
 
 
 const utils = {
-	css: { }
+	promise: { }
 }
 
 
 
 
+utils.promise.timeout = (fn, timeout) => {
 
-utils.css.stylise = (elem, sheet) => {
-
-	elem.type = 'type/css'
-
-	if (elem.styleSheet) {
-		elem.styleSheet.cssText = sheet
-	} else {
-		element.appendChild(document.createTextNode(sheet))
-	}
-
-	return elem
+	return new Promise((res, rej) => {
+		setTimeout(( ) => res(fn( )), timeout)
+	})
 
 }
-
-
-
-
 
 module.exports = utils

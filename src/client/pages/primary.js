@@ -13,89 +13,6 @@ const logic     = require('../core/logic')
 const skeleton  = require('css-loader!skeleton-css/css/skeleton.css')
 
 
-/*
-
-
-const actions = { }
-
-actions.onWebsiteEdit = function ( ) {
-	vnode.state.website = this.value
-}
-
-actions.onPasswordEdit = function ( ) {
-	vnode.state.password = this.value
-}
-
-actions.onButtonClick = function ( ) {
-	alert(vnode.state.password)
-}
-
-
-
-
-
-components.primary = {
-	view: vnode => {
-
-		const rows = { }
-
-		rows.website = [
-			m('label', { }, 'Website'),
-			m('input.u-full-width', {
-				type:        'text',
-				placeholder: '',
-				oninput: actions.onWebsiteEdit
-			})
-		]
-
-		rows.password = [
-			m('label', { }, 'Master Password'),
-			m('input.u-full-width', {
-				type:        'password',
-				placeholder: '',
-				oninput:     actions.onPasswordEdit
-			})
-		]
-
-		const button = m('.row',
-			m('input.button-primary', {
-				type:    'submit',
-				value:   'Get Password',
-				onclick: actions.onButtonClick
-			})
-		)
-
-		return m(components.primaryPageLayout, {
-			rows: [
-				rows.website,
-				rows.password
-			],
-			button: m('.row', button)
-		})
-
-	}
-}
-
-components.primaryPageLayout = {
-	view: vnode => {
-
-		const formRows = vnode.attrs.rows.map(row => {
-			return m( '.row', m.apply(null, ['.twelve-columns'].concat(row)) )
-		})
-
-		return m('div',
-			m('.container',
-				m('form', formRows),
-				vnode.attrs.button))
-
-
-
-	}
-}
-*/
-
-
-
 
 
 
@@ -157,26 +74,44 @@ components.SubmitButton = {
 			value: text,
 			onclick: ( ) => {
 
-				vnode.state.text  = 'Getting Password...'
-				vnode.state.class = 'submit active'
-				m.redraw( )
 
-				setTimeout(( ) => {
+				Promise.resolve( )
+					.then(( ) => {
 
-					vnode.state.text  = 'Completed!'
-					vnode.state.class = 'submit completed'
-					m.redraw( )
+						return utils.promise.timeout(( ) => {
 
-					setTimeout(( ) => {
+							vnode.state.text  = 'Getting Password...'
+							vnode.state.class = 'submit active'
+							m.redraw( )
 
-						vnode.state.text  = 'Get Site Password.'
-						vnode.state.class = 'submit'
-						m.redraw( )
+						}, 0)
 
-					}, 3000)
+					})
+					.then(( ) => {
 
+						return utils.promise.timeout(( ) => {
 
-				}, 3000)
+							vnode.state.text  = 'Completed!'
+							vnode.state.class = 'submit completed'
+							m.redraw( )
+
+						}, 3000)
+
+					})
+					.then(( ) => {
+
+						return utils.promise.timeout(( ) => {
+
+							vnode.state.text  = 'Get Site Password.'
+							vnode.state.class = 'submit'
+							m.redraw( )
+
+						}, 3000)
+
+					})
+					.catch(err => {
+						throw err
+					})
 
 			}
 		})
