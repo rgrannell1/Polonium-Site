@@ -147,12 +147,9 @@ components.SubmitButton = {
 	view: vnode => {
 
 		var classes = ['submit']
-		var text    = 'Get Site Password'
-
-		if (vnode.state.buttonState === 'active') {
-			classes.push('active')
-			text = 'Getting Password...'
-		}
+		var text    = vnode.state.text
+			? vnode.state.text
+			: 'Get Site Password'
 
 		return m('input', {
 			class: classes.join(' '),
@@ -160,12 +157,24 @@ components.SubmitButton = {
 			value: text,
 			onclick: ( ) => {
 
-				vnode.state.buttonState = 'active'
+				vnode.state.text  = 'Getting Password...'
+				vnode.state.class = 'submit active'
+				m.redraw( )
 
 				setTimeout(( ) => {
 
-					vnode.state.buttonState = null
+					vnode.state.text  = 'Completed!'
+					vnode.state.class = 'submit completed'
 					m.redraw( )
+
+					setTimeout(( ) => {
+
+						vnode.state.text  = 'Get Site Password.'
+						vnode.state.class = 'submit'
+						m.redraw( )
+
+					}, 3000)
+
 
 				}, 3000)
 
