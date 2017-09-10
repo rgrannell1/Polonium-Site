@@ -101,6 +101,16 @@ components.primaryPageLayout = {
 
 const components = { }
 
+components.Header = {
+	view: vnode => {
+
+		return m('header.main-head',
+			m('h1.brand', 'Polonium')
+		)
+
+	}
+}
+
 components.WebsiteInput = {
 	view: vnode => {
 
@@ -136,9 +146,30 @@ components.PasswordInput = {
 components.SubmitButton = {
 	view: vnode => {
 
-		return m('input.submit', {
+		var classes = ['submit']
+		var text    = 'Get Site Password'
+
+		if (vnode.state.buttonState === 'active') {
+			classes.push('active')
+			text = 'Getting Password...'
+		}
+
+		return m('input', {
+			class: classes.join(' '),
 			type: 'button',
-			value: 'Get Site Password'
+			value: text,
+			onclick: ( ) => {
+
+				vnode.state.buttonState = 'active'
+
+				setTimeout(( ) => {
+
+					vnode.state.buttonState = null
+					m.redraw( )
+
+				}, 3000)
+
+			}
 		})
 
 	}
@@ -148,9 +179,7 @@ components.main = {
 	view: vnode => {
 
 		return m('.container',
-			m('header.main-head',
-				m('h1.brand', 'Polonium')
-			),
+			m(components.Header, { }),
 			m('main',
 				m('form.main-input',
 

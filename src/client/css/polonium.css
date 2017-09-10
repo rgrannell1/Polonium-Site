@@ -99,6 +99,7 @@ form.main-input {
 }
 
 .submit {
+	margin-top:12px;
 	grid-column-start: 2;
 	grid-column-end: 5;
 	grid-row:    4;
@@ -111,4 +112,8 @@ form.main-input {
 .submit:focus {
 	border: 2px solid var(--primary-colour-dark);
 	outline: none;
+}
+
+.active {
+	background: var(--primary-colour-light);
 }
