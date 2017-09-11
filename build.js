@@ -41,6 +41,10 @@ tasks.webPackDevServer.task = ( ) => {
 	return exec.shell(constants.bin.webpack + ' --config webpack.config.js --hot')
 }
 
+
+
+
+
 tasks.copyStaticFiles = {
 	title: 'Copy webPack static files'
 }
@@ -74,6 +78,29 @@ tasks.copyStaticFiles.task = ( ) => {
 
 
 }
+
+
+
+
+
+
+tasks.createCss = {
+	title: 'Minify CSS'
+}
+
+tasks.createCss.task = ctx => {
+
+	const steps = ctx.paths.map( ({to, from}) => {
+		return exec.shell(`node_modules/minifier/index.js --output ${ to } ${ from }`)
+	})
+
+	return Promise.all(steps)
+
+}
+
+
+
+
 
 tasks.startDevServer = {
 	title: 'Start development server'
@@ -129,6 +156,27 @@ taskLists.checkDocs = ( ) => {
 
 }
 
+taskLists.startServer = ( ) => {
+
+	const taskList = new Listr([
+		tasks.createCss
+	])
+
+	const paths = [
+		{
+			to:   'dist/css/polonium.css',
+			from: 'src/client/css/polonium.css'
+		}
+	]
+
+	taskList.run({
+		paths: paths
+	}).catch(err => {
+		console.error(err)
+	})
+
+}
+
 
 
 
@@ -139,6 +187,7 @@ const docs = { }
 docs.main = `
 Usage:
 	build run start-dev-server
+	build run start-server
 	build run check-docs
 	build run chromeless
 `
@@ -155,4 +204,6 @@ if (args['check-docs']) {
 	taskLists.checkDocs( )
 } else if (args['start-dev-server']) {
 	taskLists.startDevServer( )
+} else if (args['start-server']) {
+	taskLists.startServer( )
 }
