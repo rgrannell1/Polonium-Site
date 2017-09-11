@@ -111,6 +111,21 @@ tasks.createCss.task = ctx => {
 
 
 
+tasks.minifyJs = {
+	title: 'Minify JavaScript'
+}
+
+tasks.minifyJs.task = ( ) => {
+
+	const indexPath = path.join(__dirname, 'dist/build-index.js')
+
+	return exec.shell('node_modules/uglify-js/bin/uglifyjs --compress --output ${indexPath}.min -- ${indexPath}')
+
+}
+
+
+
+
 
 tasks.startServer = {
 	title: 'Start Server'
@@ -186,6 +201,7 @@ taskLists.startServer = ( ) => {
 	const taskList = new Listr([
 		tasks.createCss,
 		tasks.createWebpackArtifacts,
+		//tasks.minifyJs,
 		tasks.startServer
 	])
 

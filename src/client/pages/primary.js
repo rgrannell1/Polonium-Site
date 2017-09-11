@@ -9,8 +9,6 @@ const m = require('mithril')
 
 const constants = require('../commons/constants')
 const utils     = require('../commons/utils')
-const logic     = require('../core/logic')
-const skeleton  = require('css-loader!skeleton-css/css/skeleton.css')
 
 
 
