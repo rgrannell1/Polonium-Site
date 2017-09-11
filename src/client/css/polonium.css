@@ -24,7 +24,7 @@ html {
 */
 
 .main-head {
-	padding:    0px 12px;
+	padding:    0px 16px;
 	box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
 	background: var(--primary-colour);
 	color: white;
@@ -155,9 +155,9 @@ i.burger-menu:hover {
 */
 
 input.submit {
-	margin-top:12px;
+	margin-top:24px;
 	width: 100%;
-	padding: 6px;
+	padding: 8px;
 
 	grid-column-start: 2;
 	grid-column-end: 5;
