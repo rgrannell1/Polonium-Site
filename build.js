@@ -82,6 +82,16 @@ tasks.copyStaticFiles.task = ( ) => {
 
 
 
+tasks.createWebpackArtifacts = {
+	title: 'Run WebPack'
+}
+
+tasks.createWebpackArtifacts.task = ( ) => {
+	return exec.shell('node_modules/webpack/bin/webpack.js')
+}
+
+
+
 
 
 tasks.createCss = {
@@ -98,6 +108,21 @@ tasks.createCss.task = ctx => {
 
 }
 
+
+
+
+
+tasks.startServer = {
+	title: 'Start Server'
+}
+
+tasks.startServer.task = ctx => {
+
+	const indexPath = path.join(__dirname, 'src/server/app/index.js')
+
+	return exec.shell(`node ${indexPath}`)
+
+}
 
 
 
@@ -159,7 +184,9 @@ taskLists.checkDocs = ( ) => {
 taskLists.startServer = ( ) => {
 
 	const taskList = new Listr([
-		tasks.createCss
+		tasks.createCss,
+		tasks.createWebpackArtifacts,
+		tasks.startServer
 	])
 
 	const paths = [
