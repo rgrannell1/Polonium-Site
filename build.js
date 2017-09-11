@@ -90,7 +90,7 @@ tasks.createCss = {
 
 tasks.createCss.task = ctx => {
 
-	const steps = ctx.paths.map( ({to, from}) => {
+	const steps = ctx.paths.map( ({from, to}) => {
 		return exec.shell(`node_modules/minifier/index.js --output ${ to } ${ from }`)
 	})
 
