@@ -46,38 +46,55 @@ tasks.webPackDevServer.task = ( ) => {
 
 
 
+tasks.clean = {
+	title: 'Clean Dist'
+}
+
+tasks.clean.task = async ( ) => {
+
+	await exec.shell('rm -rf' + constants.paths.dist)
+	await exec.shell('mkdir' + ' -p ' + constants.paths.dist)
+
+	return
+
+}
+
+
+
 
 tasks.copyStaticFiles = {
 	title: 'Copy webPack static files'
 }
 
-tasks.copyStaticFiles.task = ( ) => {
+tasks.copyStaticFiles.task = async ( ) => {
 
-	return exec.shell('mkdir' + ' -p ' + constants.paths.dist)
-		.then(( ) => {
+	await exec.shell('mkdir' + ' -p ' + constants.paths.dist)
 
-			const copyCss = [
-				'cp',
-				'-R',
-				path.join(constants.paths.client, 'css/'),
-				path.join(constants.paths.dist)
-			].join(' ')
+	const copyCss = [
+		'cp',
+		'-R',
+		path.join(constants.paths.client, 'css/'),
+		path.join(constants.paths.dist)
+	].join(' ')
 
-			return exec.shell(copyCss)
+	const copyHtml = [
+		'cp',
+		path.join(constants.paths.client, 'index.html'),
+		path.join(constants.paths.dist)
+	].join(' ')
 
-		})
-		.then(( ) => {
+	const copyFont = [
+		'cp',
+		'-R',
+		path.join(constants.paths.client, 'fonts/'),
+		path.join(constants.paths.dist)
+	].join(' ')
 
-			const copyHtml = [
-				'cp',
-				path.join(constants.paths.client, 'index.html'),
-				path.join(constants.paths.dist)
-			].join(' ')
-
-			return exec.shell(copyHtml)
-
-		})
-
+	return Promise.all([
+		exec.shell(copyCss),
+		exec.shell(copyHtml),
+		exec.shell(copyFont)
+	])
 
 }
 
@@ -217,6 +234,7 @@ taskLists.checkDocs = ( ) => {
 taskLists.startServer = ( ) => {
 
 	const taskList = new Listr([
+		tasks.copyStaticFiles,
 		tasks.createCss,
 		tasks.createWebpackArtifacts,
 		tasks.minifyJs,
