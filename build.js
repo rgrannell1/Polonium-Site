@@ -16,8 +16,8 @@ const config = require('config')
 
 
 
-
 const constants = {
+	nodeEnv: process.env.NODE_ENV,
 	paths: {
 		bin:    path.join(__dirname, './node_modules/.bin'),
 		client: path.join(__dirname, 'src/client/'),
@@ -120,10 +120,21 @@ tasks.minifyCss = {
 	title: 'Minify CSS'
 }
 
-tasks.minifyCss.task = ctx => {
+tasks.minifyCss.task = ( ) => {
 
-	const steps = ctx.paths.map( ({from, to}) => {
-		return exec.shell(`node_modules/minifier/index.js --output ${ to } ${ from }`)
+	const paths = [
+		{
+			to:   'dist/css/polonium.css',
+			from: 'src/client/css/polonium.css'
+		}
+	]
+
+	const steps = paths.map( ({from, to}) => {
+
+		return config.get('build.minifyCSS')
+			? exec.shell(`node_modules/minifier/index.js --output ${ to } ${ from }`)
+			: exec.shell(`cp ${ from } ${ to }`)
+
 	})
 
 	return Promise.all(steps)
@@ -142,7 +153,7 @@ tasks.minifyJs.task = ( ) => {
 	const indexPath = path.join(__dirname, 'dist/build-index.js')
 	const outputPath = path.join(__dirname, 'dist/build-index.min.js')
 
-	if (false) {
+	if (config.get('build.minifyJS')) {
 		return exec.shell(`node_modules/uglify-es/bin/uglifyjs ${indexPath} ${ outputPath }`)
 	} else {
 		return exec.shell('cp ' + indexPath + ' ' + outputPath)
@@ -170,7 +181,7 @@ tasks.copyManifest.task = ( ) => {
 
 
 tasks.startServer = {
-	title: 'Start Server'
+	title: 'Start Server (' + constants.nodeEnv + ')'
 }
 
 tasks.startServer.task = ctx => {
@@ -243,23 +254,14 @@ taskLists.startServer = ( ) => {
 	const taskList = new Listr([
 		tasks.clean,
 		tasks.copyStaticFiles,
-//		tasks.minifyCss,
+		tasks.minifyCss,
 		tasks.createWebpackArtifacts,
 		tasks.minifyJs,
 		tasks.copyManifest,
 		tasks.startServer
 	])
 
-	const paths = [
-		{
-			to:   'dist/css/polonium.css',
-			from: 'src/client/css/polonium.css'
-		}
-	]
-
-	taskList.run({
-		paths: paths
-	}).catch(err => {
+	taskList.run( ).catch(err => {
 		console.error(err)
 	})
 
@@ -287,13 +289,8 @@ const args = neodoc.run(docs.main, {
 
 
 
-if (args['--node-env']) {
 
-	throw 'xx'
 
-	config.get('')
-
-}
 
 if (args['check-docs']) {
 	taskLists.checkDocs( )
