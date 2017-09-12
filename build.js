@@ -36,6 +36,7 @@ constants.bin.inchJS           = path.join(constants.paths.bin, 'inchjs')
 
 
 
+
 const tasks = { }
 
 tasks.webPackDevServer = {
@@ -50,7 +51,7 @@ tasks.webPackDevServer.task = ( ) => {
 
 
 tasks.clean = {
-	title: 'Clean Dist'
+	title: 'Clean Artifact Folder'
 }
 
 tasks.clean.task = async ( ) => {
@@ -66,7 +67,7 @@ tasks.clean.task = async ( ) => {
 
 
 tasks.copyStaticFiles = {
-	title: 'Copy webPack static files'
+	title: 'Copy WebPack static files'
 }
 
 tasks.copyStaticFiles.task = async ( ) => {
@@ -117,7 +118,7 @@ tasks.createWebpackArtifacts.task = ( ) => {
 
 
 tasks.minifyCss = {
-	title: 'Minify CSS'
+	title: config.get('build.minifyCSS') ? 'Minify CSS' : 'Copy CSS'
 }
 
 tasks.minifyCss.task = ( ) => {
@@ -145,7 +146,8 @@ tasks.minifyCss.task = ( ) => {
 
 
 tasks.minifyJs = {
-	title: 'Minify JavaScript'
+	title: config.get('build.minifyJS') ? 'Minify JavaScript' : 'Copy JS'
+
 }
 
 tasks.minifyJs.task = ( ) => {
