@@ -4,10 +4,12 @@
 
 
 
+const fs     = require('fs')
 const path   = require('path')
 const Listr  = require('listr')
 const exec   = require('execa')
 const neodoc = require('neodoc')
+const minify = require('minify')
 
 
 
@@ -118,11 +120,27 @@ tasks.minifyJs = {
 tasks.minifyJs.task = ( ) => {
 
 	const indexPath = path.join(__dirname, 'dist/build-index.js')
+	const outputPath = path.join(__dirname, 'dist/build-index.min.js')
 
-	return exec.shell('node_modules/uglify-js/bin/uglifyjs --compress --output ${indexPath}.min -- ${indexPath}')
+	return exec.shell(`node_modules/uglify-es/bin/uglifyjs ${indexPath} ${ outputPath }`)
 
 }
 
+
+
+
+tasks.copyManifest = {
+	title: 'Copy Manifest'
+}
+
+tasks.copyManifest.task = ( ) => {
+
+	const from = path.join(__dirname, 'src/client/manifest.json')
+	const to = path.join(__dirname, 'dist/manifest.json')
+
+	return exec.shell(`cp ${from} ${to}`)
+
+}
 
 
 
@@ -201,7 +219,8 @@ taskLists.startServer = ( ) => {
 	const taskList = new Listr([
 		tasks.createCss,
 		tasks.createWebpackArtifacts,
-		//tasks.minifyJs,
+		tasks.minifyJs,
+		tasks.copyManifest,
 		tasks.startServer
 	])
 
