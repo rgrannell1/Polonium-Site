@@ -10,6 +10,9 @@ const Listr  = require('listr')
 const exec   = require('execa')
 const neodoc = require('neodoc')
 const minify = require('minify')
+const config = require('config')
+
+
 
 
 
@@ -52,7 +55,7 @@ tasks.clean = {
 
 tasks.clean.task = async ( ) => {
 
-	await exec.shell('rm -rf' + constants.paths.dist)
+	await exec.shell('rm -rf ' + constants.paths.dist)
 	await exec.shell('mkdir' + ' -p ' + constants.paths.dist)
 
 	return
@@ -113,11 +116,11 @@ tasks.createWebpackArtifacts.task = ( ) => {
 
 
 
-tasks.createCss = {
+tasks.minifyCss = {
 	title: 'Minify CSS'
 }
 
-tasks.createCss.task = ctx => {
+tasks.minifyCss.task = ctx => {
 
 	const steps = ctx.paths.map( ({from, to}) => {
 		return exec.shell(`node_modules/minifier/index.js --output ${ to } ${ from }`)
@@ -139,7 +142,11 @@ tasks.minifyJs.task = ( ) => {
 	const indexPath = path.join(__dirname, 'dist/build-index.js')
 	const outputPath = path.join(__dirname, 'dist/build-index.min.js')
 
-	return exec.shell(`node_modules/uglify-es/bin/uglifyjs ${indexPath} ${ outputPath }`)
+	if (false) {
+		return exec.shell(`node_modules/uglify-es/bin/uglifyjs ${indexPath} ${ outputPath }`)
+	} else {
+		return exec.shell('cp ' + indexPath + ' ' + outputPath)
+	}
 
 }
 
@@ -234,8 +241,9 @@ taskLists.checkDocs = ( ) => {
 taskLists.startServer = ( ) => {
 
 	const taskList = new Listr([
+		tasks.clean,
 		tasks.copyStaticFiles,
-		tasks.createCss,
+//		tasks.minifyCss,
 		tasks.createWebpackArtifacts,
 		tasks.minifyJs,
 		tasks.copyManifest,
@@ -279,6 +287,13 @@ const args = neodoc.run(docs.main, {
 
 
 
+if (args['--node-env']) {
+
+	throw 'xx'
+
+	config.get('')
+
+}
 
 if (args['check-docs']) {
 	taskLists.checkDocs( )

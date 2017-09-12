@@ -1,0 +1,6 @@
+{
+	"build": {
+		"minifyJS": false,
+		"minifyCSS": false
+	}
+}
