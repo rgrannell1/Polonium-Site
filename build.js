@@ -94,10 +94,17 @@ tasks.copyStaticFiles.task = async ( ) => {
 		path.join(constants.paths.dist)
 	].join(' ')
 
+	const copyManifest = [
+		'cp',
+		path.join(__dirname, 'src/client/manifest.json'),
+		path.join(__dirname, 'dist/manifest.json')
+	].join(' ')
+
 	return Promise.all([
 		exec.shell(copyCss),
 		exec.shell(copyHtml),
-		exec.shell(copyFont)
+		exec.shell(copyFont),
+		exec.shell(copyManifest)
 	])
 
 }
@@ -163,21 +170,6 @@ tasks.minifyJs.task = ( ) => {
 
 }
 
-
-
-
-tasks.copyManifest = {
-	title: 'Copy Manifest'
-}
-
-tasks.copyManifest.task = ( ) => {
-
-	const from = path.join(__dirname, 'src/client/manifest.json')
-	const to = path.join(__dirname, 'dist/manifest.json')
-
-	return exec.shell(`cp ${from} ${to}`)
-
-}
 
 
 
@@ -259,7 +251,6 @@ taskLists.startServer = ( ) => {
 		tasks.minifyCss,
 		tasks.createWebpackArtifacts,
 		tasks.minifyJs,
-		tasks.copyManifest,
 		tasks.startServer
 	])
 
