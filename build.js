@@ -19,18 +19,20 @@ const config = require('config')
 const constants = {
 	nodeEnv: process.env.NODE_ENV,
 	paths: {
-		bin:    path.join(__dirname, './node_modules/.bin'),
+		bin: path.join(__dirname, './node_modules/.bin'),
 		client: path.join(__dirname, 'src/client/'),
-		dist:   path.join(__dirname, 'dist/')
+		dist: path.join(__dirname, 'dist/')
 	},
 	bin: {
-
+		webpack: 'node_modules/webpack/bin/webpack.js',
+		minifier: 'node_modules/minifier/index.js',
+		uglifyjs: 'node_modules/uglify-es/bin/uglifyjs'
 	}
 }
 
-constants.bin.webpack          = path.join(constants.paths.bin, 'webpack')
+constants.bin.webpack = path.join(constants.paths.bin, 'webpack')
 constants.bin.webPackDevServer = path.join(constants.paths.bin, 'webpack-dev-server')
-constants.bin.inchJS           = path.join(constants.paths.bin, 'inchjs')
+constants.bin.inchJS = path.join(constants.paths.bin, 'inchjs')
 
 
 
@@ -117,7 +119,7 @@ tasks.createWebpackArtifacts = {
 }
 
 tasks.createWebpackArtifacts.task = ( ) => {
-	return exec.shell('node_modules/webpack/bin/webpack.js')
+	return exec.shell(constants.bin.webpack)
 }
 
 
@@ -140,7 +142,7 @@ tasks.minifyCss.task = ( ) => {
 	const steps = paths.map( ({from, to}) => {
 
 		return config.get('build.minifyCSS')
-			? exec.shell(`node_modules/minifier/index.js --output ${ to } ${ from }`)
+			? exec.shell(`${ constants.bin.minifier } --output ${ to } ${ from }`)
 			: exec.shell(`cp ${ from } ${ to }`)
 
 	})
@@ -163,7 +165,7 @@ tasks.minifyJs.task = ( ) => {
 	const outputPath = path.join(__dirname, 'dist/build-index.min.js')
 
 	if (config.get('build.minifyJS')) {
-		return exec.shell(`node_modules/uglify-es/bin/uglifyjs ${indexPath} ${ outputPath }`)
+		return exec.shell(`${ constants.bin.uglifyjs } ${indexPath} ${ outputPath }`)
 	} else {
 		return exec.shell('cp ' + indexPath + ' ' + outputPath)
 	}
