@@ -25,9 +25,7 @@ const cacheBustedRequest = url => {
 }
 
 const isCacheable = request => {
-
-	return false
-
+	return true
 }
 
 
@@ -42,7 +40,11 @@ listeners.populateCache = async event => {
 	const cache = await caches.open(constants.caches.offline)
 	await cache.addAll(constants.cacheUrls)
 
-	return event.waitUntil(self.skipWaiting( ))
+	try {
+		return event.waitUntil(self.skipWaiting( ))
+	} catch (err) {
+		return Promise.resolve( )
+	}
 
 }
 
@@ -75,17 +77,26 @@ listeners.serveFromCache = async event => {
 		const cachedResponse = await caches.match(event.request)
 
 		if (cachedResponse) {
+
+			console.log(`cache hit for ${event.request.method} ${event.request.url}`)
 			return cachedResponse
+
 		}
 
-		const cache = await caches.open(constants.caches.offline)
+	}
 
-		const uncachedResponse = await fetch(event.request)
+	const uncachedResponse = await fetch(event.request)
+
+	if (isCacheable(event.request)) {
+
+		console.log(`cache miss for ${event.request.method} ${event.request.url}`)
+
+		const cache = await caches.open(constants.caches.offline)
 		await cache.put(event.request, uncachedResponse.clone( ))
 
-		return uncachedResponse
-
 	}
+
+	return uncachedResponse
 
 }
 
