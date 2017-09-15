@@ -2,8 +2,6 @@
 
 'use strict'
 
-
-
 const fs     = require('fs')
 const path   = require('path')
 const Listr  = require('listr')
@@ -74,7 +72,8 @@ tasks.copyStaticFiles = {
 
 tasks.copyStaticFiles.task = async ( ) => {
 
-	await exec.shell('mkdir' + ' -p ' + constants.paths.dist)
+	await exec.shell('mkdir' + ' -p ' + constants.paths.dist + '/css')
+	await exec.shell('mkdir' + ' -p ' + constants.paths.dist + '/fonts')
 
 	const copyCss = [
 		'cp',
@@ -83,31 +82,44 @@ tasks.copyStaticFiles.task = async ( ) => {
 		path.join(constants.paths.dist)
 	].join(' ')
 
-	const copyHtml = [
-		'cp',
-		path.join(constants.paths.client, 'index.html'),
-		path.join(constants.paths.dist)
-	].join(' ')
+	const pairs = [
+		{
+			from:  path.join(constants.paths.client, 'fonts/NotoSans.ttf'),
+			to: path.join(constants.paths.dist, 'fonts/NotoSans.ttf')
+		},
+		{
+			from:  path.join(constants.paths.client, '/core/asset-cache.js'),
+			to: path.join(constants.paths.dist, 'asset-cache.js')
+		},
+		{
+			from: path.join(constants.paths.client, 'index.html'),
+			to: path.join(constants.paths.dist, 'index.html')
+		},
+		{
+			from: path.join(constants.paths.client, '/manifest.json'),
+			to: path.join(constants.paths.dist, '/manifest.json')
+		}
+	]
 
-	const copyFont = [
-		'cp',
-		'-R',
-		path.join(constants.paths.client, 'fonts/'),
-		path.join(constants.paths.dist)
-	].join(' ')
+	const copyPromises = pairs.map(({from, to}) => {
 
-	const copyManifest = [
-		'cp',
-		path.join(__dirname, 'src/client/manifest.json'),
-		path.join(__dirname, 'dist/manifest.json')
-	].join(' ')
+		return new Promise((res, rej) => {
+			fs.copyFile(from, to, err => {
+				err ? rej(err) : res( )
+			})
+		})
 
-	return Promise.all([
-		exec.shell(copyCss),
-		exec.shell(copyHtml),
-		exec.shell(copyFont),
-		exec.shell(copyManifest)
-	])
+	})
+
+	return Promise.all(copyPromises)
+
+//	return Promise.all([
+//		exec.shell(copyCss),
+//		exec.shell(copyHtml),
+//		exec.shell(copyFont),
+//		exec.shell(copyManifest),
+//		copyServiceWorker
+//	])
 
 }
 
