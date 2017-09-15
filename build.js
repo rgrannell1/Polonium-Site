@@ -89,7 +89,7 @@ tasks.copyStaticFiles.task = async ( ) => {
 		},
 		{
 			from:  path.join(constants.paths.client, '/core/asset-cache.js'),
-			to: path.join(constants.paths.dist, 'asset-cache.js')
+			to: path.join(constants.paths.dist, 'build-service-worker.js')
 		},
 		{
 			from: path.join(constants.paths.client, 'index.html'),
@@ -127,7 +127,12 @@ tasks.createWebpackArtifacts = {
 }
 
 tasks.createWebpackArtifacts.task = ( ) => {
-	return exec.shell(constants.bin.webpack)
+
+	return Promise.all([
+		exec.shell(`${constants.bin.webpack} --config webpack.config.js`),
+		exec.shell(`${constants.bin.webpack} --config webpack-service-worker.config.js`)
+	])
+
 }
 
 
@@ -175,8 +180,8 @@ tasks.minifyJs.task = ( ) => {
 			to: path.join(__dirname, 'dist/build-index.min.js')
 		},
 		{
-			from: path.join(constants.paths.dist, '/asset-cache.js'),
-			to: path.join(constants.paths.dist, '/service-worker.min.js')
+			from: path.join(constants.paths.dist, '/build-service-worker.js'),
+			to: path.join(constants.paths.dist, '/build-service-worker.min.js')
 		},
 	]
 
