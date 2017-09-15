@@ -10,7 +10,43 @@
 		<link rel="stylesheet" href="css/polonium.css">
 
 	</head>
+	<script type="text/javascript">
+
+		const encoder = new TextEncoder('utf-8')
+
+		window.crypto.subtle.importKey('raw', encoder.encode('password'), 'PBKDF2', false, ['deriveKey'])
+			.then(key => {
+
+				const algorithmOpts = {
+					name: 'AES-CTR',
+					length: 20
+				}
+
+//				return window.crypto.subtle.deriveKey('SHA-1', key, , true, ['encrypt', 'decrypt']
+//				)
+
+			})
+			.then(derivedKey => {
+
+				const keyData = new Uint8Array(window.crypto.subtle.exportKey('raw', derivedKey))
+				console.log(keyData)
+
+
+			})
+
+	</script>
 	<body id='app'></body>
+	<script type="text/javascript">
+
+		if ('serviceWorker' in navigator) {
+
+			navigator.serviceWorker.register('/service-worker.min.js').then(( ) => {
+				console.log('service worker loaded.')
+			})
+
+		}
+
+	</script>
 	<script src="build-index.min.js"></script>
 
 </html>
