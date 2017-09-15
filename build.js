@@ -98,6 +98,10 @@ tasks.copyStaticFiles.task = async ( ) => {
 		{
 			from: path.join(constants.paths.client, '/manifest.json'),
 			to: path.join(constants.paths.dist, '/manifest.json')
+		},
+		{
+			from: path.join(constants.paths.client, '/favicon.ico'),
+			to: path.join(constants.paths.dist, '/favicon.ico')
 		}
 	]
 
@@ -112,14 +116,6 @@ tasks.copyStaticFiles.task = async ( ) => {
 	})
 
 	return Promise.all(copyPromises)
-
-//	return Promise.all([
-//		exec.shell(copyCss),
-//		exec.shell(copyHtml),
-//		exec.shell(copyFont),
-//		exec.shell(copyManifest),
-//		copyServiceWorker
-//	])
 
 }
 
@@ -173,14 +169,28 @@ tasks.minifyJs = {
 
 tasks.minifyJs.task = ( ) => {
 
-	const indexPath = path.join(__dirname, 'dist/build-index.js')
-	const outputPath = path.join(__dirname, 'dist/build-index.min.js')
+	const paths = [
+		{
+			from: path.join(__dirname, 'dist/build-index.js'),
+			to: path.join(__dirname, 'dist/build-index.min.js')
+		},
+		{
+			from: path.join(constants.paths.dist, '/asset-cache.js'),
+			to: path.join(constants.paths.dist, '/service-worker.min.js')
+		},
+	]
 
-	if (config.get('build.minifyJS')) {
-		return exec.shell(`${ constants.bin.uglifyjs } ${indexPath} ${ outputPath }`)
-	} else {
-		return exec.shell('cp ' + indexPath + ' ' + outputPath)
-	}
+	const minifyPromises = paths.map(({from, to}) => {
+
+		if (config.get('build.minifyJS')) {
+			return exec.shell(`${ constants.bin.uglifyjs } ${from} ${ to }`)
+		} else {
+			return exec.shell('cp ' + from + ' ' + to)
+		}
+
+	})
+
+	return Promise.all(minifyPromises)
 
 }
 
