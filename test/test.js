@@ -14,9 +14,9 @@ const tests = {
 tests.routes.home.hasExpectedIds = ( ) => {
 
 	const expectedIds = [
-		'website',
-		'password',
-		'icon-brand'
+		'icon-brand',
+		'website-input-container',
+		'password-input-container'
 	]
 
 	expectedIds.forEach(id => {
