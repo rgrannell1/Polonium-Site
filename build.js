@@ -202,6 +202,17 @@ tasks.minifyJs.task = ( ) => {
 
 
 
+tasks.startKarma = {
+	title: 'Start Karma Tests'
+}
+
+tasks.startKarma.task = ( ) => {
+	return exec.shell("karma start --single-run --browsers ChromeHeadless karma.conf.js")
+}
+
+
+
+
 
 tasks.startServer = {
 	title: 'Start Server (' + constants.nodeEnv + ')'
@@ -289,6 +300,22 @@ taskLists.startServer = ( ) => {
 
 }
 
+taskLists.chromeless = ( ) => {
+
+	const taskList = new Listr([
+		tasks.clean,
+		tasks.copyStaticFiles,
+		tasks.minifyCss,
+		tasks.createWebpackArtifacts,
+		tasks.minifyJs,
+		tasks.startKarma
+	])
+
+	taskList.run( ).catch(err => {
+		console.error(err)
+	})
+
+}
 
 
 
@@ -320,4 +347,6 @@ if (args['check-docs']) {
 	taskLists.startDevServer( )
 } else if (args['start-server']) {
 	taskLists.startServer( )
+} else if (args['chromeless']) {
+	taskLists.chromeless( )
 }
