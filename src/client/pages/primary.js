@@ -21,7 +21,9 @@ components.Header = {
 
 		return m('header.main-head',
 			m('i.burger-menu', m('p', '☰')),
-			m('h1.brand', 'Polonium')
+			m('a', {
+				href: '/#!/'
+			}, m('h1.brand', {id: 'icon-brand'}, 'Polonium'))
 		)
 
 	}
@@ -30,7 +32,7 @@ components.Header = {
 components.WebsiteInput = {
 	view: vnode => {
 
-		return m('.website',
+		return m('.website', {id: 'website-input-container'},
 			m('input.website', {
 				placeholder: 'Site',
 				required: true,
@@ -46,7 +48,7 @@ components.WebsiteInput = {
 components.PasswordInput = {
 	view: vnode => {
 
-		return m('.password',
+		return m('.password', {id: 'password-input-container'},
 			m('input.password', {
 				placeholder: 'Master Password',
 				type: 'password',
@@ -136,8 +138,7 @@ components.main = {
 					m(components.PasswordInput, { }),
 					m(components.SubmitButton,  { })
 
-				),
-				m('input', {id: 'hidden', style: 'display:none',value: 'asdasdjkjj'}, 'asdasdasdasd')
+				)
 			)
 		)
 	}

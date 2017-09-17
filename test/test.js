@@ -5,11 +5,18 @@
 
 
 
-describe('/ route', ( ) => {
+const tests = {
+	routes: {
+		home: { }
+	}
+}
+
+tests.routes.home.hasExpectedIds = ( ) => {
 
 	const expectedIds = [
 		'website',
-		'password'
+		'password',
+		'icon-brand'
 	]
 
 	expectedIds.forEach(id => {
@@ -23,5 +30,34 @@ describe('/ route', ( ) => {
 
 		})
 	})
+
+}
+
+tests.routes.home.iconLeadsToHome = ( ) => {
+
+	it('has a logo icon that leads to the home-page', done => {
+
+		const brandLink = document.querySelector('a h1#icon-brand')
+
+		if (brandLink === null) {
+			done(new Error(`link not found`))
+		}
+
+		done( )
+
+
+	})
+
+}
+
+
+
+
+
+
+describe('/ route', ( ) => {
+
+	tests.routes.home.hasExpectedIds( )
+	tests.routes.home.iconLeadsToHome( )
 
 })
