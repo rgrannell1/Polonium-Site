@@ -19,6 +19,8 @@ const startTasks = args => {
 		taskLists.startServer( )
 	} else if (args['test']) {
 		taskLists.startTests( )
+	} else if (args['lint']) {
+		taskLists.lintJS( )
 	}
 
 }
@@ -33,6 +35,7 @@ docs.main = `
 Usage:
 	build run
 	build test
+	build lint
 	build start-dev-server
 	build check-docs
 

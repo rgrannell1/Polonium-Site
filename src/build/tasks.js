@@ -18,6 +18,7 @@ const constants = {
 	paths: {
 		bin: path.join(__dirname, '../../node_modules/.bin'),
 		client: path.join(__dirname, '../../src/client/'),
+		tests:  path.join(__dirname, '../../test/'),
 		dist: path.join(__dirname, '../../dist/')
 	},
 	bin: {
@@ -212,6 +213,17 @@ tasks.startKarma.task = ( ) => {
 
 
 
+tasks.startJSTests = {
+	title: 'mkdasjkdasjkasdjkasd'
+}
+
+tasks.startJSTests.task = ( ) => {
+	return exec.shell("node /home/ryan/Code/polonium-server/test/cases/test.js")
+}
+
+
+
+
 
 tasks.startServer = {
 	title: 'Start Server (' + constants.nodeEnv + ')'
@@ -224,6 +236,19 @@ tasks.startServer.task = ctx => {
 	return exec.shell(`node ${indexPath}`)
 
 }
+
+
+
+
+
+tasks.lintJS = {
+	title: 'Lint JS'
+}
+
+tasks.lintJS.task = ctx => {
+	return exec.shell(`node_modules/eslint/bin/eslint.js ${constants.paths.client}`)
+}
+
 
 
 
@@ -307,7 +332,8 @@ taskLists.startTests = ( ) => {
 		tasks.minifyCss,
 		tasks.createWebpackArtifacts,
 		tasks.minifyJs,
-		tasks.startKarma
+//		tasks.startKarma
+		tasks.startJSTests
 	])
 
 	taskList.run( ).catch(err => {
@@ -316,7 +342,17 @@ taskLists.startTests = ( ) => {
 
 }
 
+taskLists.lintJS = ( ) => {
 
+	const taskList = new Listr([
+		tasks.lintJS
+	])
+
+	taskList.run( ).catch(err => {
+		console.error(err)
+	})
+
+}
 
 
 
