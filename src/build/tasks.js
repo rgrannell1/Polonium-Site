@@ -16,9 +16,9 @@ const config = require('config')
 const constants = {
 	nodeEnv: process.env.NODE_ENV,
 	paths: {
-		bin: path.join(__dirname, './node_modules/.bin'),
-		client: path.join(__dirname, 'src/client/'),
-		dist: path.join(__dirname, 'dist/')
+		bin: path.join(__dirname, '../../node_modules/.bin'),
+		client: path.join(__dirname, '../../src/client/'),
+		dist: path.join(__dirname, '../../dist/')
 	},
 	bin: {
 		webpack: 'node_modules/webpack/bin/webpack.js',
@@ -175,8 +175,8 @@ tasks.minifyJs.task = ( ) => {
 
 	const paths = [
 		{
-			from: path.join(__dirname, 'dist/build-index.js'),
-			to: path.join(__dirname, 'dist/build-index.min.js')
+			from: path.join(constants.paths.dist, 'build-index.js'),
+			to: path.join(constants.paths.dist, 'build-index.min.js')
 		},
 		{
 			from: path.join(constants.paths.dist, '/build-service-worker.js'),
