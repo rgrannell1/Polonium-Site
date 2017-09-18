@@ -81,6 +81,13 @@ taskLists.lintJS = ( ) => {
 
 }
 
+/**
+ * Create a docker image containing the Polonium site.
+ *
+ * @return {Object} a tasklist.
+ *
+ */
+
 taskLists.deployDocker = ( ) => {
 
 	const taskList = new Listr([

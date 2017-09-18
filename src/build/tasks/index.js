@@ -16,11 +16,11 @@ const tmp = require('tmp')
 const constants = {
 	nodeEnv: process.env.NODE_ENV,
 	paths: {
-		bin: path.join(__dirname, '../../node_modules/.bin'),
-		client: path.join(__dirname, '../../src/client/'),
-		server: path.join(__dirname, '../../src/server/'),
-		tests:  path.join(__dirname, '../../test/'),
-		dist: path.join(__dirname, '../../dist/')
+		bin: path.join(__dirname, '../../../node_modules/.bin'),
+		client: path.join(__dirname, '../../../src/client/'),
+		server: path.join(__dirname, '../../../src/server/'),
+		tests:  path.join(__dirname, '../../../test/'),
+		dist: path.join(__dirname, '../../../dist/')
 	},
 	bin: {
 		webpack: 'node_modules/webpack/bin/webpack.js',
@@ -48,7 +48,7 @@ tasks.webPackDevServer = {
 }
 
 tasks.webPackDevServer.task = ( ) => {
-	return exec.shell(constants.bin.webpack + ' --config webpack.config.js --hot')
+	return exec.shell(constants.bin.webpack + ' --config webpack/webpack.config.js --hot')
 }
 
 
@@ -147,8 +147,8 @@ tasks.createWebpackArtifacts = {
 tasks.createWebpackArtifacts.task = ( ) => {
 
 	return Promise.all([
-		exec.shell(`${constants.bin.webpack} --config webpack.config.js`),
-		exec.shell(`${constants.bin.webpack} --config webpack-service-worker.config.js`)
+		exec.shell(`${constants.bin.webpack} --config webpack/webpack.config.js`),
+		exec.shell(`${constants.bin.webpack} --config webpack/webpack-service-worker.config.js`)
 	])
 
 }

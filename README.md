@@ -1,4 +1,4 @@
 
 # Polonium Site
 
-<img src="./polonium.png">
+<img src="./readme/polonium.png">

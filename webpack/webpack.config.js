@@ -23,10 +23,13 @@ const config = {
 	resolve: {
 		extensions: ['.js']
 	},
+	plugins: [
+
+	],
 	devServer: {
 		contentBase: path.join(__dirname, 'dist'),
-		inline:      true,
-		hot:         true
+		inline: true,
+		hot: true
 	}
 }
 
