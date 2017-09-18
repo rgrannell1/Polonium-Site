@@ -99,6 +99,28 @@ taskLists.deployDocker = ( ) => {
 
 }
 
+taskLists.startDocker = ( ) => {
+
+	const taskList = new Listr([
+		utils.asTask('Build Docker Image', taskLists.deployDocker),
+		tasks.startDockerImage
+	])
+
+	return taskList
+
+}
+
+taskLists.updateServer = ( ) => {
+
+	const taskList = new Listr([
+		utils.asTask('Build Docker Image', taskLists.deployDocker),
+		tasks.createVM
+	])
+
+	return taskList
+
+}
+
 
 
 module.exports = taskLists

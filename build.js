@@ -11,24 +11,35 @@ const taskLists = require('./src/build/task-lists')
 
 const startTasks = args => {
 
-	var task
-
-	if (args['check-docs']) {
-		task = taskLists.checkDocs( )
-	} else if (args['start-dev-server']) {
-		task = taskLists.startDevServer( )
-	} else if (args['run']) {
-		task = taskLists.startServer( )
-	} else if (args['test']) {
-		task = taskLists.startTests( )
-	} else if (args['lint']) {
-		task = taskLists.lintJS( )
-	} else if (args['deploy']) {
-		task = taskLists.deployDocker( )
+	const opts = {
+		'check-docs': 'checkDocs',
+		'deploy': 'deployDocker',
+		'lint': 'lintJS',
+		'run': 'startServer',
+		'start-dev-server': 'startDevServer',
+		'start-docker-server': 'startDocker',
+		'test': 'startTests'
 	}
 
-	task.run( ).catch(err => {
-		console.error(err)
+	var matched = false
+
+	Object.keys(opts).forEach(arg => {
+
+		if (args.hasOwnProperty(arg) && !matched) {
+
+			matched = true
+			const taskList = taskLists[opts[arg]]
+
+			if (!taskList) {
+				throw new Error('missing taskList')
+			}
+
+			taskList( ).run( ).catch(err => {
+				console.error(err)
+			})
+
+		}
+
 	})
 
 }
@@ -41,12 +52,13 @@ const docs = { }
 
 docs.main = `
 Usage:
-	build run
-	build test
-	build lint
-	build start-dev-server
 	build check-docs
 	build deploy
+	build lint
+	build run
+	build start-dev-server
+	build start-docker-server
+	build test
 
 Description:
 	Run Polonium tests, start the server, and perform other build tasks.

@@ -1,5 +1,6 @@
 FROM ubuntu
 LABEL maintainer="Ryan Grannell <r.grannell2@gmail.com>"
+EXPOSE 8080
 
 RUN mkdir -p /usr/local/app/src
 WORKDIR /usr/local/app

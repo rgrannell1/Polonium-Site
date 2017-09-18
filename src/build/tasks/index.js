@@ -298,11 +298,21 @@ tasks.checkDocs.task = ( ) => {
 
 
 tasks.buildDockerImage = {
-	title: 'Build Docker Image'
+	title: 'Build Server Docker Image'
 }
 
 tasks.buildDockerImage.task = ctx => {
 	return exec.shell(`docker build -t ${ constants.images.dockerSite } -f src/build/build.dockerfile .`)
+}
+
+
+
+tasks.startDockerImage = {
+	title: 'Start Server Docker Image'
+}
+
+tasks.startDockerImage.task = ( ) => {
+	return exec.shell('docker run --publish 8080:8080 -t polonium_site:latest')
 }
 
 
