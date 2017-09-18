@@ -3,7 +3,7 @@
 'use strict'
 
 const neodoc = require('neodoc')
-const taskLists = require('./src/build/tasks')
+const taskLists = require('./src/build/task-lists')
 
 
 
@@ -11,17 +11,25 @@ const taskLists = require('./src/build/tasks')
 
 const startTasks = args => {
 
+	var task
+
 	if (args['check-docs']) {
-		taskLists.checkDocs( )
+		task = taskLists.checkDocs( )
 	} else if (args['start-dev-server']) {
-		taskLists.startDevServer( )
+		task = taskLists.startDevServer( )
 	} else if (args['run']) {
-		taskLists.startServer( )
+		task = taskLists.startServer( )
 	} else if (args['test']) {
-		taskLists.startTests( )
+		task = taskLists.startTests( )
 	} else if (args['lint']) {
-		taskLists.lintJS( )
+		task = taskLists.lintJS( )
+	} else if (args['deploy']) {
+		task = taskLists.deployDocker( )
 	}
+
+	task.run( ).catch(err => {
+		console.error(err)
+	})
 
 }
 
@@ -38,6 +46,7 @@ Usage:
 	build lint
 	build start-dev-server
 	build check-docs
+	build deploy
 
 Description:
 	Run Polonium tests, start the server, and perform other build tasks.

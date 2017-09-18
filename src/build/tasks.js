@@ -2,13 +2,13 @@
 
 'use strict'
 
-const fs     = require('fs')
-const path   = require('path')
-const Listr  = require('listr')
-const exec   = require('execa')
+const fs = require('fs')
+const path = require('path')
+const Listr = require('listr')
+const exec = require('execa')
 const minify = require('minify')
 const config = require('config')
-
+const tmp = require('tmp')
 
 
 
@@ -18,6 +18,7 @@ const constants = {
 	paths: {
 		bin: path.join(__dirname, '../../node_modules/.bin'),
 		client: path.join(__dirname, '../../src/client/'),
+		server: path.join(__dirname, '../../src/server/'),
 		tests:  path.join(__dirname, '../../test/'),
 		dist: path.join(__dirname, '../../dist/')
 	},
@@ -25,6 +26,9 @@ const constants = {
 		webpack: 'node_modules/webpack/bin/webpack.js',
 		minifier: 'node_modules/minifier/index.js',
 		uglifyjs: 'node_modules/uglify-es/bin/uglifyjs'
+	},
+	images: {
+		dockerSite: 'polonium_site'
 	}
 }
 
@@ -72,17 +76,23 @@ tasks.copyStaticFiles = {
 
 tasks.copyStaticFiles.task = async ( ) => {
 
-	await exec.shell('mkdir' + ' -p ' + constants.paths.dist + '/css')
-	await exec.shell('mkdir' + ' -p ' + constants.paths.dist + '/fonts')
+	await exec.shell('mkdir -p ' + constants.paths.dist + '/css')
+	await exec.shell('mkdir -p ' + constants.paths.dist + '/fonts')
 
-	const copyCss = [
-		'cp',
-		'-R',
-		path.join(constants.paths.client, 'css/'),
-		path.join(constants.paths.dist)
-	].join(' ')
 
-	const pairs = [
+
+	const folders = [
+		{
+			from: path.join(constants.paths.client, 'css/'),
+			into: constants.paths.dist
+		},
+		{
+			from: constants.paths.server,
+			into: constants.paths.dist
+		}
+	]
+
+	const files = [
 		{
 			from:  path.join(constants.paths.client, 'fonts/NotoSans.ttf'),
 			to: path.join(constants.paths.dist, 'fonts/NotoSans.ttf')
@@ -102,10 +112,18 @@ tasks.copyStaticFiles.task = async ( ) => {
 		{
 			from: path.join(constants.paths.client, '/favicon.ico'),
 			to: path.join(constants.paths.dist, '/favicon.ico')
+		},
+		{
+			from: path.join('package.json'),
+			to: path.join(constants.paths.dist, '/package.json')
 		}
 	]
 
-	const copyPromises = pairs.map(({from, to}) => {
+	const copyFolderPromises = folders.map(({from, into}) => {
+		return exec.shell(`cp -R ${from} ${into}`)
+	})
+
+	const copyFilePromises = files.map(({from, to}) => {
 
 		return new Promise((res, rej) => {
 			fs.copyFile(from, to, err => {
@@ -115,7 +133,7 @@ tasks.copyStaticFiles.task = async ( ) => {
 
 	})
 
-	return Promise.all(copyPromises)
+	return Promise.all(copyFilePromises.concat(copyFolderPromises))
 
 }
 
@@ -231,7 +249,7 @@ tasks.startServer = {
 
 tasks.startServer.task = ctx => {
 
-	const indexPath = path.join(__dirname, 'src/server/app/index.js')
+	const indexPath = path.join(constants.paths.server, 'app/index.js')
 
 	return exec.shell(`node ${indexPath}`)
 
@@ -279,82 +297,16 @@ tasks.checkDocs.task = ( ) => {
 
 
 
-const taskLists = { }
-
-taskLists.startDevServer = ( ) => {
-
-	const taskList = new Listr([
-		tasks.copyStaticFiles,
-		tasks.webPackDevServer,
-		tasks.startDevServer
-	])
-
-	taskList.run( ).catch(err => {
-		console.error(err)
-	})
-
+tasks.buildDockerImage = {
+	title: 'Build Docker Image'
 }
 
-taskLists.checkDocs = ( ) => {
-
-	const taskList = new Listr([
-		tasks.checkDocs
-	])
-
-	taskList.run( ).catch(err => {
-		console.error(err)
-	})
-
-}
-
-taskLists.startServer = ( ) => {
-
-	const taskList = new Listr([
-		tasks.clean,
-		tasks.copyStaticFiles,
-		tasks.minifyCss,
-		tasks.createWebpackArtifacts,
-		tasks.minifyJs,
-		tasks.startServer
-	])
-
-	taskList.run( ).catch(err => {
-		console.error(err)
-	})
-
-}
-
-taskLists.startTests = ( ) => {
-
-	const taskList = new Listr([
-		tasks.clean,
-		tasks.copyStaticFiles,
-		tasks.minifyCss,
-		tasks.createWebpackArtifacts,
-		tasks.minifyJs,
-//		tasks.startKarma
-		tasks.startJSTests
-	])
-
-	taskList.run( ).catch(err => {
-		console.error(err)
-	})
-
-}
-
-taskLists.lintJS = ( ) => {
-
-	const taskList = new Listr([
-		tasks.lintJS
-	])
-
-	taskList.run( ).catch(err => {
-		console.error(err)
-	})
-
+tasks.buildDockerImage.task = ctx => {
+	return exec.shell(`docker build -t ${ constants.images.dockerSite } -f src/build/build.dockerfile .`)
 }
 
 
 
 
-module.exports = taskLists
+
+module.exports = tasks
