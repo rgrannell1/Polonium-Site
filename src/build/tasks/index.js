@@ -319,4 +319,7 @@ tasks.startDockerImage.task = ( ) => {
 
 
 
+const out = tasks
+tasks.vm = require('./vm')
+
 module.exports = tasks

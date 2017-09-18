@@ -18,7 +18,8 @@ const startTasks = args => {
 		'run': 'startServer',
 		'start-dev-server': 'startDevServer',
 		'start-docker-server': 'startDocker',
-		'test': 'startTests'
+		'test': 'startTests',
+		'push': 'updateServer'
 	}
 
 	var matched = false
@@ -59,6 +60,7 @@ Usage:
 	build start-dev-server
 	build start-docker-server
 	build test
+	build push
 
 Description:
 	Run Polonium tests, start the server, and perform other build tasks.

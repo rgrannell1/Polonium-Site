@@ -114,7 +114,7 @@ taskLists.updateServer = ( ) => {
 
 	const taskList = new Listr([
 		utils.asTask('Build Docker Image', taskLists.deployDocker),
-		tasks.createVM
+		tasks.vm.createVM
 	])
 
 	return taskList
