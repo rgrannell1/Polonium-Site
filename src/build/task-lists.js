@@ -123,4 +123,17 @@ taskLists.updateServer = ( ) => {
 
 
 
+
+
+taskLists.newSSHKey = ( ) => {
+
+	const taskList = new Listr([
+		tasks.security.createSSHCert
+	])
+
+	return taskList
+
+}
+
+
 module.exports = taskLists

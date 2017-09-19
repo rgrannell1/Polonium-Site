@@ -20,7 +20,8 @@ module.exports = {
 		minifyCSS: false
 	},
 	digitalOcean: {
-		token: process.env.DIGITAL_OCEAN_TOKEN
+		token: process.env.DIGITAL_OCEAN_TOKEN,
+		sshKeyPath: 'config/credentials/dev_key'
 	},
 	vm: {
 		name: 'dev-polonium-site',

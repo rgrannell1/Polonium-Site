@@ -61,10 +61,24 @@ Usage:
 	build start-docker-server
 	build test
 	build push
+	build new [<command>...]
 
 Description:
 	Run Polonium tests, start the server, and perform other build tasks.
 `
+
+docs.new = `
+Usage:
+	build new ssh-key
+	build new ssl-certs
+
+Description:
+	Create new Polonium certificates.
+`
+
+
+
+
 
 const args = neodoc.run(docs.main, {
 	optionsFirst: true,
@@ -75,4 +89,29 @@ const args = neodoc.run(docs.main, {
 
 
 
-startTasks(args)
+if (args.new) {
+
+	const newArgs = neodoc.run(docs.new, {
+		optionsFirst: true,
+		startOptions: true
+	})
+
+	if (newArgs['ssh-key']) {
+
+		taskLists.newSSHKey( ).run( ).catch(err => console.error(err))
+
+	} else if (newArgs['ssl-key']) {
+
+
+
+	} else {
+		throw new Error('asdsad')
+	}
+
+} else {
+	startTasks(args)
+}
+
+
+
+
