@@ -6,13 +6,15 @@
 
 const request = require('request-promise')
 const config = require('config')
+const digitalOcean = require('../commons/digital-ocean')
+
 
 
 
 
 const constants = {
 	urls: {
-		digitalOceanUrl: 'https://api.digitalocean.com/v2/droplets'
+		digitalOceanUrl: 'https://api.digitalocean.com/v2'
 	}
 }
 
@@ -29,28 +31,13 @@ tasks.createVM = {
 
 tasks.createVM.task = ( ) => {
 
-	const vmConfig = {
+	digitalOcean.setVM({
 		name: config.get('vm.name'),
 		region: config.get('vm.region'),
 		image: config.get('vm.image'),
-		size: config.get('vm.size')
-	}
-
-	const reqOpts = {
-		uri:  constants.urls.digitalOceanUrl,
-		headers: {
-			Authorization: `Bearer ${ config.get('digitalOcean.token') }`
-		},
-		json: vmConfig
-	}
-
-	request.post(reqOpts)
-		.then(res => {
-			console.log('deployed!')
-		})
-		.catch(err => {
-			console.error(err)
-		})
+		size: config.get('vm.size'),
+		userData: config.get('vm.userData')
+	})
 
 }
 

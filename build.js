@@ -54,7 +54,6 @@ const docs = { }
 docs.main = `
 Usage:
 	build check-docs
-	build deploy
 	build lint
 	build run
 	build start-dev-server
@@ -62,6 +61,7 @@ Usage:
 	build test
 	build push
 	build new [<command>...]
+	build deploy [<command>...]
 
 Description:
 	Run Polonium tests, start the server, and perform other build tasks.
@@ -88,6 +88,19 @@ const args = neodoc.run(docs.main, {
 
 
 
+const tasks = require('./src/build/tasks')
+
+tasks.vm.createVM.task( )
+
+
+
+
+/*
+
+throw 'xxx'
+
+
+
 
 if (args.new) {
 
@@ -111,7 +124,7 @@ if (args.new) {
 } else {
 	startTasks(args)
 }
-
+*/
 
 
 

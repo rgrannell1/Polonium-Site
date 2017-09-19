@@ -21,6 +21,7 @@ module.exports = {
 	},
 	digitalOcean: {
 		token: process.env.DIGITAL_OCEAN_TOKEN,
+		sshKeyName: 'polonium_ssh_key',
 		sshKeyPath: 'config/credentials/dev_key'
 	},
 	vm: {

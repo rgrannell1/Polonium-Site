@@ -320,29 +320,9 @@ tasks.startDockerImage.task = ( ) => {
 
 
 const out = tasks
+
 tasks.vm = require('./vm')
-tasks.security = { }
-
-
-
-
-
-
-tasks.security.createSSHCert = {
-	title: 'Create SSH Certificates'
-}
-
-tasks.security.createSSHCert.task = async ( ) => {
-
-	await Promise.all([
-		exec.shell(`rm "${ config.get('digitalOcean.sshKeyPath') }" || true`),
-		exec.shell(`rm ${ config.get('digitalOcean.sshKeyPath') }.pub || true`)
-	])
-
-	return exec.shell(`ssh-keygen -t rsa -b 4096 -P '' -f ${ config.get('digitalOcean.sshKeyPath') }`)
-}
-
-
+tasks.security = require('./security')
 
 
 
