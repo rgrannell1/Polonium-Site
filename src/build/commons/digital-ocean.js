@@ -139,7 +139,8 @@ api.setVM = async conf => {
 				size: conf.size,
 				ssh_keys: [
 					sshKey.fingerprint
-				]
+				],
+				user_data: conf.userData
 			}
 		}
 

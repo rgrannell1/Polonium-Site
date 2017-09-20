@@ -88,10 +88,21 @@ const args = neodoc.run(docs.main, {
 
 
 
-const tasks = require('./src/build/tasks')
+const deps = require('./src/build/utils/dependencies')
 
-tasks.vm.createVM.task( )
+deps.check([
+	deps.Executables({
+		names: ['ansible']
+	})
+])
+.then(( ) => {
 
+})
+.catch(err => {
+
+	throw err
+
+})
 
 
 
