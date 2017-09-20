@@ -90,19 +90,15 @@ const args = neodoc.run(docs.main, {
 
 const deps = require('./src/build/utils/dependencies')
 
+
+
+
+
+
 deps.check([
-	deps.Executables({
-		names: ['ansible']
-	})
+	new deps.Executables({ name: 'ansible' })
 ])
-.then(( ) => {
 
-})
-.catch(err => {
-
-	throw err
-
-})
 
 
 
