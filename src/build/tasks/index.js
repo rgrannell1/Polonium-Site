@@ -322,6 +322,7 @@ const out = tasks
 
 tasks.vm = require('./vm')
 tasks.security = require('./security')
+tasks.ansible = require('./ansible')
 
 
 

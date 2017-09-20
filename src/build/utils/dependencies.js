@@ -6,6 +6,7 @@
 
 const execa = require('execa')
 const chalk = require('chalk')
+const path  = require('path')
 const fs = require('fs')
 const {Enum} = require('enumify')
 
@@ -13,12 +14,7 @@ const {Enum} = require('enumify')
 
 class ReportState extends Enum { }
 
-ReportState.initEnum([
-	'FAILED',
-	'PASSED',
-	'SKIPPED',
-	'UNCERTAIN'
-])
+ReportState.initEnum(['FAILED', 'PASSED', 'SKIPPED', 'UNCERTAIN'])
 
 
 
@@ -107,7 +103,7 @@ class PathDependency {
 
 	}
 	report ( ) {
-		return reportStatus(this, `path: ${ this.config.path }`)
+		return reportStatus(this, `path: ${ path.resolve(this.config.path) }`)
 	}
 }
 
