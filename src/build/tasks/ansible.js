@@ -21,18 +21,16 @@ ansible.setupVM = {
 ansible.setupVM.task = async ( ) => {
 
 	await deps.check([
-		new deps.Executable({ name: 'ansible' })
+		new deps.Executable({ name: 'ansible' }),
+		new deps.Droplet({ name: config.get('vm.name') })
 	])
 
 	const existingVM = await digitalOcean.findVMs({
 		name: config.get('vm.name')
 	})
 
+	console.dir(existingVM)
 
-	console.log( existingVM )
-	console.log( existingVM )
-	console.log( existingVM )
-	console.log( existingVM )
 
 }
 

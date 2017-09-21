@@ -9,6 +9,7 @@ const chalk = require('chalk')
 const path  = require('path')
 const fs = require('fs')
 const {Enum} = require('enumify')
+const digitalOcean = require('../commons/digital-ocean')
 
 
 
@@ -25,7 +26,7 @@ const fail = Promise.reject
 
 
 
-const deps = { }
+let deps = { }
 
 deps.check = schemas => {
 
@@ -58,6 +59,9 @@ const reportStatus = (ctx, message) => {
 				break
 			case ReportState.FAILED:
 				return `${ chalk.red('❌') } ${ message }`
+				break
+			default:
+				return message
 				break
 		}
 
@@ -107,11 +111,54 @@ class PathDependency {
 	}
 }
 
+class EnvVarDependency {
+	constructor (config) {
+		this.config = config
+	}
+	status ( ) {
+
+		return new Promise((resolve, reject) => {
+
+			process.env.hasOwnProperty('DIGITAL_OCEAN_TOKEN')
+				? resolve({status: ReportState.PASSED})
+				: resolve({status: ReportState.FAILED})
+
+		})
+
+	}
+	report ( ) {
+		return reportStatus(this, `env. variable: ${ path.resolve(this.config.name) }`)
+	}
+}
+
+class DropletDependency {
+	constructor (config) {
+		this.config = config
+	}
+	status ( ) {
+
+		return digitalOcean.findVMs({ name: this.config.name }).then(vm => {
+			return vm
+				? {status: ReportState.PASSED}
+				: {status: ReportState.FAILED}
+		})
+
+	}
+	report ( ) {
+		return reportStatus(this, `droplet: ${ this.config.name }`)
+	}
+}
 
 
 
-deps.Executable = ExecutableDependency
-deps.Path = PathDependency
+
+deps = Object.assign(deps, {
+	Executable: ExecutableDependency,
+	Path: PathDependency,
+	EnvVar: EnvVarDependency,
+	Droplet: DropletDependency
+})
+
 
 
 

@@ -287,7 +287,6 @@ tasks.checkDocs.task = ( ) => {
 	return exec.shell(constants.bin.inchJS)
 		.then(output => {
 
-			console.log(output)
 
 		})
 
