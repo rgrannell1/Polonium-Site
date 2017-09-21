@@ -7,12 +7,9 @@
 
 
 const userData = `
-#cloud-config
+#!/bin/bash
 
-packages:
-	- git
-	- docker.io
-
+apt-get install git docker.io python2.7 --assume-yes
 `
 
 module.exports = {

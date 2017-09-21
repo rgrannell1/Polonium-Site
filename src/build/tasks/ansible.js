@@ -33,9 +33,12 @@ ansible.setupVM.task = async ( ) => {
 
 	const currentIP = existingVM.networks.v4[0].ip_address
 
-	exec.shell(`ansible all -i src/build/ansible/settings.js -m ping`).then(result => {
+	exec.shell(`export ANSIBLE_CONFIG="src/build/ansible/ansible.cfg" && ansible all -i src/build/ansible/settings.js -m ping`).then(result => {
 		console.log(result.stdout)
 	})
+
+
+
 
 //	exec.shell(`ansible all -i ../ansible/settings.py ../ansible/setup-vm.yaml`)
 
