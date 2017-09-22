@@ -158,11 +158,12 @@ class SSHDependency {
 	}
 	status ( ) {
 
-		return execa.shell(`cat "${ this.config.path }" | ssh ${ this.config.username }@${ this.config.ip } "echo hi"`)
+		return execa.shell(`ssh -i "${ this.config.path }" ${ this.config.username }@${ this.config.ip } "echo hi"`)
 			.then(( ) => {
 				return {status: ReportState.PASSED}
 			})
 			.catch(err => {
+				console.log(err)
 				return {status: ReportState.FAILED}
 			})
 
