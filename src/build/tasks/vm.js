@@ -7,6 +7,7 @@
 const request = require('request-promise')
 const config = require('config')
 const digitalOcean = require('../commons/digital-ocean')
+const deps = require('../utils/dependencies')
 
 
 

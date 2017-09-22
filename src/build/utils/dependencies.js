@@ -38,7 +38,9 @@ deps.check = schemas => {
 			.then(message => {
 				console.log(message)
 			})
-			.catch(( ) => { })
+			.catch(err => {
+				console.error(err)
+			})
 
 	})
 
@@ -138,6 +140,7 @@ class DropletDependency {
 	status ( ) {
 
 		return digitalOcean.findVMs({ name: this.config.name }).then(vm => {
+
 			return vm
 				? {status: ReportState.PASSED}
 				: {status: ReportState.FAILED}
@@ -149,6 +152,25 @@ class DropletDependency {
 	}
 }
 
+class SSHDependency {
+	constructor (config) {
+		this.config = config
+	}
+	status ( ) {
+
+		return execa.shell(`cat "${ this.config.path }" | ssh ${ this.config.username }@${ this.config.ip } "echo hi"`)
+			.then(( ) => {
+				return {status: ReportState.PASSED}
+			})
+			.catch(err => {
+				return {status: ReportState.FAILED}
+			})
+
+	}
+	report ( ) {
+		return reportStatus(this, `ssh: ${ this.config.username }@${ this.config.ip } ( ${ this.config.path } )`)
+	}
+}
 
 
 
@@ -156,7 +178,8 @@ deps = Object.assign(deps, {
 	Executable: ExecutableDependency,
 	Path: PathDependency,
 	EnvVar: EnvVarDependency,
-	Droplet: DropletDependency
+	Droplet: DropletDependency,
+	SSH: SSHDependency
 })
 
 

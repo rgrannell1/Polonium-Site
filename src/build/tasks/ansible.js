@@ -24,7 +24,7 @@ ansible.setupVM.task = async ( ) => {
 	await deps.check([
 		new deps.Executable({ name: 'ansible' }),
 		new deps.Droplet({ name: config.get('vm.name') }),
-		new deps.Path({ path: config.get('digitalOcean.sshKeyPath') })
+		new deps.Path({ path: config.get('digitalOcean.sshKeyPath') }),
 	])
 
 	const existingVM = await digitalOcean.findVMs({
@@ -33,9 +33,17 @@ ansible.setupVM.task = async ( ) => {
 
 	const currentIP = existingVM.networks.v4[0].ip_address
 
-	exec.shell(`export ANSIBLE_CONFIG="src/build/ansible/ansible.cfg" && ansible all -i src/build/ansible/settings.js -m ping`).then(result => {
-		console.log(result.stdout)
-	})
+	let x = await deps.check([
+		new deps.SSH({
+			path: config.get('digitalOcean.sshKeyPath'),
+			username: 'root',
+			ip: currentIP
+		})
+	])
+
+//	exec.shell(`export ANSIBLE_CONFIG="src/build/ansible/ansible.cfg" && ansible all -i src/build/ansible/settings.js -m ping`).then(result => {
+//		console.log(result.stdout)
+//	})
 
 
 
