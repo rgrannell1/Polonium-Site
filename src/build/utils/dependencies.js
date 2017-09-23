@@ -32,19 +32,21 @@ deps.check = schemas => {
 
 	var hasError = false
 
-	const schemaResults = schemas.map(schema => {
-
-		schema.report( )
-			.then(message => {
-				console.log(message)
-			})
-			.catch(err => {
-				console.error(err)
-			})
-
-	})
+	const schemaResults = schemas.map(schema => schema.report( ))
 
 	return Promise.all(schemaResults)
+		.then(results => {
+			results.forEach(result => {
+				console.log(result.message)
+			})
+
+			const failed = results.some(result => result.status === ReportState.FAILED)
+
+			if (failed) {
+				throw new Error('dependencies missing.')
+			}
+
+		})
 
 }
 
@@ -55,17 +57,19 @@ const reportStatus = (ctx, message) => {
 
 	return ctx.status( ).then(report => {
 
-		switch (report.status) {
-			case ReportState.PASSED:
-				return `${ chalk.green('✓') } ${ message }`
-				break
-			case ReportState.FAILED:
-				return `${ chalk.red('❌') } ${ message }`
-				break
-			default:
-				return message
-				break
+		const result = {
+			status: report.status
 		}
+
+		if (report.status === ReportState.PASSED) {
+			result.message = `${ chalk.green('✓') } ${ message }`
+		}
+
+		if (report.status === ReportState.FAILED) {
+			result.message = `${ chalk.red('❌') } ${ message }`
+		}
+
+		return result
 
 	})
 
