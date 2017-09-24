@@ -9,45 +9,6 @@ const taskLists = require('./src/build/task-lists')
 
 
 
-const startTasks = args => {
-
-	const opts = {
-		'check-docs': 'checkDocs',
-		'deploy': 'deployDocker',
-		'lint': 'lintJS',
-		'run': 'startServer',
-		'start-dev-server': 'startDevServer',
-		'start-docker-server': 'startDocker',
-		'test': 'startTests',
-		'push': 'updateServer'
-	}
-
-	var matched = false
-
-	Object.keys(opts).forEach(arg => {
-
-		if (args.hasOwnProperty(arg) && !matched) {
-
-			matched = true
-			const taskList = taskLists[opts[arg]]
-
-			if (!taskList) {
-				throw new Error('missing taskList')
-			}
-
-			taskList( ).run( ).catch(err => {
-				console.error(err)
-			})
-
-		}
-
-	})
-
-}
-
-
-
-
 
 const docs = { }
 
