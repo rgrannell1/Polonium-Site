@@ -25,7 +25,11 @@ ansible.setupVM.task = async ( ) => {
 		new deps.Executable({ name: 'ansible' }),
 		new deps.Droplet({ name: config.get('vm.name') }),
 		new deps.Path({ path: config.get('digitalOcean.sshKeyPath') }),
-	])
+	], {
+		ctx: {
+			task: 'Pre-Software Configurations'
+		}
+	})
 
 	const existingVM = await digitalOcean.findVMs({
 		name: config.get('vm.name')
@@ -39,9 +43,13 @@ ansible.setupVM.task = async ( ) => {
 			username: 'root',
 			ip: currentIP
 		})
-	])
+	], {
+		ctx: {
+			task: 'Pre-Software Configuration'
+		}
+	})
 
-	exec.shell(`export ANSIBLE_CONFIG="src/build/ansible/ansible.cfg" && ansible all -i src/build/ansible/settings.js src/build/ansible/settings.yaml`).then(result => {
+	exec.shell(`export ANSIBLE_CONFIG="src/build/ansible/ansible.cfg" && ansible-playbook --inventory src/build/ansible/settings.js src/build/ansible/setup-vm.yaml`).then(result => {
 		console.log(result.stdout)
 	})
 
