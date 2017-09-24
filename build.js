@@ -52,30 +52,26 @@ const startTasks = args => {
 const docs = { }
 
 docs.main = `
-Usage:
-	build check-docs
-	build lint
-	build run
-	build start-dev-server
-	build start-docker-server
-	build test
-	build push
-	build new [<command>...]
-	build deploy [<command>...]
+Usage:`
+
+Object.keys(taskLists).forEach(commandPrefix => {
+	docs.main += '\n    build ' + commandPrefix + ' [<command>...]'
+
+	docs[commandPrefix] = '\nUsage:'
+
+	Object.keys(taskLists[commandPrefix]).forEach(command => {
+
+		docs[commandPrefix] += '\n    build ' + commandPrefix + ' ' + command
+
+	})
+
+})
+
+docs.main += `
 
 Description:
-	Run Polonium tests, start the server, and perform other build tasks.
+    Execute a Polonium build-step.
 `
-
-docs.new = `
-Usage:
-	build new ssh-key
-	build new ssl-certs
-
-Description:
-	Create new Polonium certificates.
-`
-
 
 
 
@@ -85,68 +81,27 @@ const args = neodoc.run(docs.main, {
 	startOptions: true
 })
 
+Object.keys(taskLists).forEach(commandPrefix => {
+
+	if (args[commandPrefix]) {
+
+		const commandArgs =  neodoc.run(docs[commandPrefix], {
+			optionsFirst: true,
+			startOptions: true
+		})
+
+		Object.keys(taskLists[commandPrefix]).forEach(command => {
+
+			if (commandArgs[command]) {
+
+				const task = taskLists[commandPrefix][command].run( )
+				task.run( )
+
+			}
+
+		})
 
 
-
-//const deps = require('./src/build/utils/dependencies')
-
-
-
-
-
-
-
-const tasks = require('./src/build/tasks')
-
-
-tasks.ansible.setupVM.task( )
-
-/*
-
-
-deps.check([
-	new deps.Path({ path: 'fooper' }),
-	new deps.Executable({ name: 'ansible' })
-])
-.catch(err => {
-
-})
-
-*/
-
-
-
-
-/*
-
-throw 'xxx'
-
-
-
-
-if (args.new) {
-
-	const newArgs = neodoc.run(docs.new, {
-		optionsFirst: true,
-		startOptions: true
-	})
-
-	if (newArgs['ssh-key']) {
-
-		taskLists.newSSHKey( ).run( ).catch(err => console.error(err))
-
-	} else if (newArgs['ssl-key']) {
-
-
-
-	} else {
-		throw new Error('asdsad')
 	}
 
-} else {
-	startTasks(args)
-}
-*/
-
-
-
+})
