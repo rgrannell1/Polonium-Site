@@ -19,7 +19,7 @@ ansible.setupVM = {
 	title: 'Install Software'
 }
 
-ansible.setupVM.task = async ( ) => {
+ansible.setupVM.run = async ( ) => {
 
 	await deps.check([
 		new deps.Executable({ name: 'ansible' }),

@@ -34,7 +34,7 @@ security.createSSHCert = {
 	title: 'Create SSH Certificates'
 }
 
-security.createSSHCert.task = async ( ) => {
+security.createSSHCert.run = async ( ) => {
 
 	await Promise.all([
 		exec.shell(`rm "${ config.get('digitalOcean.sshKeyPath') }" || true`),
@@ -55,7 +55,7 @@ security.publishSSHCert = {
 	title: 'Publish SSH Public Key to DigitalOcean'
 }
 
-security.publishSSHCert.task = async ( ) => {
+security.publishSSHCert.run = async ( ) => {
 
 	const publicKeyPath = `${ config.get('digitalOcean.sshKeyPath') }.pub`
 	const publicKey = fs.readFileSync(publicKeyPath).toString( )

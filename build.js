@@ -16,7 +16,7 @@ docs.main = `
 Usage:`
 
 Object.keys(taskLists).forEach(commandPrefix => {
-	docs.main += '\n    build ' + commandPrefix + ' [<command>...]'
+	docs.main += '\n    build ' + commandPrefix + ' [' + Object.keys	(taskLists[commandPrefix]).join('|') + ']'
 
 	docs[commandPrefix] = '\nUsage:'
 
@@ -56,12 +56,14 @@ Object.keys(taskLists).forEach(commandPrefix => {
 			if (commandArgs[command]) {
 
 				const task = taskLists[commandPrefix][command].run( )
-				task.run( )
+
+				task.catch(err => {
+					console.error(err)
+				})
 
 			}
 
 		})
-
 
 	}
 

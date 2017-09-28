@@ -1,0 +1,9 @@
+---
+- hosts: all
+  gather_facts: False
+  tasks:
+    - name: 'Install Docker'
+      apt:
+        name: docker.io
+        state: latest
+        update_cache: yes

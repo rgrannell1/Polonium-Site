@@ -4,10 +4,10 @@
 
 
 
-
-const tests = {
-	routes: {
-		home: { }
+const puppeteer = require('puppeteer')
+const constants = {
+	domains: {
+		local: 'http://localhost:8080'
 	}
 }
 
@@ -15,56 +15,35 @@ const tests = {
 
 
 
-tests.routes.home.hasExpectedIds = ( ) => {
+const cases = { }
 
-	return new Promise((res, rej) => {
+cases.navLink = async (chrome) => {
 
-		const expectedIds = [
-			'icon-brand',
-			'website-input-container',
-			'password-input-container'
-		]
+	const page = await chrome.newPage( )
+	await page.goto(constants.domains.local)
 
-		expectedIds.forEach(id => {
-			it (`has a #${id} element.`, done => {
+	await page.click('.brand')
 
-				const element = document.getElementById(id)
-
-				if (element === null) {
-					done(new Error(`${id} element is missing.`))
-					rej( )
-				} else {
-					done( )
-					res( )
-				}
-
-			})
-		})
-
-	})
-
+	await page.close( )
 
 }
 
-tests.routes.home.iconLeadsToHome = ( ) => {
+cases.pageLoad = async (chrome) => {
 
-	return new Promise((res, rej) => {
+	const page = await chrome.newPage( )
+	await page.goto(constants.domains.local)
 
-		it('has a logo icon that leads to the home-page', done => {
-
-			const brandLink = document.querySelector('a h1#icon-brand')
-
-			if (brandLink === null) {
-				done(new Error(`link not found`))
-				rej( )
-			} else {
-				done( )
-				res( )
-			}
-
-		})
-
+	await page.click('#website-input-container')
+	await page.type('asasdasdasd', {
+		delay: 100
 	})
+
+	await page.click('#password-input-container')
+	await page.type('asasdasdasd', {
+		delay: 100
+	})
+
+	await page.close( )
 
 }
 
@@ -72,18 +51,20 @@ tests.routes.home.iconLeadsToHome = ( ) => {
 
 
 
-describe('/ route', done => {
+async function runner ( ) {
 
-	const testPromises = [
-		tests.routes.home.hasExpectedIds( ),
-		tests.routes.home.iconLeadsToHome( )
-	]
+	const chrome = await puppeteer.launch({
+		headless: false
+	})
 
-	setTimeout(( ) => {
+	await cases.pageLoad(chrome)
+	await cases.navLink(chrome)
 
-		throw 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-		Promise.all(done).then(done, done)
+	await chrome.close( )
 
-	}, 9000)
+}
 
-})
+
+
+
+runner( )

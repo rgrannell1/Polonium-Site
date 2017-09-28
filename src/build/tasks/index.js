@@ -46,7 +46,7 @@ tasks.webPackDevServer = {
 	title: 'Bundle client JavaScript dependencies'
 }
 
-tasks.webPackDevServer.task = ( ) => {
+tasks.webPackDevServer.run = ( ) => {
 	return exec.shell(constants.bin.webpack + ' --config webpack/webpack.config.js --hot')
 }
 
@@ -57,7 +57,7 @@ tasks.clean = {
 	title: 'Clean Artifact Folder'
 }
 
-tasks.clean.task = async ( ) => {
+tasks.clean.run = async ( ) => {
 
 	await exec.shell('rm -rf ' + constants.paths.dist)
 	await exec.shell('mkdir' + ' -p ' + constants.paths.dist)
@@ -73,12 +73,10 @@ tasks.copyStaticFiles = {
 	title: 'Copy WebPack static files'
 }
 
-tasks.copyStaticFiles.task = async ( ) => {
+tasks.copyStaticFiles.run = async ( ) => {
 
 	await exec.shell('mkdir -p ' + constants.paths.dist + '/css')
 	await exec.shell('mkdir -p ' + constants.paths.dist + '/fonts')
-
-
 
 	const folders = [
 		{
@@ -143,7 +141,7 @@ tasks.createWebpackArtifacts = {
 	title: 'Run WebPack'
 }
 
-tasks.createWebpackArtifacts.task = ( ) => {
+tasks.createWebpackArtifacts.run = ( ) => {
 
 	return Promise.all([
 		exec.shell(`${constants.bin.webpack} --config webpack/webpack.config.js`),
@@ -160,7 +158,7 @@ tasks.minifyCss = {
 	title: config.get('build.minifyCSS') ? 'Minify CSS' : 'Copy CSS'
 }
 
-tasks.minifyCss.task = ( ) => {
+tasks.minifyCss.run = ( ) => {
 
 	const paths = [
 		{
@@ -189,7 +187,7 @@ tasks.minifyJs = {
 
 }
 
-tasks.minifyJs.task = ( ) => {
+tasks.minifyJs.run = ( ) => {
 
 	const paths = [
 		{
@@ -223,7 +221,7 @@ tasks.startKarma = {
 	title: 'Start Karma Tests'
 }
 
-tasks.startKarma.task = ( ) => {
+tasks.startKarma.run = ( ) => {
 	return exec.shell("karma start --single-run --browsers ChromeHeadless karma.conf.js")
 }
 
@@ -234,7 +232,7 @@ tasks.startJSTests = {
 	title: 'mkdasjkdasjkasdjkasd'
 }
 
-tasks.startJSTests.task = ( ) => {
+tasks.startJSTests.run = ( ) => {
 	return exec.shell("node /home/ryan/Code/polonium-server/test/cases/test.js")
 }
 
@@ -246,7 +244,7 @@ tasks.startServer = {
 	title: 'Start Server (' + constants.nodeEnv + ')'
 }
 
-tasks.startServer.task = ctx => {
+tasks.startServer.run = ctx => {
 
 	const indexPath = path.join(constants.paths.server, 'app/index.js')
 
@@ -262,7 +260,7 @@ tasks.lintJS = {
 	title: 'Lint JS'
 }
 
-tasks.lintJS.task = ctx => {
+tasks.lintJS.run = ctx => {
 	return exec.shell(`node_modules/eslint/bin/eslint.js ${constants.paths.client}`)
 }
 
@@ -274,7 +272,7 @@ tasks.startDevServer = {
 	title: 'Start development server'
 }
 
-tasks.startDevServer.task = ( ) => {
+tasks.startDevServer.run = ( ) => {
 	return exec.shell(constants.bin.webPackDevServer + ' --content-base src' + ' --public	' + ' --hot' + ' --inline' + ' --host 0.0.0.0')
 }
 
@@ -282,7 +280,7 @@ tasks.checkDocs = {
 	title: 'Check source-code documentation'
 }
 
-tasks.checkDocs.task = ( ) => {
+tasks.checkDocs.run = ( ) => {
 
 	return exec.shell(constants.bin.inchJS)
 		.then(output => {
@@ -299,7 +297,7 @@ tasks.buildDockerImage = {
 	title: 'Build Server Docker Image'
 }
 
-tasks.buildDockerImage.task = ctx => {
+tasks.buildDockerImage.run = ctx => {
 	return exec.shell(`docker build -t ${ constants.images.dockerSite } -f src/build/build.dockerfile .`)
 }
 
@@ -309,7 +307,7 @@ tasks.startDockerImage = {
 	title: 'Start Server Docker Image'
 }
 
-tasks.startDockerImage.task = ( ) => {
+tasks.startDockerImage.run = ( ) => {
 	return exec.shell('docker run --publish 8080:8080 -t polonium_site:latest')
 }
 
