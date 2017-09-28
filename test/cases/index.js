@@ -4,7 +4,7 @@
 
 
 
-const puppeteer = require('puppeteer')
+
 const constants = {
 	domains: {
 		local: 'http://localhost:8080'
@@ -50,21 +50,4 @@ cases.pageLoad = async (chrome) => {
 
 
 
-
-async function runner ( ) {
-
-	const chrome = await puppeteer.launch({
-		headless: false
-	})
-
-	await cases.pageLoad(chrome)
-	await cases.navLink(chrome)
-
-	await chrome.close( )
-
-}
-
-
-
-
-runner( )
+module.exports = cases
