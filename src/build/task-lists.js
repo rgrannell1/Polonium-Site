@@ -4,6 +4,7 @@
 
 const tasks = require('./tasks')
 const chalk = require('chalk')
+const is = require('is')
 
 
 
@@ -17,13 +18,16 @@ const runTask = async (tasks, indent) => {
 
 		try {
 
+			is.never.undefined(title)
+			is.never.undefined(run)
+
 			await run( )
 			var message = padding + chalk.green('✓ ') + title
 
 		} catch (err) {
 
-			throw err
 			var message = padding + chalk.red('x ') + title
+			console.error(err)
 
 		}
 

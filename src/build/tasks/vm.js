@@ -21,7 +21,7 @@ tasks.createVM = {
 	title: 'Create DigitalOcean VM'
 }
 
-tasks.createVM.task = async ( ) => {
+tasks.createVM.run = async ( ) => {
 
 	await digitalOcean.setVM({
 		name: config.get('vm.name'),

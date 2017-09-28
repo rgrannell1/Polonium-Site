@@ -8,4 +8,5 @@
       changed_when: False
 
 - include: roles/install-docker/tasks/main.yaml
+- include: roles/copy-client-resources/tasks/main.yaml
 
