@@ -7,7 +7,7 @@
 const path = require('path')
 const exec = require('execa')
 const config = require('config')
-const deps = require('../utils/dependencies')
+const deps = require('../commons/dependencies')
 const digitalOcean = require('../commons/digital-ocean')
 
 

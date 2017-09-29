@@ -8,7 +8,7 @@ const avow = require('avow')
 const request = require('request-promise')
 const config = require('config')
 const digitalOcean = require('../commons/digital-ocean')
-const deps = require('../utils/dependencies')
+const deps = require('../commons/dependencies')
 const constants = require('../commons/constants')
 
 
