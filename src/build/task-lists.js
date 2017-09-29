@@ -107,15 +107,19 @@ const lintJs = {
 }
 
 lintJs.run = ( ) => {
-
-	const taskList = [
-		tasks.lintJS
-	]
-
-	return runTask(taskList)
-
+	return runTask([tasks.lintJS])
 }
 
+
+
+
+const browserTests = {
+	title: 'Browser Tests'
+}
+
+browserTests.run = ( ) => {
+	return runTask([tasks.frontEndSystemTests])
+}
 
 
 
@@ -180,6 +184,7 @@ deployRemoteServer.run = ( ) => {
 
 cli.new.ssh_key      = newSSHKey
 cli.test.lint_js     = lintJs
+cli.test.site        = browserTests
 cli.run.local_server = runLocalServer
 cli.deploy.remote_server = deployRemoteServer
 

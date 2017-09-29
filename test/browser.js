@@ -15,7 +15,7 @@ const cases = require('./cases')
 async function runner ( ) {
 
 	const chrome = await puppeteer.launch({
-		headless: false
+		headless: true
 	})
 
 	for (let method of Object.keys(cases)) {

@@ -9,10 +9,7 @@
 const userData = `
 #cloud-config
 
-packages:
-	- git
-	- docker.io
-
+apt-get install git docker.io python2.7 --assume-yes
 `
 
 module.exports = {
@@ -21,7 +18,8 @@ module.exports = {
 		minifyCSS: true
 	},
 	digitalOcean: {
-		token: process.env.DIGITAL_OCEAN_TOKEN
+		sshKeyName: 'polonium_ssh_key',
+		sshKeyPath: 'config/credentials/prod_key'
 	},
 	vm: {
 		name: 'prod-polonium-site',
@@ -29,5 +27,8 @@ module.exports = {
 		image: 'ubuntu-16-04-x64',
 		size: '512mb',
 		userData
+	},
+	tests: {
+
 	}
 }

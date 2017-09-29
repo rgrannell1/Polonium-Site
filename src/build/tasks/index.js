@@ -35,7 +35,7 @@ constants.bin.webpack = path.join(constants.paths.bin, 'webpack')
 constants.bin.webPackDevServer = path.join(constants.paths.bin, 'webpack-dev-server')
 constants.bin.inchJS = path.join(constants.paths.bin, 'inchjs')
 
-
+constants.paths.browserTests = path.join(constants.paths.tests, 'browser.js')
 
 
 
@@ -262,6 +262,16 @@ tasks.lintJS = {
 
 tasks.lintJS.run = ctx => {
 	return exec.shell(`node_modules/eslint/bin/eslint.js ${constants.paths.client}`)
+}
+
+
+
+tasks.frontEndSystemTests = {
+	title: 'Run Front-End System Tests'
+}
+
+tasks.frontEndSystemTests.run = ( ) => {
+	return exec.shell(`node ${constants.paths.browserTests}`)
 }
 
 

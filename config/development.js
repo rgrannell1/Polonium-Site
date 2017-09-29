@@ -18,7 +18,6 @@ module.exports = {
 		minifyCSS: false
 	},
 	digitalOcean: {
-		token: process.env.DIGITAL_OCEAN_TOKEN,
 		sshKeyName: 'polonium_ssh_key',
 		sshKeyPath: 'config/credentials/dev_key'
 	},
@@ -28,5 +27,8 @@ module.exports = {
 		image: 'ubuntu-16-04-x64',
 		size: '512mb',
 		userData
+	},
+	tests: {
+
 	}
 }
