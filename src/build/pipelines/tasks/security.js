@@ -6,7 +6,8 @@
 const fs = require('fs')
 const config = require('config')
 const request = require('request-promise')
-const digitalOcean = require('../commons/digital-ocean')
+const digitalOcean = require('../../commons/digital-ocean')
+const exec = require('execa')
 
 
 

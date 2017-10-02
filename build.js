@@ -2,8 +2,10 @@
 
 'use strict'
 
-const neodoc = require('neodoc')
-const taskLists = require('./src/build/task-lists')
+const neodoc    = require('neodoc')
+const pipelines = require('./src/build')
+
+require('longjohn');
 
 
 
@@ -15,12 +17,12 @@ const docs = { }
 docs.main = `
 Usage:`
 
-Object.keys(taskLists).forEach(commandPrefix => {
-	docs.main += '\n    build ' + commandPrefix + ' [' + Object.keys	(taskLists[commandPrefix]).join('|') + ']'
+Object.keys(pipelines).forEach(commandPrefix => {
+	docs.main += '\n    build ' + commandPrefix + ' [' + Object.keys	(pipelines[commandPrefix]).join('|') + ']'
 
 	docs[commandPrefix] = '\nUsage:'
 
-	Object.keys(taskLists[commandPrefix]).forEach(command => {
+	Object.keys(pipelines[commandPrefix]).forEach(command => {
 
 		docs[commandPrefix] += '\n    build ' + commandPrefix + ' ' + command
 
@@ -42,7 +44,7 @@ const args = neodoc.run(docs.main, {
 	startOptions: true
 })
 
-Object.keys(taskLists).forEach(commandPrefix => {
+Object.keys(pipelines).forEach(commandPrefix => {
 
 	if (args[commandPrefix]) {
 

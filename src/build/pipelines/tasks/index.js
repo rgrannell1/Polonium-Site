@@ -2,12 +2,13 @@
 'use strict'
 
 const fs = require('fs')
+const util = require('util')
 const path = require('path')
-const Listr = require('listr')
-const exec = require('execa')
+	const exec = require('execa')
 const minify = require('minify')
 const config = require('config')
 const tmp = require('tmp')
+const deps = require('../../commons/dependencies')
 
 
 
@@ -15,11 +16,11 @@ const tmp = require('tmp')
 const constants = {
 	nodeEnv: process.env.NODE_ENV,
 	paths: {
-		bin: path.join(__dirname, '../../../node_modules/.bin'),
-		client: path.join(__dirname, '../../../src/client/'),
-		server: path.join(__dirname, '../../../src/server/'),
-		tests:  path.join(__dirname, '../../../test/'),
-		dist: path.join(__dirname, '../../../dist/')
+		bin: path.join(__dirname, '../../../../node_modules/.bin'),
+		client: path.join(__dirname, '../../../../src/client/'),
+		server: path.join(__dirname, '../../../../src/server/'),
+		tests:  path.join(__dirname, '../../../../test/'),
+		dist: path.join(__dirname, '../../../../dist/')
 	},
 	bin: {
 		webpack: 'node_modules/webpack/bin/webpack.js',
@@ -46,7 +47,7 @@ tasks.webPackDevServer = {
 	title: 'Bundle client JavaScript dependencies'
 }
 
-tasks.webPackDevServer.run = ( ) => {
+tasks.webPackDevServer.run = async ( ) => {
 	return exec.shell(constants.bin.webpack + ' --config webpack/webpack.config.js --hot')
 }
 
@@ -116,11 +117,21 @@ tasks.copyStaticFiles.run = async ( ) => {
 		}
 	]
 
-	const copyFolderPromises = folders.map(({from, into}) => {
+	const copyFolderPromises = folders.map(async ({from, into}) => {
+
+		await deps.check([
+			new deps.Path({path: from})
+		])
+
 		return exec.shell(`cp -R ${from} ${into}`)
+
 	})
 
-	const copyFilePromises = files.map(({from, to}) => {
+	const copyFilePromises = files.map(async ({from, to}) => {
+
+		await deps.check([
+			new deps.Path({path: from})
+		])
 
 		return new Promise((res, rej) => {
 			fs.copyFile(from, to, err => {
@@ -141,7 +152,7 @@ tasks.createWebpackArtifacts = {
 	title: 'Run WebPack'
 }
 
-tasks.createWebpackArtifacts.run = ( ) => {
+tasks.createWebpackArtifacts.run = async ( ) => {
 
 	return Promise.all([
 		exec.shell(`${constants.bin.webpack} --config webpack/webpack.config.js`),
@@ -158,7 +169,7 @@ tasks.minifyCss = {
 	title: config.get('build.minifyCSS') ? 'Minify CSS' : 'Copy CSS'
 }
 
-tasks.minifyCss.run = ( ) => {
+tasks.minifyCss.run = async ( ) => {
 
 	const paths = [
 		{
@@ -187,7 +198,7 @@ tasks.minifyJs = {
 
 }
 
-tasks.minifyJs.run = ( ) => {
+tasks.minifyJs.run = async ( ) => {
 
 	const paths = [
 		{
@@ -200,12 +211,16 @@ tasks.minifyJs.run = ( ) => {
 		},
 	]
 
-	const minifyPromises = paths.map(({from, to}) => {
+	const minifyPromises = paths.map(async ({from, to}) => {
+
+		await deps.check([
+			new deps.Path({path: from})
+		])
 
 		if (config.get('build.minifyJS')) {
 			return exec.shell(`${ constants.bin.uglifyjs } ${from} ${ to }`)
 		} else {
-			return exec.shell('cp ' + from + ' ' + to)
+			return util.promisify(fs.copyFile)(from, to)
 		}
 
 	})
@@ -221,7 +236,7 @@ tasks.startKarma = {
 	title: 'Start Karma Tests'
 }
 
-tasks.startKarma.run = ( ) => {
+tasks.startKarma.run = async ( ) => {
 	return exec.shell("karma start --single-run --browsers ChromeHeadless karma.conf.js")
 }
 
@@ -232,7 +247,7 @@ tasks.startJSTests = {
 	title: 'mkdasjkdasjkasdjkasd'
 }
 
-tasks.startJSTests.run = ( ) => {
+tasks.startJSTests.run = async ( ) => {
 	return exec.shell("node /home/ryan/Code/polonium-server/test/cases/test.js")
 }
 
@@ -270,7 +285,7 @@ tasks.frontEndSystemTests = {
 	title: 'Run Front-End System Tests'
 }
 
-tasks.frontEndSystemTests.run = ( ) => {
+tasks.frontEndSystemTests.run = async ( ) => {
 	return exec.shell(`node ${constants.paths.browserTests}`)
 }
 
@@ -282,7 +297,7 @@ tasks.startDevServer = {
 	title: 'Start development server'
 }
 
-tasks.startDevServer.run = ( ) => {
+tasks.startDevServer.run = async ( ) => {
 	return exec.shell(constants.bin.webPackDevServer + ' --content-base src' + ' --public	' + ' --hot' + ' --inline' + ' --host 0.0.0.0')
 }
 
@@ -290,47 +305,19 @@ tasks.checkDocs = {
 	title: 'Check source-code documentation'
 }
 
-tasks.checkDocs.run = ( ) => {
-
+tasks.checkDocs.run = async ( ) => {
 	return exec.shell(constants.bin.inchJS)
-		.then(output => {
-
-
-		})
 
 }
 
 
 
 
-tasks.buildDockerImage = {
-	title: 'Build Server Docker Image'
-}
-
-tasks.buildDockerImage.run = ctx => {
-	return exec.shell(`docker build -t ${ constants.images.dockerSite } -f src/build/build.dockerfile .`)
-}
-
-
-
-tasks.startDockerImage = {
-	title: 'Start Server Docker Image'
-}
-
-tasks.startDockerImage.run = ( ) => {
-	return exec.shell('docker run --publish 8080:8080 -t polonium_site:latest')
-}
-
-
-
-
-
-const out = tasks
 
 tasks.vm = require('./vm')
 tasks.security = require('./security')
 tasks.ansible = require('./ansible')
-
+tasks.docker = require('./docker')
 
 
 

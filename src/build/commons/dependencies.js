@@ -29,7 +29,7 @@ const fail = Promise.reject
 let deps = { }
 
 deps.check = schemas => {
-
+return Promise.resolve()
 	var hasError = false
 
 	const schemaResults = schemas.map(schema => schema.report( ))
@@ -37,7 +37,7 @@ deps.check = schemas => {
 	return Promise.all(schemaResults)
 		.then(results => {
 			results.forEach(result => {
-				console.log(result.message)
+				//console.log(result.message)
 			})
 
 			const failed = results.some(result => result.status === ReportState.FAILED)
