@@ -1,6 +1,8 @@
 
 # Polonium Site
 
+[![Inline docs](http://inch-ci.org/github/rgrannell1/Polonium-Site.svg?branch=master)](http://inch-ci.org/github/rgrannell1/Polonium-Site)
+
 <img src="./readme/polonium.png">
 
 ##
