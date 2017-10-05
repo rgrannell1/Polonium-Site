@@ -2,11 +2,12 @@
 
 'use strict'
 
-const neodoc    = require('neodoc')
-const pipelines = require('./src/build')
+const neodoc = require('neodoc')
+const cli    = require('./src/build')
 
-require('longjohn');
-
+process.on('unhandledRejection', err => {
+	throw err;
+})
 
 
 
@@ -17,12 +18,11 @@ const docs = { }
 docs.main = `
 Usage:`
 
-Object.keys(pipelines).forEach(commandPrefix => {
-	docs.main += '\n    build ' + commandPrefix + ' [' + Object.keys	(pipelines[commandPrefix]).join('|') + ']'
+Object.keys(cli).forEach(commandPrefix => {
+	docs.main += '\n    build ' + commandPrefix + ' [' + Object.keys	(cli[commandPrefix]).join('|') + ']'
 
 	docs[commandPrefix] = '\nUsage:'
-
-	Object.keys(pipelines[commandPrefix]).forEach(command => {
+	Object.keys(cli[commandPrefix]).forEach(command => {
 
 		docs[commandPrefix] += '\n    build ' + commandPrefix + ' ' + command
 
@@ -36,15 +36,17 @@ Description:
     Execute a Polonium build-step.
 `
 
-
-
-
 const args = neodoc.run(docs.main, {
 	optionsFirst: true,
 	startOptions: true
 })
 
-Object.keys(pipelines).forEach(commandPrefix => {
+
+
+/*
+
+
+Object.keys(cli).forEach(commandPrefix => {
 
 	if (args[commandPrefix]) {
 
@@ -70,3 +72,4 @@ Object.keys(pipelines).forEach(commandPrefix => {
 	}
 
 })
+*/

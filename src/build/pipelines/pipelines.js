@@ -27,4 +27,14 @@ pipelines.deployServer = models.Pipeline({
 
 
 
+pipelines.openSSHTerminal = models.Pipeline({
+	title: 'Open SSH Connection',
+	stages: [
+		stages.openSSHTerminal
+	]
+})
+
+
+
+
 module.exports = pipelines

@@ -12,6 +12,10 @@ const render = data => {
 
 	let indent = ''
 
+	if (data && !data.event) {
+		throw new Error(JSON.stringify(data))
+	}
+
 	if (data.event.startsWith('stage')) {
 		indent = '  '
 	}
@@ -22,11 +26,21 @@ const render = data => {
 
 	let [type, result] = data.event.split('/')
 
-	const message = '[' + type + ']   ' + indent + data.title
+	if (type === 'step') {
+		type = '  ' + type
+	}
+
+	if (type === 'stage') {
+		type = ' ' + type
+	}
+
+	const diff = data.diff ? data.diff : '***'
+
+	const message = `[${type}] ${diff}ms ${indent}        ${data.title}`
 
 	if (result === 'pending') {
 
-		console.log(message + ' ...')
+		console.log(message + chalk.yellow(' ...'))
 	}
 
 	if (result === 'success') {
@@ -41,8 +55,6 @@ const render = data => {
 		console.log(data.error)
 
 	}
-
-
 
 }
 

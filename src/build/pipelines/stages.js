@@ -65,6 +65,13 @@ stages.deployServer = models.Stage({
 	]
 })
 
+stages.openSSHTerminal = models.Stage({
+	title: 'Open SSH Connection',
+	steps: [
+		tasks.security.openSSHTerminal
+	]
+})
+
 
 
 

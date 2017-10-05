@@ -4,11 +4,14 @@
 
 
 const constants = require('../commons/constants')
+const moment = require('moment')
 
 
 
 
 const runPipeline = async (data, emitter) => {
+
+	const startTime = new Date( )
 
 	emitter.emit('event', Object.assign(data, {
 		event: constants.events.pipeline.started
@@ -18,26 +21,48 @@ const runPipeline = async (data, emitter) => {
 		event: constants.events.pipeline.pending
 	}) )
 
+	let hasPassed = true
+
 	for (let stage of data.stages) {
 
 		try {
 
 			await stage.run(emitter)
 
+			var diff = moment(new Date( )).diff(startTime, 'milliseconds')
+
 			emitter.emit('event', Object.assign(data, {
-				event: constants.events.pipeline.success
+				event: constants.events.pipeline.success,
+				diff
 			}) )
 
 		} catch (err) {
 
+			hasPassed = false
+
 			emitter.emit('event', Object.assign(data, {
 				error: err,
-				event: constants.events.pipeline.failure
+				event: constants.events.pipeline.failure,
+				diff
 			}) )
 
 			break
 
 		}
+
+	}
+
+	if (hasPassed) {
+
+		emitter.emit('event', Object.assign(data, {
+			event: constants.events.pipeline.success
+		}) )
+
+	} else {
+
+		emitter.emit('event', Object.assign(data, {
+			event: constants.events.pipeline.failure
+		}) )
 
 	}
 
@@ -53,6 +78,8 @@ const runStage = async (data, emitter) => {
 		throw new Error('emitter not supplied to stage "' + data.title + '"')
 	}
 
+	const startTime = new Date( )
+
 	emitter.emit('event', Object.assign(data, {
 		event: constants.events.stage.started
 	}) )
@@ -61,34 +88,66 @@ const runStage = async (data, emitter) => {
 		event: constants.events.stage.pending
 	}) )
 
+	let hasPassed = true
+	let returnedErr
 
 	for (let step of data.steps) {
 
 		emitter.emit('event', Object.assign(step, {
-			event: constants.events.step.started
+			event: constants.events.step.started,
+			time:  new Date( )
 		}) )
 
 		emitter.emit('event', Object.assign(step, {
-			event: constants.events.step.pending
+			event: constants.events.step.pending,
+			time:  new Date( )
 		}) )
+
 
 		try {
 
 			await step.run( )
 
+			var diff = moment(new Date( )).diff(startTime, 'milliseconds')
+
 			emitter.emit('event', Object.assign(step, {
-				event: constants.events.step.success
+				event: constants.events.step.success,
+				diff
 			}) )
 
 		} catch (err) {
 
+			hasPassed = false
+			returnedErr = err
+
 			emitter.emit('event', Object.assign(step, {
 				event: constants.events.step.failure,
-				error: err
+				error: err,
+				diff
 			}) )
+
+			break
 
 		}
 
+	}
+
+	if (hasPassed) {
+
+		emitter.emit('event', Object.assign(data, {
+			event: constants.events.stage.success
+		}) )
+
+	} else {
+
+		emitter.emit('event', Object.assign(data, {
+			event: constants.events.stage.failure
+		}) )
+
+	}
+
+	if (returnedErr) {
+		throw returnedErr
 	}
 
 }

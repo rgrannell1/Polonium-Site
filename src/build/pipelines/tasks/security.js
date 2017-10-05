@@ -69,4 +69,32 @@ security.publishSSHCert.run = async ( ) => {
 
 
 
+
+security.openSSHTerminal = {
+	title: 'Open SSH Terminal'
+}
+
+security.openSSHTerminal.run = async ( ) => {
+
+	const vm = await digitalOcean.findVMs({
+		name: config.get('vm.name')
+	})
+
+	if (vm) {
+
+		const ip = vm.networks.v4[0].ip_address
+		const command = `gnome-terminal -e "ssh ${ config.get('digitalOcean.sshUserName') }@${ip} -i config/credentials/dev_key"`
+
+		return exec.shell(command)
+
+	} else {
+
+	}
+
+
+}
+
+
+
+
 module.exports = security
