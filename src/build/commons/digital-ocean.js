@@ -6,6 +6,7 @@
 
 
 const config = require('config')
+const fs = require('fs')
 const request = require('request-promise')
 const constants = require('./constants')
 
@@ -56,15 +57,38 @@ api.findSSHKeys = async fields => {
 
 
 
-api.updateSSHKey = async (name, publicKey) => {
+api.newSSHKey = async (name, publicKey) => {
 
-	throw new Error('not implemented!')
+	const newOpts = {
+		uri: `${constants.urls.digitalOceanUrl}/account/keys/`,
+		headers: {
+			Authorization: `Bearer ${ config.get('digitalOcean.token') }`
+		},
+		json: {
+			name,
+			public_key: publicKey
+		}
+	}
+
+	return request.post(newOpts)
 
 }
 
+api.updateSSHKey = async (name, publicKey) => {
 
+	const existingKey = await api.findSSHKeys({name})
 
+	const deleteOpts = {
+		uri: `${constants.urls.digitalOceanUrl}/account/keys/${ existingKey.id }`,
+		headers: {
+			Authorization: `Bearer ${ config.get('digitalOcean.token') }`
+		}
+	}
 
+	await request.delete(deleteOpts)
+	await api.newSSHKey(name, publicKey)
+
+}
 
 api.setSSHKey = async (name, publicKey) => {
 
@@ -121,11 +145,22 @@ api.setVM = async conf => {
 		name: config.get('vm.name')
 	})
 
-	if (!existingVM) {
-
-		const sshKey = await api.findSSHKeys({
-			name: config.get('digitalOcean.sshKeyName')
+	const signaturePath = config.get('digitalOcean.sshKeyPath') + '.sig'
+	const signature = await new Promise((resolve, reject) => {
+		fs.readFile(signaturePath, (err, body) => {
+			err ? reject(err) : resolve(body.toString( ))
 		})
+	})
+
+	const sshKey = await api.findSSHKeys({
+		name: config.get('digitalOcean.sshKeyName')
+	})
+
+	if (signature !== sshKey.fingerprint) {
+		throw new Error(`mismatching local / remote SSH key signatures; ${ signature }, ${ sshKey.fingerprint }`)
+	}
+
+	if (!existingVM) {
 
 		const reqOpts = {
 			uri:  `${constants.urls.digitalOceanUrl}/droplets`,

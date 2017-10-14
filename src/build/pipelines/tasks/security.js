@@ -39,10 +39,17 @@ security.createSSHCert.run = async ( ) => {
 
 	await Promise.all([
 		exec.shell(`rm "${ config.get('digitalOcean.sshKeyPath') }" || true`),
-		exec.shell(`rm ${ config.get('digitalOcean.sshKeyPath') }.pub || true`)
+		exec.shell(`rm ${ config.get('digitalOcean.sshKeyPath') }.pub || true`),
+		exec.shell(`rm ${ config.get('digitalOcean.sshKeyPath') }.sig || true`)
 	])
 
-	return exec.shell(`ssh-keygen -t rsa -b 4096 -P '' -f ${ config.get('digitalOcean.sshKeyPath') }`)
+	await exec.shell(`ssh-keygen -t rsa -b 4096 -P '' -f ${ config.get('digitalOcean.sshKeyPath') }`)
+	const result = await exec.shell(`openssl pkey -in ${ config.get('digitalOcean.sshKeyPath') } -pubout -outform DER | openssl md5 -c`)
+
+	fs.writeFileSync(config.get('digitalOcean.sshKeyPath') + '.sig', result.stdout.replace('(stdin)= ', ''))
+
+	return
+
 }
 
 
@@ -83,7 +90,7 @@ security.openSSHTerminal.run = async ( ) => {
 	if (vm) {
 
 		const ip = vm.networks.v4[0].ip_address
-		const command = `gnome-terminal -e "ssh ${ config.get('digitalOcean.sshUserName') }@${ip} -i config/credentials/dev_key"`
+		const command = `gnome-terminal -e "ssh ${ config.get('digitalOcean.sshUserName') }@${ip} -i ${ config.get('digitalOcean.sshKeyPath') }"`
 
 		return exec.shell(command)
 

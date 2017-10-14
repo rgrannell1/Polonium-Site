@@ -16,6 +16,7 @@ stages.buildDistFolder = models.Stage({
 	title: 'Build Server & Other Remote Resources',
 	steps: [
 		tasks.security.createSSHCert,
+		tasks.security.publishSSHCert,
 		tasks.clean,
 		tasks.copyStaticFiles,
 		tasks.minifyCss,
