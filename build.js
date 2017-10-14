@@ -4,6 +4,8 @@
 
 const neodoc = require('neodoc')
 const cli    = require('./src/build')
+const events = require('events')
+const render = require('./src/build/render/')
 
 process.on('unhandledRejection', err => {
 	throw err;
@@ -43,33 +45,33 @@ const args = neodoc.run(docs.main, {
 
 
 
-/*
 
+function findCommand (args, cli) {
 
-Object.keys(cli).forEach(commandPrefix => {
+	let command
 
-	if (args[commandPrefix]) {
+	Object.keys(cli).forEach(commandPrefix => {
 
-		const commandArgs =  neodoc.run(docs[commandPrefix], {
-			optionsFirst: true,
-			startOptions: true
-		})
+		if (args[commandPrefix]) {
 
-		Object.keys(taskLists[commandPrefix]).forEach(command => {
+			const commandArgs =  neodoc.run(docs[commandPrefix], {
+				optionsFirst: true,
+				startOptions: true
+			})
 
-			if (commandArgs[command]) {
+			const commandName = Object.keys(cli[commandPrefix]).find(command => commandArgs[command])
+			command = cli[commandPrefix][commandName]
+		}
 
-				const task = taskLists[commandPrefix][command].run( )
+	})
 
-				task.catch(err => {
-					console.error(err)
-				})
+	return command
 
-			}
+}
 
-		})
+const command = findCommand(args, cli)
 
-	}
+const buildEvents = new events.EventEmitter( )
+command.run(buildEvents)
 
-})
-*/
+buildEvents.on('event', render)

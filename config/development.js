@@ -5,6 +5,11 @@
 
 
 
+const path = require('path')
+
+
+
+
 
 const userData = `
 #!/bin/bash
@@ -18,8 +23,9 @@ module.exports = {
 		minifyCSS: false
 	},
 	digitalOcean: {
+		sshUserName: 'root',
 		sshKeyName: 'polonium_ssh_key',
-		sshKeyPath: 'config/credentials/dev_key'
+		sshKeyPath: path.resolve('config/credentials/dev_key')
 	},
 	vm: {
 		name: 'dev-polonium-site',

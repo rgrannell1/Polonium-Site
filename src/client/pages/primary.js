@@ -7,8 +7,7 @@
 
 const m = require('mithril')
 
-const constants = require('../commons/constants')
-const utils     = require('../commons/utils')
+const utils = require('../commons/utils')
 
 
 
@@ -17,10 +16,10 @@ const utils     = require('../commons/utils')
 const components = { }
 
 components.Header = {
-	view: vnode => {
+	view: ( ) => {
 
 		return m('header.main-head',
-			m('i.burger-menu', m('p', '☰')),
+			m('i.burger-menu', {title: 'Main menu'}, m('p', '☰')),
 			m('a', {
 				href: '/#!/'
 			}, m('h1.brand', {id: 'icon-brand'}, 'Polonium'))
@@ -127,11 +126,29 @@ components.SubmitButton = {
 }
 
 components.main = {
-	view: vnode => {
+	view: ( ) => {
 
 		return m('.container',
 			m(components.Header, { }),
 			m('main',
+				m('aside',
+					m('nav',
+						m('ul',
+							m('li', 'Foo'),
+							m('li', 'Bar'),
+							m('li', 'Baz'),
+							m('li', '______________'),
+							m('li', 'Bar'),
+							m('li', 'Baz'),
+							m('li', 'Foo'),
+							m('li', 'Bar'),
+							m('li', 'Baz'),
+							m('li', 'Foo'),
+							m('li', 'Bar'),
+							m('li', 'Baz'),
+						)
+					)
+				),
 				m('form.main-input',
 
 					m(components.WebsiteInput,  { }),
@@ -145,7 +162,7 @@ components.main = {
 }
 
 components.primaryPageLayout = {
-	view: vnode => {
+	view: ( ) => {
 
 		const state = { }
 

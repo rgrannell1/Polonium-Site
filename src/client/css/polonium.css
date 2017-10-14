@@ -48,13 +48,25 @@ html, body {
 
 .container {
 	display: grid;
-	grid-gap: 55px 0px;
 }
 
+main {
+	display: grid;
+	grid-template-columns:0.1fr 0.9fr;
+}
+
+aside {
+	padding-top: 55px;
+	grid-column: 1;
+	grid-row: 2;
+}
+
+
 form.main-input {
+	padding-top: 55px;
 
 	grid-template-columns: repeat(8, 1fr);
-	grid-column:1;
+	grid-column:2;
 	grid-row: 2;
 	display: grid;
 	grid-gap: 12px 0px;
