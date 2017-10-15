@@ -157,7 +157,18 @@ api.setVM = async conf => {
 	})
 
 	if (signature !== sshKey.fingerprint) {
-		throw new Error(`mismatching local / remote SSH key signatures; ${ signature }, ${ sshKey.fingerprint }`)
+
+		const publicKey = await new Promise((resolve, reject) => {
+
+			fs.readFile(`${config.get('digitalOcean.sshKeyPath')}.pub`, (err, content) => {
+				err ? reject(err) : resolve(content.toString( ))
+			})
+
+		})
+
+	//	await api.updateSSHKey(config.get('digitalOcean.sshKeyName'), publicKey)
+
+	//	throw new Error(`mismatching local / remote SSH key signatures; ${ signature }, ${ sshKey.fingerprint }`)
 	}
 
 	if (!existingVM) {

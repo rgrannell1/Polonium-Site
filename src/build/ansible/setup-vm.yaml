@@ -1,14 +1,14 @@
 ---
 - hosts: all
+  become: true
+  gather_facts: false
+  pre_tasks:
+  - raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+  - setup: # aka gather_facts
 
   tasks:
     - name: Check the VM can be contacted
       action: ping
 
-#  pre_tasks:
-#    - name: Install python for Ansible
-#      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
-#      changed_when: False
-#
-#- include: roles/install-docker/tasks/main.yaml
-#- include: roles/copy-client-resources/tasks/main.yaml
+- include: roles/install-docker/tasks/main.yaml
+- include: roles/copy-client-resources/tasks/main.yaml
