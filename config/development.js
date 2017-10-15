@@ -6,6 +6,7 @@
 
 
 const path = require('path')
+const credentials = require('./credentials/credentials.json')
 
 
 
@@ -32,7 +33,9 @@ module.exports = {
 		region: 'lon1',
 		image: 'ubuntu-16-04-x64',
 		size: '512mb',
-		userData
+		userData,
+		domain:    credentials.vmDomain,
+		subDomain: 'polonium'
 	},
 	tests: {
 

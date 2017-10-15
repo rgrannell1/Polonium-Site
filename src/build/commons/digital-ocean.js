@@ -102,6 +102,95 @@ api.setSSHKey = async (name, publicKey) => {
 
 }
 
+api.listDomainRecords = async (domain) => {
+
+	const getOpts = {
+		uri: `${constants.urls.digitalOceanUrl}/domains/${ domain }/records`,
+		headers: {
+			Authorization: `Bearer ${ config.get('digitalOcean.token') }`
+		}
+	}
+
+	return request.get(getOpts)
+
+}
+
+api.findDomainRecord = async (domain, fields) => {
+
+	if (Object.keys(fields).length === 0) {
+		throw new Error('no fields provided.')
+	}
+
+	const res = JSON.parse(await api.listDomainRecords(domain))
+
+	return res.domain_records.find(recordFields => {
+
+		return Object.keys(fields).every(field => {
+			return recordFields[field] === fields[field]
+		})
+
+	})
+
+}
+
+api.newDomainRecord = async (conf) => {
+
+	const reqOpts = {
+		uri:  `${constants.urls.digitalOceanUrl}/domains/${conf.domain}/records`,
+		headers: {
+			Authorization: `Bearer ${ config.get('digitalOcean.token') }`
+		},
+		json: {
+			type: conf.type,
+			name: conf.subDomain,
+			data: conf.ipv4Address,
+			priority: null,
+			port: null,
+			ttl: conf.ttl,
+			weight: null,
+			flags: null,
+			tag: null
+		}
+	}
+
+	return request.post(reqOpts)
+
+}
+
+api.setDomainRecord = async (conf) => {
+
+	const vm = await api.findVMs({
+		name: conf.name
+	})
+
+	const ipv4Address = vm.networks.v4[0].ip_address
+
+	if (!vm) {
+		throw new Error('cannot add domain-record for non-existing droplet.')
+	} else if (!ipv4Address) {
+		throw new Error('cannot add domain-record for droplet without IP address.')
+	}
+
+	const existingRecord = await api.findDomainRecord(conf.domain, {
+		type: 'A',
+		name: conf.subDomain,
+		data: ipv4Address
+	})
+
+	if (!existingRecord) {
+
+		return api.newDomainRecord({
+			domain: conf.domain,
+			type: 'A',
+			subDomain: conf.subDomain,
+			ipv4Address,
+			ttl: conf.ttl
+		})
+
+	}
+
+}
+
 
 
 

@@ -104,4 +104,25 @@ security.openSSHTerminal.run = async ( ) => {
 
 
 
+
+
+security.addDomainRecord = {
+	title: 'Add Domain-Record to Droplet'
+}
+
+security.addDomainRecord.run = async ( ) => {
+
+	return await digitalOcean.setDomainRecord({
+		name: config.get('vm.name'),
+		domain: config.get('vm.domain'),
+		subDomain: config.get('vm.subDomain'),
+		ttl: 1800
+	})
+
+}
+
+
+
+
+
 module.exports = security
