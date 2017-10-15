@@ -8,7 +8,7 @@ const path = require('path')
 const minify = require('minify')
 const config = require('config')
 const tmp = require('tmp')
-const deps = require('../../commons/dependencies')
+const deps = require('../commons/dependencies')
 
 
 
@@ -16,11 +16,11 @@ const deps = require('../../commons/dependencies')
 const constants = {
 	nodeEnv: process.env.NODE_ENV,
 	paths: {
-		bin: path.join(__dirname, '../../../../node_modules/.bin'),
-		client: path.join(__dirname, '../../../../src/client/'),
-		server: path.join(__dirname, '../../../../src/server/'),
-		tests:  path.join(__dirname, '../../../../test/'),
-		dist: path.join(__dirname, '../../../../dist/')
+		bin: path.join(__dirname, '	../../../../../node_modules/.bin'),
+		client: path.join(__dirname, '../../../src/client/'),
+		server: path.join(__dirname, '../../../src/server/'),
+		tests:  path.join(__dirname, '../../../test/'),
+		dist: path.join(__dirname, '../../../dist/')
 	},
 	bin: {
 		webpack: 'node_modules/webpack/bin/webpack.js',

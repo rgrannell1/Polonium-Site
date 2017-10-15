@@ -2,7 +2,19 @@
 - hosts: all
   gather_facts: False
   tasks:
-    - name: 'Copy'
-      copy:
-        src: ../../../../../../dist
-        dest: /dist
+    - name: 'Install Pip'
+      apt:
+        name: python-pip
+        update_cache: yes
+
+    - name: 'Install docker-py'
+      shell: 'sudo pip install docker-py'
+
+    - name: 'Run Docker Image'
+      docker:
+        name: polonium_site
+        image: rgrannell1/polonium_site
+        state: reloaded
+        pull: always
+        ports:
+        - "443:8080"

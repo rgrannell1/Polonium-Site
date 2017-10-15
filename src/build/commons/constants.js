@@ -1,6 +1,8 @@
 
 'use strict'
 
+const path = require('path')
+
 
 
 
@@ -34,6 +36,11 @@ const constants = {
 			failure: 'step/failure',
 			success: 'step/success'
 		}
+	},
+	paths: {
+		ansibleCfg:       path.join(__dirname, '../ansible/ansible.cfg'),
+		ansibleInventory: path.join(__dirname, '../ansible/settings.js'),
+		ansiblePlaybook:  path.join(__dirname, '../ansible/setup-vm.yaml')
 	}
 }
 

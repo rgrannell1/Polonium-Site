@@ -3,7 +3,7 @@
 'use strict'
 
 const tasks  = require('./tasks')
-const models = require('../models')
+const models = require('./models')
 
 
 
@@ -22,6 +22,15 @@ stages.buildDistFolder = models.Stage({
 		tasks.minifyCss,
 		tasks.createWebpackArtifacts,
 		tasks.minifyJs
+	]
+})
+
+stages.publishDockerImage = models.Stage({
+	title: 'Publish Docker Images',
+	steps: [
+		tasks.docker.buildDockerImage,
+		tasks.docker.login,
+		tasks.docker.publishDockerImage
 	]
 })
 

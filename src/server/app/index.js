@@ -10,7 +10,15 @@ const app = new Koa( )
 const path = require('path')
 const koaStatic = require('koa-static-server')
 const router    = require('koa-router')
+const bunyan = require('bunyan')
+const constants = require('../commons/constants')
 
+const log = bunyan.createLogger({
+	name: constants.appName,
+	streams: [{
+		path: './logs'
+	}]
+})
 
 
 
@@ -29,6 +37,17 @@ routers.dynamic.get('/health', async ctx => {
 
 
 app
+.use(async (ctx, next) => {
+
+	await next( )
+
+	log.info({
+		method: ctx.method,
+		url: ctx.url,
+	})
+
+
+})
 .use(routers.dynamic.routes( ))
 .use(routers.static)
 

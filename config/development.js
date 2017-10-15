@@ -36,5 +36,8 @@ module.exports = {
 	},
 	tests: {
 
+	},
+	docker: {
+		imageName: 'polonium_site'
 	}
 }

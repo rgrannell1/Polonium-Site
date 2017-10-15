@@ -7,8 +7,9 @@
 const path = require('path')
 const exec = require('execa')
 const config = require('config')
-const deps = require('../../commons/dependencies')
-const digitalOcean = require('../../commons/digital-ocean')
+const deps = require('../commons/dependencies')
+const digitalOcean = require('../commons/digital-ocean')
+const constants = require('../commons/constants')
 
 
 
@@ -41,7 +42,7 @@ ansible.setupVM.run = async ( ) => {
 		})
 	])
 
-	return exec.shell(`export ANSIBLE_CONFIG="src/build/ansible/ansible.cfg" && ansible-playbook --inventory src/build/ansible/settings.js src/build/ansible/setup-vm.yaml`).then(result => {
+	return exec.shell(`export ANSIBLE_CONFIG="${ constants.paths.ansibleCfg }" && ansible-playbook --inventory "${ constants.paths.ansibleInventory }" "${ constants.paths.ansiblePlaybook }"`).then(result => {
 		console.log(result.stdout)
 	})
 

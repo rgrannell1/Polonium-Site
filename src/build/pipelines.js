@@ -1,7 +1,7 @@
 
 'use strict'
 
-const models = require('../models')
+const models = require('./models')
 const stages = require('./stages')
 const events = require('events')
 
@@ -19,6 +19,7 @@ pipelines.deployServer = models.Pipeline({
 	title: 'Deploy Server',
 	stages: [
 		stages.buildDistFolder,
+		stages.publishDockerImage,
 		stages.createVM,
 		stages.deployServer
 	]
