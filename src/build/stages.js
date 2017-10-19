@@ -72,7 +72,8 @@ stages.runLocally = models.Stage({
 stages.deployServer = models.Stage({
 	title: 'Deploy Server to DigitalOcean',
 	steps: [
-		tasks.ansible.setupVM
+//		tasks.ansible.setupVM,
+		tasks.ansible.obtainCertificates
 	]
 })
 

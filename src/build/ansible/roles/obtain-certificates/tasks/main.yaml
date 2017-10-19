@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  gather_facts: False
+  gather_facts: True
   tasks:
     - apt_repository:
         repo: 'ppa:certbot/certbot'
@@ -10,3 +10,10 @@
         name: certbot
         state: latest
         update_cache: yes
+
+    - name: Copy Remote Certificates
+      synchronize:
+        mode: pull
+        src: "/etc/letsencrypt/live/polonium.rgrannell.world/"
+        dest: "../../../../../../config/credentials/certs/"
+        recursive: yes

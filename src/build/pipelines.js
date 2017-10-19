@@ -19,9 +19,9 @@ pipelines.deployServer = models.Pipeline({
 	title: 'Deploy Server',
 	stages: [
 		stages.buildDistFolder,
-		stages.publishDockerImage,
 		stages.createVM,
-		stages.deployServer
+		stages.deployServer,
+		stages.publishDockerImage
 	]
 })
 

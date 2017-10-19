@@ -11,18 +11,27 @@
       shell: 'sudo pip install docker-py'
 
     - name: 'Create a volume with options'
-      docker_volume:
+      docker_container:
         name: app_volume
+        image: ubuntu
+        volumes:
+          - /data
 
     - name: 'Pull Server Image'
       docker_image:
         name: rgrannell1/polonium_site
+
+    - name: 'Copy files into volumes'
+      shell: docker cp /etc/letsencrypt/live/polonium.rgrannell.world/ app_volume:/data
 
     - name: 'Run Docker Image'
       docker_container:
         name: polonium_site
         image: rgrannell1/polonium_site
         state: started
+        recreate: yes
         ports:
           - "80:8080"
           - "443:8081"
+        volumes_from:
+          - app_volume

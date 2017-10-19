@@ -20,7 +20,7 @@ ansible.setupVM = {
 	title: 'Install Software'
 }
 
-ansible.setupVM.run = async ( ) => {
+async function runAnsiblePlaybook (ansiblePlaybook) {
 
 	await deps.check([
 		new deps.Executable({ name: 'ansible' }),
@@ -42,10 +42,22 @@ ansible.setupVM.run = async ( ) => {
 		})
 	])
 
-	return exec.shell(`export ANSIBLE_CONFIG="${ constants.paths.ansibleCfg }" && ansible-playbook --inventory "${ constants.paths.ansibleInventory }" "${ constants.paths.ansiblePlaybook }"`).then(result => {
+	return exec.shell(`export ANSIBLE_CONFIG="${ constants.paths.ansibleCfg }" && ansible-playbook --inventory "${ constants.paths.ansibleInventory }" "${ ansiblePlaybook }"`).then(result => {
 		console.log(result.stdout)
 	})
 
+}
+
+ansible.setupVM.run = async ( ) => {
+	return runAnsiblePlaybook(constants.paths.setupVmPlaybook)
+}
+
+ansible.obtainCertificates = {
+	title: 'Obtain LetsEncrypt Certificates'
+}
+
+ansible.obtainCertificates.run = async ( ) => {
+	return runAnsiblePlaybook(constants.paths.obtainCertificatePlaybook)
 }
 
 
