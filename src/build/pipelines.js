@@ -18,10 +18,10 @@ const pipelines = { }
 pipelines.deployServer = models.Pipeline({
 	title: 'Deploy Server',
 	stages: [
-//		stages.buildDistFolder,
-//		stages.publishDockerImage,
+		stages.buildDistFolder,
+		stages.publishDockerImage,
 		stages.createVM,
-//		stages.deployServer
+		stages.deployServer
 	]
 })
 
@@ -32,6 +32,16 @@ pipelines.openSSHTerminal = models.Pipeline({
 	title: 'Open SSH Connection',
 	stages: [
 		stages.openSSHTerminal
+	]
+})
+
+
+
+
+pipelines.runDepCheck = models.Pipeline({
+	title: 'Run Depcheck',
+	stages: [
+		//stages.runDepCheck
 	]
 })
 

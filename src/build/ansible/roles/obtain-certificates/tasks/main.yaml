@@ -1,0 +1,12 @@
+---
+- hosts: all
+  gather_facts: False
+  tasks:
+    - apt_repository:
+        repo: 'ppa:certbot/certbot'
+
+    - name: 'Install Certbot'
+      apt:
+        name: certbot
+        state: latest
+        update_cache: yes

@@ -57,8 +57,8 @@ stages.runLocally = models.Stage({
 stages.createVM = models.Stage({
 	title: 'Create DigitalOcean VM',
 	steps: [
+		tasks.vm.createVM,
 		tasks.security.addDomainRecord
-	//	tasks.vm.createVM
 	]
 })
 

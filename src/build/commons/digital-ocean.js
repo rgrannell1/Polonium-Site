@@ -157,6 +157,28 @@ api.newDomainRecord = async (conf) => {
 
 }
 
+api.removeDomainRecord = async (domain, subDomain) => {
+
+	const existingRecord = await api.findDomainRecord(domain, {
+		type: 'A',
+		name: subDomain
+	})
+
+	if (existingRecord) {
+
+		const reqOpts = {
+			uri:  `${constants.urls.digitalOceanUrl}/domains/${domain}/records/${existingRecord.id}`,
+			headers: {
+				Authorization: `Bearer ${ config.get('digitalOcean.token') }`
+			}
+		}
+
+		await request.delete(reqOpts)
+
+	}
+
+}
+
 api.setDomainRecord = async (conf) => {
 
 	const vm = await api.findVMs({
@@ -171,15 +193,29 @@ api.setDomainRecord = async (conf) => {
 		throw new Error('cannot add domain-record for droplet without IP address.')
 	}
 
-	const existingRecord = await api.findDomainRecord(conf.domain, {
-		type: 'A',
-		name: conf.subDomain,
-		data: ipv4Address
-	})
+	const [existingRecord, existingSubdomainRecord] = await Promise.all([
+
+		api.findDomainRecord(conf.domain, {
+			type: 'A',
+			name: conf.subDomain,
+			data: ipv4Address
+		}),
+		api.findDomainRecord(conf.domain, {
+			type: 'A',
+			name: conf.subDomain
+		})
+
+	])
+
+	if (!existingRecord && existingSubdomainRecord) {
+
+		await api.removeDomainRecord(conf.domain, conf.subDomain)
+
+	}
 
 	if (!existingRecord) {
 
-		return api.newDomainRecord({
+		await api.newDomainRecord({
 			domain: conf.domain,
 			type: 'A',
 			subDomain: conf.subDomain,
@@ -226,6 +262,29 @@ api.findVMs = async fields => {
 
 }
 
+api.newVm = async conf => {
+
+	const reqOpts = {
+		uri:  `${constants.urls.digitalOceanUrl}/droplets`,
+		headers: {
+			Authorization: `Bearer ${ config.get('digitalOcean.token') }`
+		},
+		json: {
+			name: conf.name,
+			region: conf.region,
+			image: conf.image,
+			size: conf.size,
+			ssh_keys: [
+				conf.fingerprint
+			],
+			monitoring: true,
+			user_data: conf.userData
+		}
+	}
+
+	return request.post(reqOpts)
+
+}
 
 
 api.setVM = async conf => {
@@ -261,29 +320,9 @@ api.setVM = async conf => {
 	}
 
 	if (!existingVM) {
-
-		const reqOpts = {
-			uri:  `${constants.urls.digitalOceanUrl}/droplets`,
-			headers: {
-				Authorization: `Bearer ${ config.get('digitalOcean.token') }`
-			},
-			json: {
-				name: conf.name,
-				region: conf.region,
-				image: conf.image,
-				size: conf.size,
-				ssh_keys: [
-					sshKey.fingerprint
-				],
-				monitoring: true,
-				user_data: conf.userData
-			}
-		}
-
-		return request.post(reqOpts)
-
-	} else {
-		// unimplemented at the moment!
+		return api.newVm(Object.assign(conf, {
+			fingerprint: sshKey.fingerprint
+		}))
 	}
 
 }

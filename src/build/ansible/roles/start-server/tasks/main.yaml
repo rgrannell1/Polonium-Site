@@ -10,11 +10,19 @@
     - name: 'Install docker-py'
       shell: 'sudo pip install docker-py'
 
+    - name: 'Create a volume with options'
+      docker_volume:
+        name: app_volume
+
+    - name: 'Pull Server Image'
+      docker_image:
+        name: rgrannell1/polonium_site
+
     - name: 'Run Docker Image'
-      docker:
+      docker_container:
         name: polonium_site
         image: rgrannell1/polonium_site
-        state: reloaded
-        pull: always
+        state: started
         ports:
-        - "443:8080"
+          - "80:8080"
+          - "443:8081"
