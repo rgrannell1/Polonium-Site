@@ -38,10 +38,10 @@ pipelines.openSSHTerminal = models.Pipeline({
 
 
 
-pipelines.runDepCheck = models.Pipeline({
+pipelines.getSSLCertificate = models.Pipeline({
 	title: 'Run Depcheck',
 	stages: [
-		//stages.runDepCheck
+		stages.obtainCertificates
 	]
 })
 

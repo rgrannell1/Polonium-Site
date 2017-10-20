@@ -7,16 +7,19 @@ const pipelines = require('./pipelines')
 
 
 
-const cli = {
-	deploy: { },
-	open: { },
-	run: { }
+const cli = { }
+
+cli.deploy = {
+	server: pipelines.deployServer
 }
-
-cli.deploy.server        = pipelines.deployServer
-cli.open['ssh-terminal'] = pipelines.openSSHTerminal
-cli.run['depcheck']      = pipelines.runDepCheck
-
-
+cli.open = {
+	'ssh-terminal': pipelines.openSSHTerminal
+}
+cli.run = {
+	'depcheck': pipelines.runDepCheck
+}
+cli.get = {
+	'ssl-certificate': pipelines.getSSLCertificate
+}
 
 module.exports = cli
