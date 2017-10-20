@@ -27,7 +27,10 @@ const createInventoryScript = async ( ) => {
 				ansible_ssh_user: 'root',
 				ansible_ssh_private_key_file: config.get('digitalOcean.sshKeyPath'),
 				ansible_python_interpreter: '/usr/bin/python2.7',
-				host_key_checking: false
+				host_key_checking: false,
+				docker_username: config.get('docker.username'),
+				docker_password: config.get('docker.password'),
+				docker_email: config.get('docker.email')
 			}
 		}
 	}

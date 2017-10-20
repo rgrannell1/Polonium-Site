@@ -60,6 +60,14 @@ ansible.obtainCertificates.run = async ( ) => {
 	return runAnsiblePlaybook(constants.paths.obtainCertificatePlaybook)
 }
 
+ansible.startServer = {
+	title: 'Start Server'
+}
+
+ansible.startServer.run = async ( ) => {
+	return runAnsiblePlaybook(constants.paths.startServerPlaybook)
+}
+
 
 
 

@@ -41,7 +41,8 @@ const constants = {
 		ansibleCfg:                path.join(__dirname, '../ansible/ansible.cfg'),
 		ansibleInventory:          path.join(__dirname, '../ansible/settings.js'),
 		setupVmPlaybook:           path.join(__dirname, '../ansible/setup-vm.yaml'),
-		obtainCertificatePlaybook: path.join(__dirname, '../ansible/obtain-certificates.yaml')
+		obtainCertificatePlaybook: path.join(__dirname, '../ansible/obtain-certificates.yaml'),
+		startServerPlaybook:       path.join(__dirname, '../ansible/start-server.yaml'),
 	}
 }
 

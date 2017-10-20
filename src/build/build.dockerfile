@@ -14,6 +14,8 @@ ADD dist /usr/local/app/dist
 RUN cd /usr/local/app/dist/ && yarn install
 RUN mkdir -p /usr/local/app/dist/client/.well-known/acme-challenge
 
-ADD config/credentials/certs /etc/letsencrypt/live/polonium.rgrannell.world
+RUN mkdir /etc/letsencrypt/archive/polonium.rgrannell.world -p
+
+COPY config/credentials/certs /etc/letsencrypt/archive/polonium.rgrannell.world
 
 CMD node dist/server/app/index.js

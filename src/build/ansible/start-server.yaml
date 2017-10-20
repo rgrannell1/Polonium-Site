@@ -10,4 +10,4 @@
     - name: Check the VM can be contacted
       action: ping
 
-- import_playbook: roles/obtain-certificates/tasks/main.yaml
+- import_playbook: roles/start-server/tasks/main.yaml

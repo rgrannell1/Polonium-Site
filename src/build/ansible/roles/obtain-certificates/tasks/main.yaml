@@ -14,6 +14,6 @@
     - name: Copy Remote Certificates
       synchronize:
         mode: pull
-        src: "/etc/letsencrypt/live/polonium.rgrannell.world/"
+        src: "/etc/letsencrypt/archive/polonium.rgrannell.world/"
         dest: "../../../../../../config/credentials/certs/"
         recursive: yes
