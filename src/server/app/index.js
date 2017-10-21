@@ -1,24 +1,22 @@
 
 'use strict'
 
-
-
-
+const fs = require('fs')
+const http = require('http')
+const https = require('https')
 
 const Koa = require('koa')
-const app = new Koa( )
 const path = require('path')
 const koaStatic = require('koa-static-server')
 const router    = require('koa-router')
-const bunyan = require('bunyan')
 const constants = require('../commons/constants')
+const bunyan = require('bunyan')
+const forceSSL = require('koa-sslify');
 
 const log = bunyan.createLogger({
-	name: constants.appName,
-	streams: [{
-		path: './logs'
-	}]
+	name: constants.appName
 })
+
 
 
 
@@ -30,28 +28,45 @@ routers.static = koaStatic({
 
 routers.dynamic = router( )
 
-routers.dynamic.get('/health', async ctx => {
-	ctx.status = 200
-})
-
-
-
-app
-.use(async (ctx, next) => {
-
-	await next( )
+routers.dynamic.use(async (ctx, next) => {
 
 	log.info({
 		method: ctx.method,
 		url: ctx.url,
 	})
 
+	await next( )
 
 })
+
+routers.dynamic.get('/health', async ctx => {
+	ctx.status = 200
+})
+
+
+
+const httpApp = new Koa( )
+const httpsApp = new Koa( )
+
+httpApp
+.use(forceSSL( ));
+
+httpsApp
 .use(routers.dynamic.routes( ))
 .use(routers.static)
 
 
 
 
-app.listen(8080)
+
+const certOptions = {
+	key: fs.readFileSync(constants.paths.letsEncryptKey).toString( ),
+	ca: fs.readFileSync(constants.paths.letsEncryptCa).toString( ),
+	cert: fs.readFileSync(constants.paths.letsEncryptCert).toString( )
+};
+
+http.createServer(httpApp.callback( ))
+	.listen(constants.ports.http)
+
+https.createServer(certOptions, httpsApp.callback( ))
+	.listen(constants.ports.https)
