@@ -20,7 +20,8 @@ const constants = {
 		client: path.join(__dirname, '../../../src/client/'),
 		server: path.join(__dirname, '../../../src/server/'),
 		tests:  path.join(__dirname, '../../../test/'),
-		dist: path.join(__dirname, '../../../dist/')
+		dist: path.join(__dirname, '../../../dist/'),
+		distCerts: path.join(__dirname, '../../../dist/config/credentials/certs')
 	},
 	bin: {
 		webpack: 'node_modules/webpack/bin/webpack.js',
@@ -62,6 +63,7 @@ tasks.clean.run = async ( ) => {
 
 	await exec.shell('rm -rf ' + constants.paths.dist)
 	await exec.shell('mkdir' + ' -p ' + constants.paths.dist)
+	await exec.shell('mkdir' + ' -p ' + constants.paths.distCerts)
 
 	return
 

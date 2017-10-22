@@ -12,12 +12,18 @@ const models = require('./models')
 
 const stages = { }
 
+stages.cleanDistFolder = models.Stage({
+	title: 'Clean the dist folder',
+	steps: [
+		tasks.clean
+	]
+})
+
 stages.buildDistFolder = models.Stage({
 	title: 'Build Server & Other Remote Resources',
 	steps: [
 //		tasks.security.createSSHCert,
 //		tasks.security.publishSSHCert,
-		tasks.clean,
 		tasks.copyStaticFiles,
 		tasks.minifyCss,
 		tasks.createWebpackArtifacts,
@@ -77,11 +83,17 @@ stages.obtainCertificates = models.Stage({
 	]
 })
 
-stages.deployServer = models.Stage({
+stages.configureServer = models.Stage({
 	title: 'Deploy Server to DigitalOcean',
 	steps: [
 		tasks.ansible.setupVM,
-		tasks.ansible.obtainCertificates,
+		tasks.ansible.obtainCertificates
+	]
+})
+
+stages.startServer = models.Stage({
+	title: 'Start Server',
+	steps: [
 		tasks.ansible.startServer
 	]
 })

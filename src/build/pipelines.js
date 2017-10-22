@@ -18,10 +18,12 @@ const pipelines = { }
 pipelines.deployServer = models.Pipeline({
 	title: 'Deploy Server',
 	stages: [
-		stages.buildDistFolder,
+		stages.cleanDistFolder,
 		stages.createVM,
-		stages.deployServer,
-		stages.publishDockerImage
+		stages.configureServer,
+		stages.buildDistFolder,
+		stages.publishDockerImage,
+		stages.startServer
 	]
 })
 

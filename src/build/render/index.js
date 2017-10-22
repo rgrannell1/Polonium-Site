@@ -34,9 +34,11 @@ const render = data => {
 		type = ' ' + type
 	}
 
-	const diff = data.diff ? data.diff : '***'
+	const diff = data.diff ? (data.diff / 1000).toFixed(1) : ''
 
-	const message = `[${type}] ${diff}ms ${indent}        ${data.title}`
+	const message = data.diff
+		? `[${type}] ${diff}s ${indent}        ${data.title}`
+		: `[${type}]          ${indent}        ${data.title}`
 
 	if (result === 'pending') {
 

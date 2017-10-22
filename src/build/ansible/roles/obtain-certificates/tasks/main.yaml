@@ -17,3 +17,10 @@
         src: "/etc/letsencrypt/archive/polonium.rgrannell.world/"
         dest: "../../../../../../config/credentials/certs/"
         recursive: yes
+
+    - name: Copy Remote Certificates To Dist
+      synchronize:
+        mode: pull
+        src: "/etc/letsencrypt/archive/polonium.rgrannell.world/"
+        dest: "../../../../../../dist/config/credentials/certs/"
+        recursive: yes
