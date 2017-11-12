@@ -8,3 +8,6 @@
         name: docker.io
         state: latest
         update_cache: yes
+    - name: 'Install Micro Text Editor'
+      shell: "sudo snap install micro --classic"
+

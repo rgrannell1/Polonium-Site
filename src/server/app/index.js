@@ -2,71 +2,58 @@
 'use strict'
 
 const fs = require('fs')
-const http = require('http')
-const https = require('https')
-
 const Koa = require('koa')
-const path = require('path')
-const koaStatic = require('koa-static-server')
-const router    = require('koa-router')
+const Router = require('koa-router')
+const http2 = require('http2')
+
 const constants = require('../commons/constants')
 const bunyan = require('bunyan')
-const forceSSL = require('koa-sslify');
+const config = require('config')
 
 const log = bunyan.createLogger({
-	name: constants.appName
+  name: constants.appName
 })
 
+const routes = { }
 
+routes.setHTST = async (ctx, next) => {
+  ctx.setHeader('Strict-Transport-Security', `max-age=${constants.timeouts.htst};`)
+  await next()
+}
 
+routes.getContent = async (ctx, next) => {
+  ctx.body = 'aasdasdaasdASD'
+  ctx.status = 200
+  await next()
+}
 
-const routers = { }
+const apps = {
+  http: new Koa(),
+  https: new Koa()
+}
 
-routers.static = koaStatic({
-	rootDir: path.join(__dirname, '../../../dist/')
-})
+const routers = {
+  https: new Router()
+}
 
-routers.dynamic = router( )
+routers.https
+  .use(routes.setHTST)
+  .use(routes.getContent)
 
-routers.dynamic.use(async (ctx, next) => {
-
-	log.info({
-		method: ctx.method,
-		url: ctx.url,
-	})
-
-	await next( )
-
-})
-
-routers.dynamic.get('/health', async ctx => {
-	ctx.status = 200
-})
-
-
-
-const httpApp = new Koa( )
-const httpsApp = new Koa( )
-
-httpApp
-.use(forceSSL( ));
-
-httpsApp
-.use(routers.dynamic.routes( ))
-.use(routers.static)
-
-
-
-
+apps.https
+  .use(routers.https.routes())
+  .use(routers.https.allowedMethods())
 
 const certOptions = {
-	key: fs.readFileSync(constants.paths.letsEncryptKey).toString( ),
-	ca: fs.readFileSync(constants.paths.letsEncryptCa).toString( ),
-	cert: fs.readFileSync(constants.paths.letsEncryptCert).toString( )
-};
+  key: fs.readFileSync(config.get('ssl.privateKey')).toString(),
+  cert: fs.readFileSync(config.get('ssl.cert')).toString()
+}
 
-http.createServer(httpApp.callback( ))
-	.listen(constants.ports.http)
+/*
+if (false) {
+  certOptions.ca = fs.readFileSync(config.get('ssl.chain')).toString()
+}
+*/
 
-https.createServer(certOptions, httpsApp.callback( ))
-	.listen(constants.ports.https)
+http2.createSecureServer(certOptions, apps.https.callback())
+  .listen(constants.ports.https)

@@ -13,6 +13,16 @@ const pipelines = { }
 
 
 
+pipelines.runLocalServer = models.Pipeline({
+	title: 'Build Server',
+	stages: [
+		stages.cleanDistFolder,
+		stages.buildDistFolder,
+		stages.runLocalServer
+	]
+})
+
+
 
 
 pipelines.deployServer = models.Pipeline({
