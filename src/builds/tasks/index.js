@@ -3,6 +3,7 @@ const {Build, Task} = require('../../build-framework')
 const fsUtils = require('../../utils/fs')
 const minify = require('../../utils/minify')
 const exec = require('execa')
+const spawn = require('child_process').spawn
 
 const fs = require('fs')
 const path = require('path')
@@ -91,8 +92,9 @@ tasks.security.addLocalSSLCert = new Task({
 tasks.server.runLocalServer = new Task({
   title: 'Run Polonium server locally',
   run: async () => {
-    fsUtils.watch(DIST_PATH, async () => {
-      await exec.shell(`node ${DIST_PATH}/server/app/index.js`)
+    const child = spawn('node', [`${DIST_PATH}/server/app/index.js`])
+    child.on('exit', (code, signal) => {
+      console.log(`exited with code ${code} & signal ${signal}`)
     })
   }
 })

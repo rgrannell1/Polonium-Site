@@ -3,8 +3,8 @@
 
 const fs = require('fs')
 const Koa = require('koa')
-const Router = require('koa-router')
 const http2 = require('http2')
+const router = require('koa-simple-router')
 
 const constants = require('../commons/constants')
 const bunyan = require('bunyan')
@@ -17,32 +17,30 @@ const log = bunyan.createLogger({
 const routes = { }
 
 routes.setHTST = async (ctx, next) => {
-  ctx.setHeader('Strict-Transport-Security', `max-age=${constants.timeouts.htst};`)
   await next()
+  ctx.set('Strict-Transport-Security', `max-age=${constants.timeouts.htst};`)
 }
 
 routes.getContent = async (ctx, next) => {
-  ctx.body = 'aasdasdaasdASD'
+  ctx.body = 'asdasd'
   ctx.status = 200
   await next()
 }
+
+const routers = { }
+
+routers.https = router(_ => {
+  _.all('*', routes.setHTST)
+  _.get('*', routes.getContent)
+})
 
 const apps = {
   http: new Koa(),
   https: new Koa()
 }
 
-const routers = {
-  https: new Router()
-}
-
-routers.https
-  .use(routes.setHTST)
-  .use(routes.getContent)
-
 apps.https
-  .use(routers.https.routes())
-  .use(routers.https.allowedMethods())
+  .use(routers.https)
 
 const certOptions = {
   key: fs.readFileSync(config.get('ssl.privateKey')).toString(),

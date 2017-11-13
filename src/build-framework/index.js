@@ -26,7 +26,7 @@ class BuildReporter {
   buildFailure ({state, err, title}) {
     const elapsedTime = Date.now()
     this._write({type: 'build', title, elapsedTime, suffix: chalk.red('x')})
-    console.error(err)
+    throw err
   }
   taskPending ({state, title}) {
     this._write({type: 'task', title, suffix: chalk.yellow('...')})
@@ -41,7 +41,7 @@ class BuildReporter {
   taskFailure ({state, err, title}) {
     const elapsedTime = Date.now()
     this._write({type: 'task', title, elapsedTime, suffix: chalk.red('x')})
-    console.error(err)
+    throw err
   }
 }
 

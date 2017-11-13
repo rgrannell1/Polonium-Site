@@ -70,3 +70,6 @@ function findCommand (args) {
 
 const command = findCommand(args)
 command.run()
+  .catch(err => {
+    throw err
+  })

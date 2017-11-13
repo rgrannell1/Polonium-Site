@@ -24,10 +24,11 @@ builds.buildDistFolder = new Build({
 builds.runLocalServer = new Build({
   title: 'Run local instance of the server',
   tasks: [
-    tasks.build.cleanDistFolder,
-    tasks.build.buildDistFolder,
     tasks.server.runLocalServer
-  ]
+  ],
+  watch: {
+    folder: DIST_PATH
+  }
 })
 
 builds.deployRemoteServer = new Build({
