@@ -3,7 +3,7 @@ const fs = require('fs')
 const watch = require('node-watch')
 const mkdirp = require('mkdirp-promise')
 const rimraf = require('rimraf-promise')
-const ncp = require('ncp')
+const cpr = require('cpr')
 
 const fsUtils = {}
 
@@ -17,7 +17,12 @@ fsUtils.mkdir = path => {
 
 fsUtils.copyDir = (source, dest) => {
   return new Promise((resolve, reject) => {
-    ncp(source, dest, err => {
+    const opts = {
+      deleteFirst: true,
+      overwrite: true,
+      confirm: true
+    }
+    cpr(source, dest, opts, err => {
       err ? reject(err) : resolve()
     })
   })
