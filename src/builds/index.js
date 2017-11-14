@@ -15,20 +15,14 @@ builds.buildDistFolder = new Build({
   tasks: [
     tasks.build.cleanDistFolder,
     tasks.build.buildDistFolder
-  ],
-  watch: {
-    folder: SERVER_PATH
-  }
+  ]
 })
 
 builds.runLocalServer = new Build({
   title: 'Run local instance of the server',
   tasks: [
     tasks.server.runLocalServer
-  ],
-  watch: {
-    folder: DIST_PATH
-  }
+  ]
 })
 
 builds.deployRemoteServer = new Build({

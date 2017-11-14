@@ -58,7 +58,7 @@ class Build {
       }
     }
   }
-  async run (watch = true) {
+  async run () {
     const state = {
       startTime: new Date()
     }
@@ -70,12 +70,6 @@ class Build {
       this.reporter.taskPending({state, title: task.title})
       try {
         await task.run()
-        if (watch && this.watch && this.watch.folder) {
-          fsUtils.watch(path.resolve(this.watch.folder), async () => {
-            this.reporter.buildReloaded({state, title: task.title})
-            await task.run()
-          })
-        }
         this.reporter.taskSuccess({state, title: task.title})
       } catch (err) {
         this.reporter.taskFailure({state, err, title: task.title})

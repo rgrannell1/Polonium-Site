@@ -1,6 +1,5 @@
 
 const fs = require('fs')
-const watch = require('node-watch')
 const mkdirp = require('mkdirp-promise')
 const rimraf = require('rimraf-promise')
 const cpr = require('cpr')
@@ -54,10 +53,6 @@ fsUtils.testFile = path => {
       }
     })
   })
-}
-
-fsUtils.watch = (path, listener) => {
-  watch(path, {recursive: true}, listener)
 }
 
 module.exports = fsUtils

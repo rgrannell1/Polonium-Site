@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node build.js test",
-    "start": "node build.js run"
+    "build:watch": "find ./src | entr -s 'node cli.js build dist-folder'",
+    "start:watch": "find ./dist  | entr -r -s 'node cli.js run local-server'"
   },
   "author": "",
   "license": "MIT",
