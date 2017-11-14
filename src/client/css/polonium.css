@@ -1,6 +1,5 @@
 
 :root {
-
 	--primary-colour: #5d51d6;
 	--primary-colour-light: #908ace;
 	--primary-colour-dark: #3b3392;
@@ -23,7 +22,7 @@ html * {
 */
 
 .main-head {
-	padding: 0px 16px;
+	padding: 0px 20px;
 	background: var(--primary-colour);
 	color: white;
 }
@@ -36,37 +35,34 @@ h1.brand {
 
 html, body {
     margin: 0;
+    color: rgb(179, 9, 9);;
 }
-
-
-
-
 
 .container {
 	display: grid;
 }
-
-main {
+.container-overlay {
 	display: grid;
-	grid-template-columns:0.1fr 0.9fr;
 }
 
 form.main-input {
 	padding-top: 38px;
-	grid-template-columns: repeat(8, 1fr);
+	grid-template-columns: repeat(6, 1fr);
 	grid-column:2;
 	grid-row: 2;
 	display: grid;
-	grid-gap: 25px 0px;
+	grid-gap: 30px 0px;
 }
 
-i.burger-menu {
+label.burger-menu {
+	font-size: 1.4em;
 	grid-column-start: 1;
-	grid-column-end: 2;
 	grid-row: 1;
+	grid-column-end: 2;
+	margin-top: 15px
 }
 
-i.burger-menu:hover {
+label.burger-menu:hover {
 	font-weight: bold;
 }
 
@@ -75,7 +71,6 @@ i.burger-menu:hover {
 	grid-row: 1;
 	display: grid;
 	grid-template-columns: 1fr 9fr;
-
 }
 
 .main-head h1.brand {
@@ -95,13 +90,13 @@ i.burger-menu:hover {
 
 .website {
 	grid-column-start: 2;
-	grid-column-end: 7;
+	grid-column-end: 5;
 	grid-row:    2;
 	width: 100%;
 }
 
 .website input {
-	margin-top: 45px;
+	margin-top: 35px;
 	padding: 10px 6px;
 	border: none;
 	border-bottom: 1px solid var(--primary-colour);
@@ -128,7 +123,7 @@ i.burger-menu:hover {
 
 .password {
 	grid-column-start: 2;
-	grid-column-end: 7;
+	grid-column-end: 5;
 	grid-row:    3;
 	width: 100%;
 	margin-bottom: 40px;
@@ -159,8 +154,8 @@ i.burger-menu:hover {
 input.submit {
 	width: 100%;
 	max-width: 218px;
-	min-width: 140px;
-	padding: 20px 20px;
+	min-width: 210px;
+	padding: 0px 20px;
 	height: 60px;
 	grid-column-start: 2;
 	grid-row: 4;
