@@ -13,16 +13,8 @@
     src: url(../fonts/NotoSans.ttf);
 }
 
-@font-face {
-    font-family: 'icomoon';
-    src: url(../fonts/icomoon.ttf);
-}
-
 html * {
 	font-size: 1.03em;
-}
-
-html {
 	font-family: 'Noto Sans', sans-serif;
 }
 
@@ -60,14 +52,12 @@ main {
 }
 
 form.main-input {
-	padding-top: 55px;
-
+	padding-top: 38px;
 	grid-template-columns: repeat(8, 1fr);
 	grid-column:2;
 	grid-row: 2;
 	display: grid;
 	grid-gap: 25px 0px;
-
 }
 
 i.burger-menu {
@@ -111,7 +101,7 @@ i.burger-menu:hover {
 }
 
 .website input {
-	margin-top: 50px;
+	margin-top: 45px;
 	padding: 10px 6px;
 	border: none;
 	border-bottom: 1px solid var(--primary-colour);
