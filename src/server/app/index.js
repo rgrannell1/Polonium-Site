@@ -11,7 +11,6 @@ const staticFiles = require('koa-static')
 const constants = require('../commons/constants')
 const bunyan = require('bunyan')
 const config = require('config')
-const path = require('path')
 
 const log = bunyan.createLogger({
   name: constants.appName
@@ -19,17 +18,20 @@ const log = bunyan.createLogger({
 
 const routes = { }
 
+routes.logRequest = async (ctx, next) => {
+  log.info({message: 'request received.'})
+  await next()
+}
+
 routes.setHTST = async (ctx, next) => {
   await next()
   ctx.set('Strict-Transport-Security', `max-age=${constants.timeouts.htst};`)
 }
 
-const PROJECT_ROOT = path.resolve(__dirname, '../..')
-
-routes.getContent = staticFiles(PROJECT_ROOT, {})
+routes.getContent = staticFiles(constants.paths.projectRoot, {})
 
 routes.compress = compress({
-  filter: contentType => /text/i.test(contentType),
+  filter: contentType => true,
   threshold: 128,
   flush: require('zlib').Z_SYNC_FLUSH
 })
@@ -37,6 +39,7 @@ routes.compress = compress({
 const routers = { }
 
 routers.https = router(_ => {
+  _.all('*', routes.logRequest)
   _.all('*', routes.setHTST)
   _.all('*', routes.compress)
   _.get('*', routes.getContent)

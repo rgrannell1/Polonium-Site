@@ -4,6 +4,7 @@ const path = require('path')
 module.exports = {
   appName: 'polonium',
   paths: {
+    projectRoot: path.resolve(__dirname, '../..')
   },
   ports: {
     http: 8080,
