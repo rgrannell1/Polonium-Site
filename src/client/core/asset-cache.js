@@ -7,7 +7,9 @@
 
 const constants = {
 	cacheUrls: [
-		'css/polonium.css'
+		'/',
+		'polonium.css',
+		'NotoSans.ttf'
 	],
 	contentTypes: {
 		html: 'text/html'

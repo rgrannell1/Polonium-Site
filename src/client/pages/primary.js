@@ -131,24 +131,14 @@ components.main = {
 		return m('.container',
 			m(components.Header, { }),
 			m('main',
-				m('aside',
-					m('nav',
-						m('ul',
-							m('li', 'Foo'),
-							m('li', 'Bar'),
-							m('li', 'Baz'),
-							m('li', '______________'),
-							m('li', 'Bar'),
-							m('li', 'Baz'),
-							m('li', 'Foo'),
-							m('li', 'Bar'),
-							m('li', 'Baz'),
-							m('li', 'Foo'),
-							m('li', 'Bar'),
-							m('li', 'Baz'),
-						)
-					)
-				),
+//				m('aside',
+//					m('nav',
+//						m('ul',
+//							m('li', m('a', 'About')),
+//							m('li', m('a', 'Privacy'))
+//						)
+//					)
+//				),
 				m('form.main-input',
 
 					m(components.WebsiteInput,  { }),
