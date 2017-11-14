@@ -1,34 +1,22 @@
 
-"use strict"
-
-
-
+'use strict'
 
 const forge = require('node-forge')
 // const polonium  = require('polonium')
 
-
-
-
 const processes = {
-	//getPassword: require('worker-loader!./workers')
-	getPassword: require('./workers')
+  // getPassword: require('worker-loader!./workers')
+  getPassword: require('./workers')
 }
 
+function foo () {
 
-
-
-
-function foo ( ) {
-
-	/*
+  /*
 	const getPasswordWorker = new processes.getPassword
 
 	getPasswordWorker.postMessage({
 		a: 'xxx'
 	})
-
-
 
 	const bar = new Promise((resolve, reject) => {
 
@@ -49,12 +37,8 @@ function foo ( ) {
 	})
 	*/
 
-
 }
 
-
-
-
 module.exports = {
-	foo
+  foo
 }

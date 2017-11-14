@@ -1,60 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="theme-color">
-		<link rel="manifest" href="./manifest.json">
+  <head>
+    <meta charset="utf-8">
+    <title>Polonium</title>
+    <meta name="theme-color">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title></title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/polonium.css">
+  </head>
 
-		<link rel="stylesheet" href="css/polonium.css">
+  <body id='app'></body>
+  <script type="text/javascript">
 
-		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/build-service-worker.min.js').then(() => {
+        console.log('service worker loaded.')
+      })
+    } else {
+      console.error('serviceWorker not supported.')
+    }
 
-
-	</head>
-	<script type="text/javascript">
-
-/*
-
-		const encoder = new TextEncoder('utf-8')
-
-		window.crypto.subtle.importKey('raw', encoder.encode('password'), 'PBKDF2', false, ['deriveKey'])
-			.then(key => {
-
-				const algorithmOpts = {
-					name: 'AES-CTR',
-					length: 20
-				}
-
-				return window.crypto.subtle.deriveKey('SHA-1', key, , true, ['encrypt', 'decrypt']
-				)
-
-			})
-			.then(derivedKey => {
-
-				const keyData = new Uint8Array(window.crypto.subtle.exportKey('raw', derivedKey))
-				console.log(keyData)
-
-
-			})
-
-*/
-
-	</script>
-	<body id='app'></body>
-	<script type="text/javascript">
-
-		if ('serviceWorker' in navigator) {
-
-			navigator.serviceWorker.register('/build-service-worker.min.js').then(( ) => {
-				console.log('service worker loaded.')
-			})
-
-		}
-
-	</script>
-	<script src="build-index.min.js"></script>
+  </script>
+  <script src="build-index.min.js"></script>
 
 </html>

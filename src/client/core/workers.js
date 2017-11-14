@@ -1,14 +1,7 @@
 
-"use strict"
-
-
-
-
+'use strict'
 
 const polonium = require('polonium')
-
-
-
 
 /*
 polonium.polonium({

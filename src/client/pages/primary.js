@@ -2,6 +2,7 @@
 'use strict'
 
 const m = require('mithril')
+const clipboard = require('clipboard-polyfill')
 
 const utils = require('../commons/utils')
 
@@ -9,22 +10,26 @@ const eventHandlers = { }
 
 eventHandlers.onButtonClick = vnode => {
   Promise.resolve()
+  /*
+
     .then(() => {
       return utils.promise.timeout(() => {
         vnode.state.text = 'Getting Password...'
         vnode.state.class = 'submit active'
         m.redraw()
-      }, 0)
+      }, 1)
     })
+  */
     .then(() => {
+      clipboard.writeText('this is a password')
+      /*
       return utils.promise.timeout(() => {
-        console.log(document.getElementById('hidden'))
-        document.execCommand('copy', false, document.getElementById('hidden').select())
 
         vnode.state.text = 'Copied to Clipboard'
         vnode.state.class = 'submit completed'
         m.redraw()
       }, 3000)
+      */
     })
     .then(() => {
       return utils.promise.timeout(() => {
