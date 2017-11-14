@@ -5,6 +5,39 @@ const m = require('mithril')
 
 const utils = require('../commons/utils')
 
+const eventHandlers = { }
+
+eventHandlers.onButtonClick = vnode => {
+  Promise.resolve()
+    .then(() => {
+      return utils.promise.timeout(() => {
+        vnode.state.text = 'Getting Password...'
+        vnode.state.class = 'submit active'
+        m.redraw()
+      }, 0)
+    })
+    .then(() => {
+      return utils.promise.timeout(() => {
+        console.log(document.getElementById('hidden'))
+        document.execCommand('copy', false, document.getElementById('hidden').select())
+
+        vnode.state.text = 'Copied to Clipboard'
+        vnode.state.class = 'submit completed'
+        m.redraw()
+      }, 3000)
+    })
+    .then(() => {
+      return utils.promise.timeout(() => {
+        vnode.state.text = 'Get Site Password'
+        vnode.state.class = 'submit'
+        m.redraw()
+      }, 3000)
+    })
+    .catch(err => {
+      throw err
+    })
+}
+
 const components = { }
 
 components.Header = {
@@ -60,36 +93,7 @@ components.SubmitButton = {
       class: bclass,
       type: 'button',
       value: text,
-      onclick: () => {
-        Promise.resolve()
-          .then(() => {
-            return utils.promise.timeout(() => {
-              vnode.state.text = 'Getting Password...'
-              vnode.state.class = 'submit active'
-              m.redraw()
-            }, 0)
-          })
-          .then(() => {
-            return utils.promise.timeout(() => {
-              console.log(document.getElementById('hidden'))
-              document.execCommand('copy', false, document.getElementById('hidden').select())
-
-              vnode.state.text = 'Copied to Clipboard'
-              vnode.state.class = 'submit completed'
-              m.redraw()
-            }, 3000)
-          })
-          .then(() => {
-            return utils.promise.timeout(() => {
-              vnode.state.text = 'Get Site Password'
-              vnode.state.class = 'submit'
-              m.redraw()
-            }, 3000)
-          })
-          .catch(err => {
-            throw err
-          })
-      }
+      onclick: eventHandlers.onButtonClick.bind(this, vnode)
     })
   }
 }
