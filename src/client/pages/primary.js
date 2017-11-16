@@ -6,30 +6,39 @@ const clipboard = require('clipboard-polyfill')
 
 const utils = require('../commons/utils')
 
+if (window.Worker) {
+  var poloniumWorker = new Worker('/build-web-workers.min.js')
+} else {
+  console.error('webWorkers not supported.')
+}
+
 const eventHandlers = { }
 
 eventHandlers.onButtonClick = vnode => {
   Promise.resolve()
-  /*
-
     .then(() => {
-      return utils.promise.timeout(() => {
-        vnode.state.text = 'Getting Password...'
-        vnode.state.class = 'submit active'
-        m.redraw()
-      }, 1)
+      poloniumWorker.postMessage({})
+
+      Object.assign(vnode.state, {
+        text: 'Getting Password...',
+        class: 'submit active'
+      })
+      m.redraw()
     })
-  */
     .then(() => {
-      clipboard.writeText('this is a password')
-      /*
-      return utils.promise.timeout(() => {
+      const resultPromise = Promise.resolve(resolve => {
+        poloniumWorker.onmessage = event => {
+          clipboard.writeText(event.data)
+          Object.assign(vnode.state, {
+            text: 'Copied to Clipboard',
+            class: 'submit completed'
+          })
+          m.redraw()
+          resolve()
+        }
+      })
 
-        vnode.state.text = 'Copied to Clipboard'
-        vnode.state.class = 'submit completed'
-        m.redraw()
-      }, 3000)
-      */
+      return resultPromise
     })
     .then(() => {
       return utils.promise.timeout(() => {

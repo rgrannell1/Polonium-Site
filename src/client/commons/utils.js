@@ -1,21 +1,14 @@
 
-"use strict"
-
-
+'use strict'
 
 const utils = {
-	promise: { }
+  promise: { }
 }
 
-
-
-
 utils.promise.timeout = (fn, timeout) => {
-
-	return new Promise((res, rej) => {
-		setTimeout(( ) => res(fn( )), timeout)
-	})
-
+  return new Promise(resolve => {
+    setTimeout(() => resolve(fn()), timeout)
+  })
 }
 
 module.exports = utils

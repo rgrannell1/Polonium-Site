@@ -6,13 +6,10 @@
     <meta name="theme-color">
     <link rel="manifest" href="./manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link rel="stylesheet" href="css/polonium.css">
   </head>
-
   <body id='app'></body>
   <script type="text/javascript">
-
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/build-service-worker.min.js').then(() => {
         console.log('service worker loaded.')
@@ -20,8 +17,6 @@
     } else {
       console.error('serviceWorker not supported.')
     }
-
   </script>
-  <script src="build-index.min.js"></script>
-
+  <script src="build-index.min.js"></script
 </html>

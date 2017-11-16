@@ -1,3 +1,4 @@
+/* eslint-env node, serviceworker */
 
 'use strict'
 
