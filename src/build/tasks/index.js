@@ -13,7 +13,7 @@ const deps = require('../commons/dependencies')
 const constants = {
   nodeEnv: process.env.NODE_ENV,
   paths: {
-    bin: path.join(__dirname, '	../../../../../node_modules/.bin'),
+    bin: path.join(__dirname, ' ../../../../../node_modules/.bin'),
     client: path.join(__dirname, '../../../src/client/'),
     server: path.join(__dirname, '../../../src/server/'),
     tests: path.join(__dirname, '../../../test/'),
@@ -86,6 +86,10 @@ tasks.copyStaticFiles.run = async () => {
       to: path.join(constants.paths.dist, 'build-service-worker.js')
     },
     {
+      from: path.join(constants.paths.client, '/core/web-workers.js'),
+      to: path.join(constants.paths.dist, 'build-web-workers.js')
+    },
+    {
       from: path.join(constants.paths.client, 'index.html'),
       to: path.join(constants.paths.dist, 'index.html')
     },
@@ -151,8 +155,8 @@ tasks.minifyCss.run = async () => {
 
   const steps = paths.map(({from, to}) => {
     return config.get('build.minifyCSS')
-			? exec.shell(`${constants.bin.minifier} --output ${to} ${from}`)
-			: exec.shell(`cp ${from} ${to}`)
+      ? exec.shell(`${constants.bin.minifier} --output ${to} ${from}`)
+      : exec.shell(`cp ${from} ${to}`)
   })
 
   return Promise.all(steps)
@@ -172,6 +176,10 @@ tasks.minifyJs.run = async () => {
     {
       from: path.join(constants.paths.dist, '/build-service-worker.js'),
       to: path.join(constants.paths.dist, '/build-service-worker.min.js')
+    },
+    {
+      from: path.join(constants.paths.dist, '/build-web-workers.js'),
+      to: path.join(constants.paths.dist, '/build-web-workers.min.js')
     }
   ]
 
@@ -237,7 +245,7 @@ tasks.startDevServer = {
 }
 
 tasks.startDevServer.run = async () => {
-  return exec.shell(constants.bin.webPackDevServer + ' --content-base src' + ' --public	' + ' --hot' + ' --inline' + ' --host 0.0.0.0')
+  return exec.shell(constants.bin.webPackDevServer + ' --content-base src' + ' --public ' + ' --hot' + ' --inline' + ' --host 0.0.0.0')
 }
 
 tasks.checkDocs = {

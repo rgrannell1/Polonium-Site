@@ -1,10 +1,13 @@
 
 :root {
+	--primary-colour-light: #908ace;	
 	--primary-colour: #5d51d6;
-	--primary-colour-light: #908ace;
 	--primary-colour-dark: #3b3392;
-	--font-dark: gray;
+	--black: #b3b3b3;
+	--font-dark: #404040;
 	--button-ready: #4caf50;
+	--error-colour: #ef4a4a;
+	--error-colour-dark: #ab3636
 }
 
 @font-face {
@@ -100,7 +103,7 @@ label.burger-menu:hover {
 	margin-top: 35px;
 	padding: 10px 6px;
 	border: none;
-	border-bottom: 1px solid var(--primary-colour);
+	border-bottom: 1px solid var(--black);
 	margin-bottom: 1px;
 }
 
@@ -110,7 +113,7 @@ label.burger-menu:hover {
 .website input:focus {
 	outline:none;
 	border: none;
-	border-bottom: 2px solid var(--primary-colour);
+	border-bottom: 2px solid var(--black);
 	margin-bottom: 0px;
 }
 
@@ -133,7 +136,7 @@ label.burger-menu:hover {
 .password input {
 	padding: 10px 6px;
 	border: none;
-	border-bottom: 1px solid var(--primary-colour);
+	border-bottom: 1px solid var(--black);
 	margin-bottom: 1px;
 }
 
@@ -144,7 +147,7 @@ label.burger-menu:hover {
 .password input:focus {
 	outline:none;
 	border: none;
-	border-bottom: 2px solid var(--primary-colour);
+	border-bottom: 2px solid var(--black);
 	margin-bottom: 0px;
 }
 
@@ -161,7 +164,7 @@ input.submit {
 	grid-column-start: 2;
 	grid-row: 4;
 	background: none;
-	border: 1px solid var(--primary-colour);
+	border: 1px solid var(--black);
 	color: white;
 	vertical-align: middle;
 }
@@ -181,6 +184,11 @@ input.submit.active {
 
 input.submit.completed {
 	background: var(--primary-colour-dark);
+}
+
+input.submit.failed {
+	background: var(--error-colour);
+	border: 1px solid var(--error-colour-dark);
 }
 
 

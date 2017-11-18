@@ -16,7 +16,7 @@ const constants = {
 const security = { }
 
 /*
-	Create a new, local SSH key.
+  Create a new, local SSH key.
 */
 
 security.createSSHCert = {
@@ -37,7 +37,7 @@ security.createSSHCert.run = async () => {
 }
 
 /*
-	Add an SSH key to DigitalOcean.
+  Add an SSH key to DigitalOcean.
 */
 
 security.publishSSHCert = {
@@ -48,7 +48,7 @@ security.publishSSHCert.run = async () => {
   const publicKeyPath = `${config.get('digitalOcean.sshKeyPath')}.pub`
   const publicKey = fs.readFileSync(publicKeyPath).toString()
 
- 	return digitalOcean.setSSHKey(config.get('digitalOcean.sshKeyName'), publicKey)
+  return digitalOcean.setSSHKey(config.get('digitalOcean.sshKeyName'), publicKey)
 }
 
 security.openSSHTerminal = {
@@ -75,7 +75,7 @@ security.addDomainRecord = {
 }
 
 security.addDomainRecord.run = async () => {
-  return await digitalOcean.setDomainRecord({
+  return digitalOcean.setDomainRecord({
     name: config.get('vm.name'),
     domain: config.get('vm.domain'),
     subDomain: config.get('vm.subDomain'),

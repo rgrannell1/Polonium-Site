@@ -8,27 +8,73 @@ const spawn = require('child_process').spawn
 const fs = require('fs')
 const path = require('path')
 const config = require('config')
+const digitalOcean = require('../../utils/digitalocean')
+const ansible = require('../../utils/ansible')
+const constants = require('../constants')
 
 const PROJECT_PATH = path.join(__dirname, '../../..')
 const CLIENT_PATH = path.join(PROJECT_PATH, 'src/client')
 const DIST_PATH = path.join(PROJECT_PATH, 'dist')
 
-const constants = {
-  paths: {
-    dist: DIST_PATH,
-    distCerts: path.join(__dirname, '../../../dist/certs')
-  },
-  bin: {
-    webpack: 'node_modules/webpack/bin/webpack.js',
-    uglifyjs: 'node_modules/uglify-es/bin/uglifyjs',
-    minifier: 'node_modules/minifier/index.js'
-  }
-}
 const tasks = {
   build: {},
   security: {},
-  server: {}
+  server: {},
+  docker: {}
 }
+
+const conditions = { }
+
+conditions.distChanged = async () => {
+  const checksumPath = `${PROJECT_PATH}/dist.checksum`
+  const currentSum = (await exec.shell(`rhash -r ${DIST_PATH} --simple | sha256sum | cut -d " " -f1`)).stdout
+  const previousSum = (await fsUtils.testFile(checksumPath))
+      ? (await fsUtils.readFile(checksumPath)).toString()
+      : ''
+
+  await fsUtils.writeFile(checksumPath, currentSum)
+  return currentSum === previousSum
+}
+
+tasks.docker.buildImage = new Task({
+  title: 'Build docker-image',
+  run: async () => {
+    return exec.shell(`docker build -t ${config.get('docker.imageName')}:latest -f ${constants.paths.dockerfile} .`)
+  },
+  skip: conditions.distChanged
+})
+tasks.docker.login = new Task({
+  title: 'Login to docker',
+  run: async () => {
+    return exec.shell(`docker login --username=${config.get('docker.username')} --password=${config.get('docker.password')}`)
+  },
+  skip: conditions.distChanged
+})
+tasks.docker.publishImage = new Task({
+  title: 'Publish docker-image',
+  run: async () => {
+    await exec.shell(`docker tag ${config.get('docker.imageName')} ${config.get('docker.username')}/${config.get('docker.imageName')}:latest`)
+    await exec.shell(`docker push ${config.get('docker.username')}/${config.get('docker.imageName')}`)
+  },
+  skip: conditions.distChanged
+})
+
+tasks.security.getCerts = new Task({
+  title: 'Download SSL certificates from remote server',
+  run: async () => {
+    return ansible.runPlaybook(constants.paths.ansible.getCerts)
+  },
+  skip: async () => {
+    const exists = await Promise.all([
+      `${PROJECT_PATH}/config/credentials/certs/cert1.pem`,
+      `${PROJECT_PATH}/config/credentials/certs/chain1.pem`,
+      `${PROJECT_PATH}/config/credentials/certs/fullchain1.pem`,
+      `${PROJECT_PATH}/config/credentials/certs/privkey1.pem`
+    ].map(fsUtils.testFile))
+
+    return exists.every(val => val)
+  }
+})
 
 tasks.security.addSSHCert = new Task({
   title: 'Ensure an SSH certificate exists',
@@ -99,6 +145,13 @@ tasks.server.runLocalServer = new Task({
   }
 })
 
+tasks.server.createVM = new Task({
+  title: 'Setup a VM',
+  run: async () => {
+    await digitalOcean.setVM(config.get('vm'))
+  }
+})
+
 /**
  *
  */
@@ -164,6 +217,7 @@ tasks.build.minifyJS = new Task({
   run: async () => {
     await Promise.all([
       minify.js(`${DIST_PATH}/build-index.js`, `${DIST_PATH}/build-index.min.js`),
+      minify.js(`${DIST_PATH}/build-web-workers.js`, `${DIST_PATH}/build-web-workers.min.js`),
       minify.js(`${DIST_PATH}/build-service-worker.js`, `${DIST_PATH}/build-service-worker.min.js`)
     ])
   }
@@ -174,7 +228,8 @@ tasks.build.createWebPackArtifacts = new Task({
   run: async () => {
     return Promise.all([
       exec.shell(`${constants.bin.webpack} --config webpack/webpack.config.js`),
-      exec.shell(`${constants.bin.webpack} --config webpack/webpack-service-worker.config.js`)
+      exec.shell(`${constants.bin.webpack} --config webpack/webpack-service-worker.config.js`),
+      exec.shell(`${constants.bin.webpack} --config webpack/webpack-web-workers.config.js`)
     ])
   }
 })

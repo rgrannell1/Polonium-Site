@@ -1,12 +1,6 @@
 
 const {Build} = require('../build-framework')
 const tasks = require('./tasks')
-const path = require('path')
-
-const PROJECT_PATH = path.join(__dirname, '../..')
-const CLIENT_PATH = path.join(PROJECT_PATH, 'src/client')
-const SERVER_PATH = path.join(PROJECT_PATH, 'src/server')
-const DIST_PATH = path.join(PROJECT_PATH, 'dist')
 
 const builds = { }
 
@@ -29,7 +23,14 @@ builds.deployRemoteServer = new Build({
   title: 'Deploy to DigitalOcean',
   tasks: [
     tasks.build.cleanDistFolder,
-    tasks.build.buildDistFolder
+    tasks.build.buildDistFolder,
+    tasks.server.createVM,
+    tasks.security.getCerts,
+    tasks.build.cleanDistFolder,
+    tasks.build.buildDistFolder,
+    tasks.docker.buildImage,
+    tasks.docker.login,
+    tasks.docker.publishImage
   ]
 })
 

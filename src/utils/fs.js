@@ -6,6 +6,22 @@ const cpr = require('cpr')
 
 const fsUtils = {}
 
+fsUtils.readFile = path => {
+  return new Promise((resolve, reject) => {
+    return fs.readFile(path, (err, res) => {
+      err ? reject(err) : resolve(res)
+    })
+  })
+}
+
+fsUtils.writeFile = (path, content) => {
+  return new Promise((resolve, reject) => {
+    return fs.writeFile(path, content, err => {
+      err ? reject(err) : resolve()
+    })
+  })
+}
+
 fsUtils.removeFolder = path => {
   return rimraf(path)
 }

@@ -6,10 +6,10 @@ const path = require('path')
 const config = {
   context: path.resolve('src/client'),
   entry: {
-    app: './index.js'
+    app: './core/web-workers.js'
   },
   output: {
-    filename: 'build-index.js',
+    filename: 'build-web-workers.js',
     path: path.resolve('./dist'),
     publicPath: '/assets/'
   },

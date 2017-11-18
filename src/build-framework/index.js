@@ -3,6 +3,7 @@ const chalk = require('chalk')
 const constants = require('./constants')
 const fsUtils = require('../utils/fs')
 const path = require('path')
+const util = require('util')
 
 class BuildReporter {
   constructor (config) {
@@ -16,9 +17,6 @@ class BuildReporter {
   buildPending ({state, title}) {
     this._write({type: 'build', title, suffix: chalk.yellow('...')})
   }
-  buildReloaded ({state, title}) {
-    this._write({type: 'build', title, suffix: chalk.yellow('!')})
-  }
   buildSuccess ({state, title}) {
     const elapsedTime = Date.now()
     this._write({type: 'build', title, elapsedTime, suffix: chalk.green('✓')})
@@ -31,12 +29,13 @@ class BuildReporter {
   taskPending ({state, title}) {
     this._write({type: 'task', title, suffix: chalk.yellow('...')})
   }
-  taskReloaded ({state, title}) {
-    this._write({type: 'build', title, suffix: chalk.yellow('!')})
-  }
   taskSuccess ({state, title}) {
     const elapsedTime = Date.now()
     this._write({type: 'task', title, elapsedTime, suffix: chalk.green('✓')})
+  }
+  taskSkipped ({state, title}) {
+    const elapsedTime = Date.now()
+    this._write({type: 'task', title, elapsedTime, suffix: chalk.blue('-->')})
   }
   taskFailure ({state, err, title}) {
     const elapsedTime = Date.now()
@@ -67,8 +66,19 @@ class Build {
     let hasPassed = true
 
     for (let task of this.tasks) {
+      if (!task) {
+        throw new Error(`task not defined in ${util.inspect(this.tasks)}`)
+      }
+
       this.reporter.taskPending({state, title: task.title})
       try {
+        if (task.skip) {
+          const shouldSkip = await task.skip()
+          if (shouldSkip) {
+            this.reporter.taskSkipped({state, title: task.title})
+            continue
+          }
+        }
         await task.run()
         this.reporter.taskSuccess({state, title: task.title})
       } catch (err) {

@@ -28,6 +28,11 @@ routes.setHTST = async (ctx, next) => {
   ctx.set('Strict-Transport-Security', `max-age=${constants.timeouts.htst};`)
 }
 
+routes.setNoDelay = async (ctx, next) => {
+  ctx.request.setNoDelay()
+  await next()
+}
+
 routes.getContent = staticFiles(constants.paths.projectRoot, {})
 
 routes.compress = compress({

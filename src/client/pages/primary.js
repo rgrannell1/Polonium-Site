@@ -12,44 +12,54 @@ if (window.Worker) {
   console.error('webWorkers not supported.')
 }
 
+const view = {
+  button: { }
+}
+
+view.button.active = vnode => {
+  Object.assign(vnode.state, {
+    text: 'Getting Password...',
+    class: 'submit active'
+  })
+}
+
+view.button.complete = vnode => {
+  Object.assign(vnode.state, {
+    text: 'Copied to Clipboard',
+    class: 'submit completed'
+  })
+}
+
+view.button.error = vnode => {
+  Object.assign(vnode.state, {
+    text: 'Failed',
+    class: 'submit failed'
+  })
+}
+
 const eventHandlers = { }
 
-eventHandlers.onButtonClick = vnode => {
-  Promise.resolve()
-    .then(() => {
-      poloniumWorker.postMessage({})
+eventHandlers.onButtonClick = async vnode => {
+  poloniumWorker.postMessage({})
+  view.button.active(vnode)
+  m.redraw()
 
-      Object.assign(vnode.state, {
-        text: 'Getting Password...',
-        class: 'submit active'
-      })
-      m.redraw()
-    })
-    .then(() => {
-      const resultPromise = Promise.resolve(resolve => {
-        poloniumWorker.onmessage = event => {
-          clipboard.writeText(event.data)
-          Object.assign(vnode.state, {
-            text: 'Copied to Clipboard',
-            class: 'submit completed'
-          })
-          m.redraw()
-          resolve()
-        }
-      })
-
-      return resultPromise
-    })
-    .then(() => {
-      return utils.promise.timeout(() => {
-        vnode.state.text = 'Get Site Password'
-        vnode.state.class = 'submit'
+  const onMessage = Promise.resolve(resolve => {
+    poloniumWorker.onmessage = event => {
+      const result = clipboard.writeText(event.data).then(() => {
+        view.button.complete(vnode)
         m.redraw()
-      }, 3000)
-    })
-    .catch(err => {
-      throw err
-    })
+      })
+      resolve(result)
+    }
+  })
+
+  const onTimeout = utils.promise.timeout(() => {
+    view.button.error(vnode)
+    m.redraw()
+  }, 3000)
+
+  await Promise.race([onMessage, onTimeout])
 }
 
 const components = { }
@@ -95,18 +105,10 @@ components.PasswordInput = {
 
 components.SubmitButton = {
   view: vnode => {
-    var text = vnode.state.text
-      ? vnode.state.text
-      : 'Get Site Password'
-
-    var bclass = vnode.state.class
-      ? vnode.state.class
-      : 'submit'
-
     return m('input', {
-      class: bclass,
+      class: vnode.state.class || 'submit',
       type: 'button',
-      value: text,
+      value: vnode.state.text || 'Get Site Password',
       onclick: eventHandlers.onButtonClick.bind(this, vnode)
     })
   }
