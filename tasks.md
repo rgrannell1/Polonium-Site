@@ -2,6 +2,11 @@
 ## Performance
 
 - [ ] implement http2
+- [ ] implement minification
+
+## SSL
+
+- [ ] Implement letsencrypt fetching
 
 ## Progressive WebApp
 
