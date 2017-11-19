@@ -1,4 +1,8 @@
 
+## Performance
+
+- [ ] implement http2
+
 ## Progressive WebApp
 
 - [ ] add icons for site
