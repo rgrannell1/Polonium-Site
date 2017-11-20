@@ -4,12 +4,19 @@
   gather_facts: false
   pre_tasks:
   - raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
-  - setup: # aka gather_facts
+  - setup:
 
   tasks:
     - name: Check the VM can be contacted
       action: ping
 
-- import_playbook: roles/install-docker/tasks/main.yaml
-- import_playbook: roles/copy-client-resources/tasks/main.yaml
-- import_playbook: roles/update-packages/tasks/main.yaml
+    - name: 'Install Docker'
+      apt:
+        name: docker.io
+        state: latest
+        update_cache: yes
+
+    - name: 'Copy'
+      copy:
+        src: ../../dist
+        dest: /dist

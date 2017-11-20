@@ -4,6 +4,9 @@ const tasks = require('./tasks')
 
 const builds = { }
 
+/**
+ * Build the source-code into a single artifact folder.
+ */
 builds.buildDistFolder = new Build({
   title: 'Build the dist folder',
   tasks: [
@@ -12,6 +15,9 @@ builds.buildDistFolder = new Build({
   ]
 })
 
+/**
+ * Run the Polonium Server locally.
+ */
 builds.runLocalServer = new Build({
   title: 'Run local instance of the server',
   tasks: [
@@ -19,18 +25,23 @@ builds.runLocalServer = new Build({
   ]
 })
 
+/**
+ * Deploy a server to DigitalOcean.
+ */
 builds.deployRemoteServer = new Build({
   title: 'Deploy to DigitalOcean',
   tasks: [
     tasks.build.cleanDistFolder,
     tasks.build.buildDistFolder,
     tasks.server.createVM,
+    tasks.server.setupVM,
     tasks.security.getCerts,
     tasks.build.cleanDistFolder,
     tasks.build.buildDistFolder,
     tasks.docker.buildImage,
     tasks.docker.login,
-    tasks.docker.publishImage
+    tasks.docker.publishImage,
+    tasks.server.startServer
   ]
 })
 

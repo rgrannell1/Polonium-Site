@@ -36,10 +36,10 @@ tasks.createVM.run = async () => {
         digitalOcean.findVMs({
           name: config.get('vm.name')
         })
-				.then(existingVM => {
+        .then(existingVM => {
   existingVM.networks.v4[0].ip_address
 })
-				.then(resolve, reject)
+        .then(resolve, reject)
       }, 1000)
     })
   }, 10)

@@ -21,8 +21,8 @@ minify.js = (from, to) => {
 
 minify.css = (from, to) => {
   return config.get('build.minifyCSS')
-      ? exec.shell(`${constants.bin.minifier} --output ${to} ${from}`)
-      : fsUtils.copy(from, to)
+    ? exec.shell(`${constants.bin.minifier} --output ${to} ${from}`)
+    : fsUtils.copy(from, to)
 }
 
 module.exports = minify

@@ -9,5 +9,27 @@
   tasks:
     - name: Check the VM can be contacted
       action: ping
+    - apt_repository:
+        repo: 'ppa:certbot/certbot'
+
+    - name: 'Install Certbot'
+      apt:
+        name: certbot
+        state: latest
+        update_cache: yes
+
+    - name: Copy Remote Certificates
+      synchronize:
+        mode: pull
+        src: "/etc/letsencrypt/archive/polonium.rgrannell.world/"
+        dest: "../../config/credentials/certs/"
+        recursive: yes
+
+    - name: Copy Remote Certificates To Dist
+      synchronize:
+        mode: pull
+        src: "/etc/letsencrypt/archive/polonium.rgrannell.world/"
+        dest: "../../dist/config/credentials/certs/"
+        recursive: yes
 
 - import_playbook: roles/obtain-certificates/tasks/main.yaml

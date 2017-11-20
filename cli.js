@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-'use strict'
-
 const neodoc = require('neodoc')
 const cli = require('./src/build-cli')
 
@@ -48,6 +46,15 @@ const args = neodoc.run(docs.main, {
   startOptions: true
 })
 
+/**
+ *
+ * @params {object} args arbitrary command-line arguments.
+ *
+ * lookup the command to run based on provided cli arguments.
+ *
+ * return {function?} this command to run.
+ *
+ */
 function findCommand (args) {
   let command
 

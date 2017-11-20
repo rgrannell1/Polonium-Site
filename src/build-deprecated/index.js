@@ -1,8 +1,5 @@
 
-'use strict'
-
 const pipelines = require('./pipelines')
-
 const cli = { }
 
 cli.deploy = {

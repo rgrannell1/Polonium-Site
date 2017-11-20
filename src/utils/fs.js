@@ -6,6 +6,14 @@ const cpr = require('cpr')
 
 const fsUtils = {}
 
+/**
+ *
+ * @param {string} the path to read from.
+ *
+ * @returns {Promise} promise containing file content.
+ *
+ */
+
 fsUtils.readFile = path => {
   return new Promise((resolve, reject) => {
     return fs.readFile(path, (err, res) => {
@@ -13,6 +21,14 @@ fsUtils.readFile = path => {
     })
   })
 }
+
+/**
+ *
+ * @param {string} path the path to write to.
+ * @param {string} content the content to write to a file
+ *
+ * @returns {Promise} a result promise.
+ */
 
 fsUtils.writeFile = (path, content) => {
   return new Promise((resolve, reject) => {
@@ -22,13 +38,35 @@ fsUtils.writeFile = (path, content) => {
   })
 }
 
+/**
+ *
+ * @param {string} path the path to remove.
+ *
+ * @returns {Promise} a result promise.
+ */
+
 fsUtils.removeFolder = path => {
   return rimraf(path)
 }
 
+/**
+ *
+ * @param {string} path the path to create.
+ *
+ * @returns {Promise} a result promise.
+ */
+
 fsUtils.mkdir = path => {
   return mkdirp(path)
 }
+
+/**
+ *
+ * @param {string} source the folder to copy
+ * @param {string} source the destination of the folder
+ *
+ * @returns {Promise} a result promise.
+ */
 
 fsUtils.copyDir = (source, dest) => {
   return new Promise((resolve, reject) => {
@@ -43,6 +81,14 @@ fsUtils.copyDir = (source, dest) => {
   })
 }
 
+/**
+ *
+ * @param {string} source the path to copy
+ * @param {string} source the destination of the file
+ *
+ * @returns {Promise} a result promise.
+ */
+
 fsUtils.copy = (source, dest) => {
   return new Promise((resolve, reject) => {
     fs.copyFile(source, dest, err => {
@@ -50,6 +96,13 @@ fsUtils.copy = (source, dest) => {
     })
   })
 }
+
+/**
+ *
+ * @param {string} source the path to test for
+ *
+ * @returns {Promise} a result promise containing a boolean value.
+ */
 
 fsUtils.testFile = path => {
   if (!path) {

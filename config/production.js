@@ -3,33 +3,39 @@ const path = require('path')
 const credentials = require('./credentials/credentials.json')
 
 const userData = `
-#cloud-config
+#!/bin/bash
 
 apt-get install git docker.io python2.7 --assume-yes
 `
 
 module.exports = {
   build: {
-    minifyJS: true,
-    minifyCSS: true
+    minifyJS: false,
+    minifyCSS: false
   },
   digitalOcean: {
+    sshUserName: 'root',
     sshKeyName: 'polonium_ssh_key',
-    sshKeyPath: 'config/credentials/prod_key'
+    sshKeyPath: path.resolve('config/credentials/dev_key')
+  },
+  ssl: {
+    privateKey: path.join(__dirname, 'credentials/certs/privkey1.pem'),
+    cert: path.join(__dirname, 'credentials/certs/cert1.pem'),
+    chain: null
   },
   vm: {
-    name: 'prod-polonium-site',
+    name: 'dev-polonium-site',
     region: 'lon1',
     image: 'ubuntu-16-04-x64',
     size: '512mb',
-    userData
-  },
-  ssl: {
-    privateKey: path.resolve('config/credentials/certs/privkey1.pem'),
-    cert: path.resolve('config/credentials/certs/cert1.pem'),
-    chain: path.resolve('config/credentials/certs/fullchain1.pem')
+    userData,
+    domain: credentials.vmDomain,
+    subDomain: 'polonium'
   },
   tests: {
 
+  },
+  docker: {
+    imageName: 'polonium_site'
   }
 }

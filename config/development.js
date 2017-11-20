@@ -19,8 +19,8 @@ module.exports = {
     sshKeyPath: path.resolve('config/credentials/dev_key')
   },
   ssl: {
-    privateKey: path.resolve('config/credentials/local_ssl_certs/privkey1.pem'),
-    cert: path.resolve('config/credentials/local_ssl_certs/cert1.pem'),
+    privateKey: path.join(__dirname, 'credentials/local_ssl_certs/privkey1.pem'),
+    cert: path.join(__dirname, 'credentials/local_ssl_certs/cert1.pem'),
     chain: null
   },
   vm: {

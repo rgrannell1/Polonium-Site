@@ -15,10 +15,10 @@ const constants = {
   },
   paths: {
     ansibleInventory: path.join(__dirname, '../ansible/settings.js'),
-    setupVmPlaybook: path.join(__dirname, '../ansible/setup-vm.yaml'),
-    startServerPlaybook: path.join(__dirname, '../ansible/start-server.yaml'),
     ansible: {
-      getCerts: path.join(__dirname, '../ansible/obtain-certificates.yaml')
+      getCerts: path.join(__dirname, '../ansible/obtain-certificates.yaml'),
+      startServer: path.join(__dirname, '../ansible/start-server.yaml'),
+      setupVm: path.join(__dirname, '../ansible/setup-vm.yaml')
     },
     dockerfile: path.join(__dirname, '../dockerfiles/build.dockerfile')
   },

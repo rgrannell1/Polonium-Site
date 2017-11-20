@@ -2,6 +2,7 @@
 const {Build, Task} = require('../../build-framework')
 const fsUtils = require('../../utils/fs')
 const minify = require('../../utils/minify')
+const chalk = require('chalk')
 const exec = require('execa')
 const spawn = require('child_process').spawn
 
@@ -33,20 +34,30 @@ conditions.distChanged = async () => {
       : ''
 
   await fsUtils.writeFile(checksumPath, currentSum)
-  return currentSum === previousSum
+
+  // return currentSum === previousSum
+  return false
 }
 
 tasks.docker.buildImage = new Task({
   title: 'Build docker-image',
   run: async () => {
-    return exec.shell(`docker build -t ${config.get('docker.imageName')}:latest -f ${constants.paths.dockerfile} .`)
+    const cmd = `docker build -t ${config.get('docker.imageName')}:latest -f ${constants.paths.dockerfile} .`
+    const result = exec.shell(cmd)
+
+    result.stdout
+      .on('data', chunk => console.log(chalk.blue(chunk)))
+      .on('end', chunk => console.log(chalk.blue(chunk)))
+
+    return result
   },
   skip: conditions.distChanged
 })
 tasks.docker.login = new Task({
   title: 'Login to docker',
   run: async () => {
-    return exec.shell(`docker login --username=${config.get('docker.username')} --password=${config.get('docker.password')}`)
+    const cmd = `docker login --username=${config.get('docker.username')} --password=${config.get('docker.password')}`
+    return exec.shell(cmd)
   },
   skip: conditions.distChanged
 })
@@ -54,7 +65,14 @@ tasks.docker.publishImage = new Task({
   title: 'Publish docker-image',
   run: async () => {
     await exec.shell(`docker tag ${config.get('docker.imageName')} ${config.get('docker.username')}/${config.get('docker.imageName')}:latest`)
-    await exec.shell(`docker push ${config.get('docker.username')}/${config.get('docker.imageName')}`)
+
+    const result = exec.shell(`docker push ${config.get('docker.username')}/${config.get('docker.imageName')}`)
+
+    result.stdout
+      .on('data', chunk => console.log(chalk.blue(chunk)))
+      .on('end', chunk => console.log(chalk.blue(chunk)))
+
+    await result
   },
   skip: conditions.distChanged
 })
@@ -149,6 +167,20 @@ tasks.server.createVM = new Task({
   title: 'Setup a VM',
   run: async () => {
     await digitalOcean.setVM(config.get('vm'))
+  }
+})
+
+tasks.server.setupVM = new Task({
+  title: 'Install software on the VM',
+  run: async () => {
+    return ansible.runPlaybook(constants.paths.ansible.setupVm)
+  }
+})
+
+tasks.server.startServer = new Task({
+  title: 'Start Polonium on the remote server',
+  run: async () => {
+    return ansible.runPlaybook(constants.paths.ansible.startServer)
   }
 })
 
