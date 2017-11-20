@@ -77,6 +77,22 @@ tasks.docker.publishImage = new Task({
   skip: conditions.distChanged
 })
 
+tasks.security.openTerminal = new Task({
+  title: 'Download SSL certificates from remote server',
+  run: async () => {
+    const vm = await digitalOcean.findVMs({
+      name: config.get('vm.name')
+    })
+
+    if (vm) {
+      const ip = vm.networks.v4[0].ip_address
+      const command = `gnome-terminal -e "ssh ${config.get('digitalOcean.sshUserName')}@${ip} -i ${config.get('digitalOcean.sshKeyPath')}"`
+
+      return exec.shell(command)
+    }
+  }
+})
+
 tasks.security.getCerts = new Task({
   title: 'Download SSL certificates from remote server',
   run: async () => {

@@ -1,5 +1,6 @@
 FROM ubuntu
 LABEL maintainer="Ryan Grannell <r.grannell2@gmail.com>"
+LABEL description="This private image runs a Polonium server"
 EXPOSE 8080
 
 ENV NODE_CONFIG_DIR=/usr/local/app/dist/config

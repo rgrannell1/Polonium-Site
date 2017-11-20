@@ -47,7 +47,9 @@ builds.deployRemoteServer = new Build({
 
 builds.openSSHTerminal = new Build({
   title: 'Open an SSH terminal to the DigitalOcean terminal',
-  tasks: []
+  tasks: [
+    tasks.security.openTerminal
+  ]
 })
 
 builds.fetchSSLCertificate = new Build({
