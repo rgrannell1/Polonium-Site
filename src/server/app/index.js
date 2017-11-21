@@ -72,5 +72,9 @@ if (false) {
   certOptions.ca = fs.readFileSync(config.get('ssl.chain')).toString()
 } */
 
-http2.createSecureServer(certOptions, apps.https.callback())
+const server = http2.createSecureServer(certOptions, apps.https.callback())
   .listen(constants.ports.https)
+
+server.on('connection', socket => {
+  socket.setNoDelay(true)
+})
