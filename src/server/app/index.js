@@ -29,7 +29,10 @@ routes.setHTST = async (ctx, next) => {
 }
 
 routes.setNoDelay = async (ctx, next) => {
-  ctx.request.setNoDelay()
+  await next()
+}
+
+routes.logging = async (ctx, next) => {
   await next()
 }
 
@@ -48,6 +51,7 @@ routers.https = router(_ => {
   _.all('*', routes.setHTST)
   _.all('*', routes.compress)
   _.get('*', routes.getContent)
+  _.post('/log', routes.logging)
 })
 
 const apps = {

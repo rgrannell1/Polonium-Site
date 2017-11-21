@@ -5,6 +5,7 @@
 const constants = {
   cacheUrls: [
     '/',
+    '/index.html',
     'polonium.css',
     'NotoSans.ttf'
   ],

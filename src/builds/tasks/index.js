@@ -5,6 +5,7 @@ const minify = require('../../utils/minify')
 const chalk = require('chalk')
 const exec = require('execa')
 const spawn = require('child_process').spawn
+const postDeploymentTests = require('../../../tests/post-deployment-test')
 
 const fs = require('fs')
 const path = require('path')
@@ -21,7 +22,8 @@ const tasks = {
   build: {},
   security: {},
   server: {},
-  docker: {}
+  docker: {},
+  test: {}
 }
 
 const conditions = { }
@@ -294,6 +296,13 @@ tasks.build.buildDistFolder = new Build({
     tasks.build.createWebPackArtifacts,
     tasks.build.minifyJS
   ]
+})
+
+tasks.test.postDeployment = new Task({
+  title: 'Test that the website is superficially working',
+  run: async () => {
+    return postDeploymentTests()
+  }
 })
 
 module.exports = tasks
