@@ -1,0 +1,17 @@
+{
+	@context: {
+		user: {
+			@id: ""
+			@type: "user"
+		},
+		url: {
+			@id: ""
+			@type: ""
+		},
+		time: {
+			@id: ""
+			@type: ""
+		}
+	},
+	'@type': 'request'
+}

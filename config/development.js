@@ -31,11 +31,5 @@ module.exports = {
     userData,
     domain: credentials.vmDomain,
     subDomain: 'polonium'
-  },
-  tests: {
-
-  },
-  docker: {
-    imageName: 'polonium_site'
   }
 }

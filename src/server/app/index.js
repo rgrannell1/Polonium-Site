@@ -7,29 +7,36 @@ const http2 = require('http2')
 const router = require('koa-simple-router')
 const compress = require('koa-compress')
 const staticFiles = require('koa-static')
-
 const constants = require('../commons/constants')
-const bunyan = require('bunyan')
+const logging = require('../commons/logging')
+const entities = require('../schemas')
+const facts = require('../commons/facts')
 const config = require('config')
-
-const log = bunyan.createLogger({
-  name: constants.appName
-})
 
 const routes = { }
 
-routes.logRequest = async (ctx, next) => {
-  log.info({message: 'request received.'})
+/**
+ *
+ * Register the request fact.
+ *
+ */
+routes.registerRequest = async (ctx, next) => {
+  const request = entities.request({
+    user: entities.user({
+      ip: ctx.ip,
+      agent: ctx.headers['user-agent']
+    }),
+    url: ctx.originalUrl,
+    time: Date.now()
+  })
+
+  facts.note(request)
   await next()
 }
 
 routes.setHTST = async (ctx, next) => {
   await next()
   ctx.set('Strict-Transport-Security', `max-age=${constants.timeouts.htst};`)
-}
-
-routes.setNoDelay = async (ctx, next) => {
-  await next()
 }
 
 routes.logging = async (ctx, next) => {
@@ -44,13 +51,21 @@ routes.compress = compress({
   flush: require('zlib').Z_SYNC_FLUSH
 })
 
+routes.noContentFound = async (ctx, next) => {
+  if (parseInt(ctx.status) === 404) {
+    ctx.status = 404
+    ctx.body = '<html>Oh no, an error</html>'
+  }
+}
+
 const routers = { }
 
 routers.https = router(_ => {
-  _.all('*', routes.logRequest)
+  _.all('*', routes.registerRequest)
   _.all('*', routes.setHTST)
   _.all('*', routes.compress)
   _.get('*', routes.getContent)
+  _.get('*', routes.noContentFound)
   _.post('/log', routes.logging)
 })
 

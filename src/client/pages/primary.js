@@ -78,8 +78,8 @@ components.Header = {
 components.WebsiteInput = {
   view: vnode => {
     return m('.website', {id: 'website-input-container'},
-      m('input.website', {
-        placeholder: 'Site',
+      m('label', {for: 'website', spellcheck: false}, 'Site'),
+      m('input#website', {
         required: true,
         oninput: m.withAttr('value', val => {
           vnode.state.website = val
@@ -92,8 +92,9 @@ components.WebsiteInput = {
 components.PasswordInput = {
   view: vnode => {
     return m('.password', {id: 'password-input-container'},
-      m('input.password', {
-        placeholder: 'Master Password',
+      m('label', {for: 'password'}, 'Master Password'),
+      m('input#password', {
+        required: true,
         type: 'password',
         oninput: m.withAttr('value', val => {
           vnode.state.password = val

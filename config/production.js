@@ -10,8 +10,8 @@ apt-get install git docker.io python2.7 --assume-yes
 
 module.exports = {
   build: {
-    minifyJS: false,
-    minifyCSS: false
+    minifyJS: true,
+    minifyCSS: true
   },
   digitalOcean: {
     sshUserName: 'root',
@@ -31,11 +31,5 @@ module.exports = {
     userData,
     domain: credentials.vmDomain,
     subDomain: 'polonium'
-  },
-  tests: {
-
-  },
-  docker: {
-    imageName: 'polonium_site'
   }
 }

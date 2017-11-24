@@ -58,6 +58,7 @@ listeners.tidyCache = async event => {
 }
 
 listeners.serveFromCache = async event => {
+  event.request
   if (isCacheable(event.request)) {
     const cachedResponse = await caches.match(event.request)
 

@@ -5,6 +5,7 @@ const m = require('mithril')
 const pages = require('./pages')
 
 document.body.onload = function () {
+  m.route.mode = 'search'
   m.route(document.body, '/', {
     '/': pages['/'].body,
     '/about': pages['/about'].body,

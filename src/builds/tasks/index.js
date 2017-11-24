@@ -175,6 +175,8 @@ tasks.server.runLocalServer = new Task({
   title: 'Run Polonium server locally',
   run: async () => {
     const child = spawn('node', [`${DIST_PATH}/server/app/index.js`])
+    child.stdout.pipe(process.stdout)
+    child.stderr.pipe(process.stderr)
     child.on('exit', (code, signal) => {
       console.log(`exited with code ${code} & signal ${signal}`)
     })
@@ -242,13 +244,13 @@ tasks.build.copyStaticFiles = new Task({
     await Promise.all([
       fsUtils.copyDir(`${CLIENT_PATH}/fonts`, `${DIST_PATH}/fonts`),
       fsUtils.copyDir(`${CLIENT_PATH}/css`, `${DIST_PATH}/css`),
+      fsUtils.copyDir(`${CLIENT_PATH}/core`, `${DIST_PATH}/core`),
       fsUtils.copyDir(`${PROJECT_PATH}/src/server`, `${DIST_PATH}/server`),
       fsUtils.copyDir(`${PROJECT_PATH}/config`, `${DIST_PATH}/config`),
       fsUtils.copy(`${CLIENT_PATH}/index.html`, `${DIST_PATH}/index.html`),
       fsUtils.copy(`${CLIENT_PATH}/manifest.json`, `${DIST_PATH}/manifest.json`),
       fsUtils.copy(`${CLIENT_PATH}/favicon.ico`, `${DIST_PATH}/favicon.ico`),
-      fsUtils.copy(`${CLIENT_PATH}/icon.png`, `${DIST_PATH}/icon.png`),
-      fsUtils.copy(`${PROJECT_PATH}/package.json`, `${DIST_PATH}/package.json`)
+      fsUtils.copy(`${CLIENT_PATH}/icon.png`, `${DIST_PATH}/icon.png`), fsUtils.copy(`${PROJECT_PATH}/package.json`, `${DIST_PATH}/package.json`)
     ])
   }
 })

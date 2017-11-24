@@ -1,22 +1,23 @@
 
 :root {
-	--primary-colour-light: #908ace;	
-	--primary-colour: #5d51d6;
-	--primary-colour-dark: #3b3392;
 	--black: #b3b3b3;
-	--font-dark: #404040;
 	--button-ready: #4caf50;
+	--error-colour-dark: #ab3636;
 	--error-colour: #ef4a4a;
-	--error-colour-dark: #ab3636
+	--font: #404040;
+	--font-dark: #3a3a3a;
+	--primary-colour-dark: #3b3392;
+	--primary-colour-light: #908ace;
+	--primary-colour: #5d51d6;
 }
 
 @font-face {
-    font-family: 'Noto Sans';
-    src: url(../fonts/NotoSans.ttf);
+	font-family: 'Noto Sans';
+	src: url(../fonts/NotoSans.ttf);
 }
 
 html * {
-	font-size: 1.03em;
+	font-size: 1.02em;
 	font-family: 'Noto Sans', sans-serif;
 	webkit-text-security: square;
 }
@@ -24,6 +25,11 @@ html * {
 /*
 	Navbar styling.
 */
+
+noscript#fallback-message {
+	font-size: 2em;
+	font-align: center;
+}
 
 .main-head {
 	padding: 0px 20px;
@@ -38,8 +44,16 @@ h1.brand {
 }
 
 html, body {
-    margin: 0;
-    color: rgb(179, 9, 9);;
+	margin: 0;
+	color: var(--font);
+}
+
+label:focus {
+	color:red;
+}
+
+#website-input-container:focus *, #password-input-container:focus * {
+	color: red;
 }
 
 .container {
@@ -75,6 +89,7 @@ label.burger-menu:hover {
 	grid-row: 1;
 	display: grid;
 	grid-template-columns: 1fr 9fr;
+	box-shadow: 0 0 4px rgba(0,0,0,0.010), 0 4px 8px rgba(0,0,0,0.20);
 }
 
 .main-head h1.brand {
@@ -82,11 +97,6 @@ label.burger-menu:hover {
 	grid-column-end: 3;
 	grid-row: 1;
 }
-
-
-
-
-
 
 /*
 	site input styling.
@@ -96,30 +106,25 @@ label.burger-menu:hover {
 	grid-column-start: 2;
 	grid-column-end: 5;
 	grid-row:    2;
-	width: 100%;
 }
 
-.website input {
-	margin-top: 35px;
+
+
+
+input#website {
 	padding: 10px 6px;
 	border: none;
 	border-bottom: 1px solid var(--black);
 	margin-bottom: 1px;
+	width: 100%;
 }
 
-.website input::placeholder {
-	color: var(--font-dark);
-}
-.website input:focus {
+input#website:focus {
 	outline:none;
 	border: none;
 	border-bottom: 2px solid var(--black);
 	margin-bottom: 0px;
 }
-
-
-
-
 
 /*
 	password input styling.
@@ -133,18 +138,15 @@ label.burger-menu:hover {
 	margin-bottom: 40px;
 }
 
-.password input {
+input#password {
 	padding: 10px 6px;
 	border: none;
 	border-bottom: 1px solid var(--black);
 	margin-bottom: 1px;
+	width: 100%;
 }
 
-.password input::placeholder {
-	color: var(--font-dark);
-}
-
-.password input:focus {
+input#password:focus {
 	outline:none;
 	border: none;
 	border-bottom: 2px solid var(--black);
@@ -159,14 +161,20 @@ input.submit {
 	width: 100%;
 	max-width: 218px;
 	min-width: 210px;
-	padding: 0px 20px;
-	height: 60px;
+	padding: 0px 15px;
+	height: 50px;
 	grid-column-start: 2;
 	grid-row: 4;
 	background: none;
 	border: 1px solid var(--black);
+	box-shadow: 0 0 4px rgba(0,0,0,0.07), 0 4px 8px rgba(0,0,0,0.14);
 	color: white;
-	vertical-align: middle;
+	border-radius: 4px;
+}
+
+input.submit:hover {
+	background: var(--primary-colour-dark);
+	box-shadow: 0 0 4px rgba(0,0,0,0.014), 0 4px 8px rgba(0,0,0,0.28);
 }
 
 input.submit:focus {

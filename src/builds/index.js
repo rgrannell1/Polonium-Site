@@ -41,8 +41,8 @@ builds.deployRemoteServer = new Build({
     tasks.docker.buildImage,
     tasks.docker.login,
     tasks.docker.publishImage,
-    tasks.server.startServer,
-    tasks.test.postDeployment
+    tasks.server.startServer
+//  tasks.test.postDeployment
   ]
 })
 
