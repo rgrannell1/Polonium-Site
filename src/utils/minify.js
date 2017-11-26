@@ -14,7 +14,8 @@ const constants = {
 const minify = { }
 
 minify.js = (from, to) => {
-  return config.get('build.minifyJS')
+//  return config.get('build.minifyJS')
+  return false
     ? exec.shell(`${constants.bin.uglifyjs} ${from} ${to}`)
     : fsUtils.copy(from, to)
 }

@@ -6,20 +6,16 @@ const chalk = require('chalk')
 const path = require('path')
 const fs = require('fs')
 const {Enum} = require('enumify')
-const digitalOcean = require('../commons/digital-ocean')
+// const digitalOcean = require('../commons/digital-ocean')
 
 class ReportState extends Enum { }
 
 ReportState.initEnum(['FAILED', 'PASSED', 'SKIPPED', 'UNCERTAIN'])
 
-const ok = Promise.resolve
-const fail = Promise.reject
-
 let deps = { }
 
 deps.check = schemas => {
   return Promise.resolve()
-  var hasError = false
 
   const schemaResults = schemas.map(schema => schema.report())
 

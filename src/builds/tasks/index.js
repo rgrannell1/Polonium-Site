@@ -12,6 +12,7 @@ const path = require('path')
 const config = require('config')
 const digitalOcean = require('../../utils/digitalocean')
 const ansible = require('../../utils/ansible')
+const deps = require('../../utils/dependencies')
 const constants = require('../constants')
 
 const PROJECT_PATH = path.join(__dirname, '../../..')
@@ -236,21 +237,25 @@ tasks.build.copyStaticFiles = new Task({
   title: 'Copy Static Files',
   run: async () => {
     await Promise.all([
-      fsUtils.mkdir(`${DIST_PATH}/css`),
-      fsUtils.mkdir(`${DIST_PATH}/fonts`),
+      fsUtils.mkdir(`${DIST_PATH}/client`),
+      fsUtils.mkdir(`${DIST_PATH}/client/css`),
+      fsUtils.mkdir(`${DIST_PATH}/client/fonts`),
+      fsUtils.mkdir(`${DIST_PATH}/client/core`),
       fsUtils.mkdir(`${DIST_PATH}/server`)
     ])
 
     await Promise.all([
-      fsUtils.copyDir(`${CLIENT_PATH}/fonts`, `${DIST_PATH}/fonts`),
-      fsUtils.copyDir(`${CLIENT_PATH}/css`, `${DIST_PATH}/css`),
-      fsUtils.copyDir(`${CLIENT_PATH}/core`, `${DIST_PATH}/core`),
+      fsUtils.copyDir(`${CLIENT_PATH}/fonts`, `${DIST_PATH}/client/fonts`),
+      fsUtils.copyDir(`${CLIENT_PATH}/css`, `${DIST_PATH}/client/css`),
+      fsUtils.copyDir(`${CLIENT_PATH}/core`, `${DIST_PATH}/client/core`),
       fsUtils.copyDir(`${PROJECT_PATH}/src/server`, `${DIST_PATH}/server`),
       fsUtils.copyDir(`${PROJECT_PATH}/config`, `${DIST_PATH}/config`),
-      fsUtils.copy(`${CLIENT_PATH}/index.html`, `${DIST_PATH}/index.html`),
-      fsUtils.copy(`${CLIENT_PATH}/manifest.json`, `${DIST_PATH}/manifest.json`),
-      fsUtils.copy(`${CLIENT_PATH}/favicon.ico`, `${DIST_PATH}/favicon.ico`),
-      fsUtils.copy(`${CLIENT_PATH}/icon.png`, `${DIST_PATH}/icon.png`), fsUtils.copy(`${PROJECT_PATH}/package.json`, `${DIST_PATH}/package.json`)
+      fsUtils.copy(`${CLIENT_PATH}/index.html`, `${DIST_PATH}/client/index.html`),
+      fsUtils.copy(`${CLIENT_PATH}/manifest.json`, `${DIST_PATH}/client/manifest.json`),
+      fsUtils.copy(`${CLIENT_PATH}/favicon.ico`, `${DIST_PATH}/client/favicon.ico`),
+      fsUtils.copy(`${CLIENT_PATH}/icon-256.png`, `${DIST_PATH}/client/icon-256.png`),
+      fsUtils.copy(`${CLIENT_PATH}/icon-512.png`, `${DIST_PATH}/client/icon-512.png`),
+      fsUtils.copy(`${PROJECT_PATH}/package.json`, `${DIST_PATH}/package.json`)
     ])
   }
 })
@@ -259,7 +264,7 @@ tasks.build.minifyCss = new Task({
   title: 'Minify CSS Files',
   run: async () => {
     await Promise.all([
-      minify.css(`${CLIENT_PATH}/css/polonium.css`, `${DIST_PATH}/css/polonium.min.css`)
+      minify.css(`${CLIENT_PATH}/css/polonium.css`, `${DIST_PATH}/client/css/polonium.min.css`)
     ])
   }
 })
@@ -267,10 +272,13 @@ tasks.build.minifyCss = new Task({
 tasks.build.minifyJS = new Task({
   title: 'Minify JS Files',
   run: async () => {
+    await deps.check([
+      new deps.Path({path: `${DIST_PATH}/build-index.js`})
+    ])
+
     await Promise.all([
-      minify.js(`${DIST_PATH}/build-index.js`, `${DIST_PATH}/build-index.min.js`),
-      minify.js(`${DIST_PATH}/build-web-workers.js`, `${DIST_PATH}/build-web-workers.min.js`),
-      minify.js(`${DIST_PATH}/build-service-worker.js`, `${DIST_PATH}/build-service-worker.min.js`)
+      minify.js(`${DIST_PATH}/build-index.js`, `${DIST_PATH}/client/build-index.min.js`),
+      minify.js(`${DIST_PATH}/build-web-workers.js`, `${DIST_PATH}/client/build-web-workers.min.js`)
     ])
   }
 })

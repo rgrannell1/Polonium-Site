@@ -8,7 +8,6 @@ const router = require('koa-simple-router')
 const compress = require('koa-compress')
 const staticFiles = require('koa-static')
 const constants = require('../commons/constants')
-const logging = require('../commons/logging')
 const entities = require('../schemas')
 const facts = require('../commons/facts')
 const config = require('config')
@@ -21,7 +20,7 @@ const routes = { }
  *
  */
 routes.registerRequest = async (ctx, next) => {
-  const request = entities.request({
+  const requestData = entities.request({
     user: entities.user({
       ip: ctx.ip,
       agent: ctx.headers['user-agent']
@@ -30,7 +29,7 @@ routes.registerRequest = async (ctx, next) => {
     time: Date.now()
   })
 
-  facts.note(request)
+  facts.note(requestData)
   await next()
 }
 

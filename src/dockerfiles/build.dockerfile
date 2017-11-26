@@ -19,7 +19,6 @@ RUN cd /usr/local/app/dist/ && yarn install
 RUN mkdir -p /usr/local/app/dist/client/.well-known/acme-challenge
 
 RUN mkdir /etc/letsencrypt/archive/polonium.rgrannell.world -p
-# RUN snap install micro --classic
 
 COPY config/credentials/certs /etc/letsencrypt/archive/polonium.rgrannell.world
 

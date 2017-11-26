@@ -8,8 +8,12 @@
 	"description": "stateless password manager",
 	"icons": [
 		{
-			"src": "images/icon",
+			"src": "images/icon-256.png",
 			"sizes": "256x256"
+		},
+		{
+			"src": "images/icon-512.png",
+			"sizes": "512x512"
 		}
 	]
 }
