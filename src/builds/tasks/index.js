@@ -250,7 +250,7 @@ tasks.build.copyStaticFiles = new Task({
       fsUtils.copyDir(`${CLIENT_PATH}/core`, `${DIST_PATH}/client/core`),
       fsUtils.copyDir(`${PROJECT_PATH}/src/server`, `${DIST_PATH}/server`),
       fsUtils.copyDir(`${PROJECT_PATH}/config`, `${DIST_PATH}/config`),
-      fsUtils.copy(`${CLIENT_PATH}/index.html`, `${DIST_PATH}/client/index.html`),
+      fsUtils.copy(`${CLIENT_PATH}/templates/index.html`, `${DIST_PATH}/client/index.html`),
       fsUtils.copy(`${CLIENT_PATH}/manifest.json`, `${DIST_PATH}/client/manifest.json`),
       fsUtils.copy(`${CLIENT_PATH}/favicon.ico`, `${DIST_PATH}/client/favicon.ico`),
       fsUtils.copy(`${CLIENT_PATH}/icon-256.png`, `${DIST_PATH}/client/icon-256.png`),

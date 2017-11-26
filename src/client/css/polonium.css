@@ -13,7 +13,7 @@
 
 @font-face {
 	font-family: 'Noto Sans';
-	src: url(../fonts/NotoSans.ttf);
+	src: url("../fonts/NotoSans.ttf");
 }
 
 html * {
@@ -22,16 +22,58 @@ html * {
 	webkit-text-security: square;
 }
 
-/*
-	Navbar styling.
-*/
+a {
+	color: inherit; /* blue colors for links too */
+	text-decoration: inherit; /* no underline */
+}
+
+ul {
+	list-style-type: none;
+}
+
+#links {
+x	grid-column-start: 3;
+	grid-column-end: 4;
+	grid-row: 1;
+	font-size: 1.4em;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	cursor: pointer;
+}
+
+#links:hover {
+	font-weight: bold;
+}
+
+#settings-menu {
+	position: absolute;
+	padding: 10px 30px;
+	box-shadow: 0 0 4px rgba(0,0,0,0.010), 0 4px 8px rgba(0,0,0,0.20);
+	right: 0px;
+	margin: 0px;
+	background: white;
+}
+
+#settings-menu.inactive {
+	display: none;
+}
+
+#settings-menu a:hover {
+	text-decoration: underline;
+	color: var(--primary-colour);
+}
+
+#settings-menu li {
+	margin: 20px;
+}
+
 
 noscript#fallback-message {
 	font-size: 2em;
 	font-align: center;
 }
 
-.main-head {
+#main-head {
 	padding: 0px 20px;
 	background: var(--primary-colour);
 	color: white;
@@ -48,18 +90,20 @@ html, body {
 	color: var(--font);
 }
 
-label:focus {
-	color:red;
+label.burger-menu {
+	font-size: 1.4em;
+	grid-column-start: 1;
+	grid-row: 1;
+	grid-column-end: 2;
+	margin-top: 15px;
+	cursor: pointer;
 }
 
-#website-input-container:focus *, #password-input-container:focus * {
-	color: red;
+label.burger-menu:hover {
+	font-weight: bold;
 }
 
 .container {
-	display: grid;
-}
-.container-overlay {
 	display: grid;
 }
 
@@ -72,27 +116,15 @@ form.main-input {
 	grid-gap: 30px 0px;
 }
 
-label.burger-menu {
-	font-size: 1.4em;
-	grid-column-start: 1;
-	grid-row: 1;
-	grid-column-end: 2;
-	margin-top: 15px
-}
-
-label.burger-menu:hover {
-	font-weight: bold;
-}
-
-.main-head {
+#main-head {
 	grid-column: 1;
 	grid-row: 1;
 	display: grid;
-	grid-template-columns: 1fr 9fr;
+	grid-template-columns: 1fr 8.5fr 0.5fr;
 	box-shadow: 0 0 4px rgba(0,0,0,0.010), 0 4px 8px rgba(0,0,0,0.20);
 }
 
-.main-head h1.brand {
+#main-head h1.brand {
 	grid-column-start: 2;
 	grid-column-end: 3;
 	grid-row: 1;
@@ -197,14 +229,4 @@ input.submit.completed {
 input.submit.failed {
 	background: var(--error-colour);
 	border: 1px solid var(--error-colour-dark);
-}
-
-
-
-
-
-
-a {
-	color: inherit; /* blue colors for links too */
-	text-decoration: inherit; /* no underline */
 }
