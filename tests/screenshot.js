@@ -15,7 +15,7 @@ const config = require('config')
 const screenshot = async (prefix, device, setup) => {
   const browser = await puppeteer.launch({
     ignoreHTTPSErrors: true,
-    headless: false
+    headless: true
   })
 
   const {width, height} = constants.devices[device]
