@@ -1,13 +1,12 @@
 
 const {Build, Task} = require('../../build-framework')
-const fsUtils = require('../../utils/fs')
+const utils = require('@rgrannell1/utils')
 const minify = require('../../utils/minify')
 const chalk = require('chalk')
 const exec = require('execa')
 const spawn = require('child_process').spawn
 const postDeploymentTests = require('../../../tests/post-deployment-test')
 
-const fs = require('fs')
 const path = require('path')
 const config = require('config')
 const digitalOcean = require('../../utils/digitalocean')
@@ -32,11 +31,11 @@ const conditions = { }
 conditions.distChanged = async () => {
   const checksumPath = `${PROJECT_PATH}/dist.checksum`
   const currentSum = (await exec.shell(`rhash -r ${DIST_PATH} --simple | sha256sum | cut -d " " -f1`)).stdout
-  const previousSum = (await fsUtils.testFile(checksumPath))
-      ? (await fsUtils.readFile(checksumPath)).toString()
+  const previousSum = (await utils.fs.testFile(checksumPath))
+      ? (await utils.fs.readFile(checksumPath)).toString()
       : ''
 
-  await fsUtils.writeFile(checksumPath, currentSum)
+  await utils.fs.writeFile(checksumPath, currentSum)
 
   // return currentSum === previousSum
   return false
@@ -107,7 +106,7 @@ tasks.security.getCerts = new Task({
       `${PROJECT_PATH}/config/credentials/certs/chain1.pem`,
       `${PROJECT_PATH}/config/credentials/certs/fullchain1.pem`,
       `${PROJECT_PATH}/config/credentials/certs/privkey1.pem`
-    ].map(fsUtils.testFile))
+    ].map(utils.fs.testFile))
 
     return exists.every(val => val)
   }
@@ -122,9 +121,9 @@ tasks.security.addSSHCert = new Task({
       sig: `${config.get('digitalOcean.sshKeyPath')}.sig`
     }
 
-    const hasPrivKey = await fsUtils.testFile(paths.priv)
-    const hasPubKey = await fsUtils.testFile(paths.pub)
-    const hasSigKey = await fsUtils.testFile(paths.sig)
+    const hasPrivKey = await utils.fs.testFile(paths.priv)
+    const hasPubKey = await utils.fs.testFile(paths.pub)
+    const hasSigKey = await utils.fs.testFile(paths.sig)
     const hasAll = hasPrivKey && hasPubKey && hasSigKey
 
     if (!hasAll) {
@@ -152,12 +151,12 @@ tasks.security.addLocalSSLCert = new Task({
     // todo foldy
 
     const parts = [
-      await fsUtils.testFile(paths.privateKey),
-      await fsUtils.testFile(paths.cert)
+      await utils.fs.testFile(paths.privateKey),
+      await utils.fs.testFile(paths.cert)
     ]
 
     if (paths.chain) {
-      parts.push(await fsUtils.testFile(paths.chain))
+      parts.push(await utils.fs.testFile(paths.chain))
     }
 
     const hasAll = parts.every(part => part)
@@ -223,9 +222,9 @@ tasks.security.publishSSHCert = new Task({
 tasks.build.cleanDistFolder = new Task({
   title: 'Clean artifact folder',
   run: async () => {
-    await fsUtils.removeFolder(DIST_PATH)
-    await fsUtils.mkdir(DIST_PATH)
-    await fsUtils.mkdir(CLIENT_PATH)
+    await utils.fs.removeFolder(DIST_PATH)
+    await utils.fs.mkdir(DIST_PATH)
+    await utils.fs.mkdir(CLIENT_PATH)
   }
 })
 
@@ -237,25 +236,25 @@ tasks.build.copyStaticFiles = new Task({
   title: 'Copy Static Files',
   run: async () => {
     await Promise.all([
-      fsUtils.mkdir(`${DIST_PATH}/client`),
-      fsUtils.mkdir(`${DIST_PATH}/client/css`),
-      fsUtils.mkdir(`${DIST_PATH}/client/fonts`),
-      fsUtils.mkdir(`${DIST_PATH}/client/core`),
-      fsUtils.mkdir(`${DIST_PATH}/server`)
+      utils.fs.mkdir(`${DIST_PATH}/client`),
+      utils.fs.mkdir(`${DIST_PATH}/client/css`),
+      utils.fs.mkdir(`${DIST_PATH}/client/fonts`),
+      utils.fs.mkdir(`${DIST_PATH}/client/core`),
+      utils.fs.mkdir(`${DIST_PATH}/server`)
     ])
 
     await Promise.all([
-      fsUtils.copyDir(`${CLIENT_PATH}/fonts`, `${DIST_PATH}/client/fonts`),
-      fsUtils.copyDir(`${CLIENT_PATH}/css`, `${DIST_PATH}/client/css`),
-      fsUtils.copyDir(`${CLIENT_PATH}/core`, `${DIST_PATH}/client/core`),
-      fsUtils.copyDir(`${PROJECT_PATH}/src/server`, `${DIST_PATH}/server`),
-      fsUtils.copyDir(`${PROJECT_PATH}/config`, `${DIST_PATH}/config`),
-      fsUtils.copy(`${CLIENT_PATH}/templates/index.html`, `${DIST_PATH}/client/index.html`),
-      fsUtils.copy(`${CLIENT_PATH}/manifest.json`, `${DIST_PATH}/client/manifest.json`),
-      fsUtils.copy(`${CLIENT_PATH}/favicon.ico`, `${DIST_PATH}/client/favicon.ico`),
-      fsUtils.copy(`${CLIENT_PATH}/icon-256.png`, `${DIST_PATH}/client/icon-256.png`),
-      fsUtils.copy(`${CLIENT_PATH}/icon-512.png`, `${DIST_PATH}/client/icon-512.png`),
-      fsUtils.copy(`${PROJECT_PATH}/package.json`, `${DIST_PATH}/package.json`)
+      utils.fs.copyDir(`${CLIENT_PATH}/fonts`, `${DIST_PATH}/client/fonts`),
+      utils.fs.copyDir(`${CLIENT_PATH}/css`, `${DIST_PATH}/client/css`),
+      utils.fs.copyDir(`${CLIENT_PATH}/core`, `${DIST_PATH}/client/core`),
+      utils.fs.copyDir(`${PROJECT_PATH}/src/server`, `${DIST_PATH}/server`),
+      utils.fs.copyDir(`${PROJECT_PATH}/config`, `${DIST_PATH}/config`),
+      utils.fs.copy(`${CLIENT_PATH}/templates/index.html`, `${DIST_PATH}/client/index.html`),
+      utils.fs.copy(`${CLIENT_PATH}/manifest.json`, `${DIST_PATH}/client/manifest.json`),
+      utils.fs.copy(`${CLIENT_PATH}/favicon.ico`, `${DIST_PATH}/client/favicon.ico`),
+      utils.fs.copy(`${CLIENT_PATH}/icon-256.png`, `${DIST_PATH}/client/icon-256.png`),
+      utils.fs.copy(`${CLIENT_PATH}/icon-512.png`, `${DIST_PATH}/client/icon-512.png`),
+      utils.fs.copy(`${PROJECT_PATH}/package.json`, `${DIST_PATH}/package.json`)
     ])
   }
 })
