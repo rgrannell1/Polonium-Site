@@ -1,6 +1,7 @@
 
 const {Build, Task} = require('../../build-framework')
 const utils = require('@rgrannell1/utils')
+const DigitalOcean = require('@rgrannell1/utils').digitalOcean
 const minify = require('../../utils/minify')
 const chalk = require('chalk')
 const exec = require('execa')
@@ -9,7 +10,6 @@ const postDeploymentTests = require('../../../tests/post-deployment-test')
 
 const path = require('path')
 const config = require('config')
-const digitalOcean = require('../../utils/digitalocean')
 const ansible = require('../../utils/ansible')
 const deps = require('../../utils/dependencies')
 const constants = require('../constants')
@@ -82,7 +82,7 @@ tasks.docker.publishImage = new Task({
 tasks.security.openTerminal = new Task({
   title: 'Download SSL certificates from remote server',
   run: async () => {
-    const vm = await digitalOcean.findVMs({
+    const vm = await utils.digitalOcean.findVMs({
       name: config.get('vm.name')
     })
 
@@ -186,7 +186,12 @@ tasks.server.runLocalServer = new Task({
 tasks.server.createVM = new Task({
   title: 'Setup a VM',
   run: async () => {
-    await digitalOcean.setVM(config.get('vm'))
+    return new DigitalOcean(config.get('digitalOcean.token'))
+      .setVM(config.get('vm'), {
+        sshKeyPath: config.get('digitalOcean.sshKeyPath'),
+        sshKeyName: config.get('digitalOcean.sshKeyName'),
+        vmName: config.get('vm.name')
+      })
   }
 })
 

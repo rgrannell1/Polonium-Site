@@ -3,8 +3,8 @@
 	"short_name": "Polonium",
 	"start_url": "/#!/",
 	"display":   "standalone",
-	"background_color": "#33C3F0",
-	"theme_color": "#33C3F0",
+	"background_color": "#5d51d6",
+	"theme_color": "#5d51d6",
 	"description": "stateless password manager",
 	"icons": [
 		{

@@ -1,7 +1,6 @@
 
 const chalk = require('chalk')
 const constants = require('./constants')
-const fsUtils = require('../utils/fs')
 const path = require('path')
 const util = require('util')
 
