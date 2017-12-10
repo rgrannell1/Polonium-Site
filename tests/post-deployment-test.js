@@ -13,7 +13,10 @@ const cases = { }
 cases.testEndpointStatus = new TestCase({
   description: 'Check the URL responds with the correct status-code',
   run: async () => {
-    const res = await request(`https://${config.get('vm.subDomain')}.${config.get('vm.domain')}`)
+    console.log(`https://${config.get('vm.subDomain')}.${config.get('vm.domain')}`)
+    const res = await request({
+      uri: `https://${config.get('vm.subDomain')}.${config.get('vm.domain')}`
+    })
 
     if (res.statusCode !== 200) {
       throw new Error('unexpected status-code received')

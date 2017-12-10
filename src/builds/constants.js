@@ -19,8 +19,7 @@ const constants = {
       getCerts: path.join(__dirname, '../ansible/obtain-certificates.yaml'),
       startServer: path.join(__dirname, '../ansible/start-server.yaml'),
       setupVm: path.join(__dirname, '../ansible/setup-vm.yaml')
-    },
-    dockerfile: path.join(__dirname, '../dockerfiles/build.dockerfile')
+    }
   },
   bin: {
     webpack: 'node_modules/webpack/bin/webpack.js',

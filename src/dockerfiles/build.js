@@ -7,15 +7,16 @@ const {
   ENV,
   COPY,
   CMD,
-  RUN
+  RUN,
+  HEALTHCHECK
 } = require('@rgrannell1/utils').docker
 
 module.exports = function (env) {
   return FILE([
     FROM('ubuntu'),
     LABEL({
-      maintainer: 'Ryan Grannell <r.grannell2@gmail.com>',
-      description: 'This private image runs a Polonium server'
+      maintainer: '"Ryan Grannell <r.grannell2@gmail.com>"',
+      description: '"This private image runs a Polonium server"'
     }),
     EXPOSE('8080'),
     ENV({
@@ -31,6 +32,12 @@ module.exports = function (env) {
       'npm install --global yarn'
     ]),
     COPY('config/credentials/certs /etc/letsencrypt/archive/polonium.rgrannell.world'),
+
+    HEALTHCHECK({
+      interval: '1m',
+      timeout: '5s'
+    }, CMD(['curl -f https://localhost:8080 || exit 1'])),
+
     CMD(['node dist/server/app/index.js'])
   ])
 }

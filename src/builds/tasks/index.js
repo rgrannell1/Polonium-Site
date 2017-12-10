@@ -8,6 +8,7 @@ const exec = require('execa')
 const spawn = require('child_process').spawn
 const puppeteer = require('puppeteer')
 const postDeploymentTests = require('../../../tests/post-deployment-test')
+const buildDockerFile = require('../../dockerfiles/build')
 
 const path = require('path')
 const config = require('config')
@@ -45,7 +46,11 @@ conditions.distChanged = async () => {
 tasks.docker.buildImage = new Task({
   title: 'Build docker-image',
   run: async () => {
-    const cmd = `docker build -t ${config.get('docker.imageName')}:latest -f ${constants.paths.dockerfile} .`
+    // -- load, then save
+
+    const tpath = await utils.fs.writeTmpFile(buildDockerFile(), __dirname)
+
+    const cmd = `docker build -t ${config.get('docker.imageName')}:latest -f ${tpath} .`
     const result = exec.shell(cmd)
 
     result.stdout
@@ -319,7 +324,7 @@ tasks.test.checkSSL = new Task({
 
     const acceptableGrades = new Set(['B', 'B+', 'A-', 'A', 'A+'])
     if (acceptableGrades.has(certResults.grade)) {
-      throw new Error('unacceptable status code.')
+      throw new Error(`unacceptable status code "${certResults.grade}".`)
     }
   }
 })

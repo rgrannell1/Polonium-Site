@@ -6,6 +6,7 @@ const staticFiles = require('koa-static')
 const constants = require('../commons/constants')
 const entities = require('../schemas')
 const facts = require('../commons/facts')
+const {logger} = require('../commons/logging')
 
 const routes = { }
 
@@ -34,6 +35,11 @@ routes.setHTST = async (ctx, next) => {
 }
 
 routes.logging = async (ctx, next) => {
+  logger.info({
+    url: ctx.url,
+    ips: ctx.ips,
+    method: ctx.method
+  })
   await next()
 }
 

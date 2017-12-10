@@ -38,10 +38,10 @@ builds.deployRemoteServer = new Build({
 //    tasks.security.getCerts,
 //    tasks.build.cleanDistFolder,
 //    tasks.build.buildDistFolder,
-//    tasks.docker.buildImage,
-//    tasks.docker.login,
-//    tasks.docker.publishImage,
-//    tasks.server.startServer
+    tasks.docker.buildImage,
+    tasks.docker.login,
+    tasks.docker.publishImage,
+    tasks.server.startServer,
     tasks.test.postDeployment
   ]
 })

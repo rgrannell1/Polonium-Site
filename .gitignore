@@ -3,3 +3,4 @@ dist/
 config/credentials
 *.retry
 dist.checksum
+screenshots/
