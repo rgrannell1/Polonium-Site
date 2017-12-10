@@ -3,12 +3,10 @@
 'use strict'
 
 const config = require('config')
-const digitalOcean = require('../utils/digitalocean')
+const DigitalOcean = require('@rgrannell1/utils').digitalOcean
 
 const createInventoryScript = async () => {
-  const existingVM = await digitalOcean.findVMs({
-    name: config.get('vm.name')
-  })
+  const existingVM = await new DigitalOcean(config.get('digitalOcean.token')).findVMs({name: config.get('vm.name')})
 
   const result = {
     group: {

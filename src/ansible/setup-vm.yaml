@@ -20,3 +20,5 @@
       copy:
         src: ../../dist
         dest: /dist
+
+# add unattended upgrades

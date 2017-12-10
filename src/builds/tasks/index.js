@@ -6,6 +6,7 @@ const minify = require('../../utils/minify')
 const chalk = require('chalk')
 const exec = require('execa')
 const spawn = require('child_process').spawn
+const puppeteer = require('puppeteer')
 const postDeploymentTests = require('../../../tests/post-deployment-test')
 
 const path = require('path')
@@ -82,9 +83,7 @@ tasks.docker.publishImage = new Task({
 tasks.security.openTerminal = new Task({
   title: 'Download SSL certificates from remote server',
   run: async () => {
-    const vm = await utils.digitalOcean.findVMs({
-      name: config.get('vm.name')
-    })
+    const vm = await new DigitalOcean(config.get('digitalOcean.token')).findVMs({name: config.get('vm.name')})
 
     if (vm) {
       const ip = vm.networks.v4[0].ip_address
@@ -312,11 +311,35 @@ tasks.build.buildDistFolder = new Build({
   ]
 })
 
-tasks.test.postDeployment = new Task({
-  title: 'Test that the website is superficially working',
+tasks.test.checkSSL = new Task({
+  title: 'Check the SSL grade is sufficient',
   run: async () => {
-    return postDeploymentTests()
+    const host = `${config.get('vm.subDomain')}.${config.get('vm.domain')}`
+    const certResults = await utils.sslLabs().scan(host)
+
+    const acceptableGrades = new Set(['B', 'B+', 'A-', 'A', 'A+'])
+    if (acceptableGrades.has(certResults.grade)) {
+      throw new Error('unacceptable status code.')
+    }
   }
 })
 
+tasks.test.postDeployment = new Build({
+  title: 'Test that the website is superficially working',
+  tasks: [
+    tasks.test.checkSSL
+  ]
+})
+
 module.exports = tasks
+
+/*
+const chrome = await puppeteer.launch({headless: true})
+const page = await chrome.newPage()
+await page.goto(`https://polonium.rgrannell.world/#!/`)
+
+const capturer = new utils.browser.ScreenCapture({page})
+const screenshot = await capturer.capture()
+*/
+
+/// utils.browser.ScreenCapture.compare(1, 2)

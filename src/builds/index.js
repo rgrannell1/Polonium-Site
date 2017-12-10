@@ -31,18 +31,18 @@ builds.runLocalServer = new Build({
 builds.deployRemoteServer = new Build({
   title: 'Deploy to DigitalOcean',
   tasks: [
-    tasks.build.cleanDistFolder,
-    tasks.build.buildDistFolder,
-    tasks.server.createVM,
-    tasks.server.setupVM,
-    tasks.security.getCerts,
-    tasks.build.cleanDistFolder,
-    tasks.build.buildDistFolder,
-    tasks.docker.buildImage,
-    tasks.docker.login,
-    tasks.docker.publishImage,
-    tasks.server.startServer
-//  tasks.test.postDeployment
+//    tasks.build.cleanDistFolder,
+//    tasks.build.buildDistFolder,
+//    tasks.server.createVM,
+//    tasks.server.setupVM,
+//    tasks.security.getCerts,
+//    tasks.build.cleanDistFolder,
+//    tasks.build.buildDistFolder,
+//    tasks.docker.buildImage,
+//    tasks.docker.login,
+//    tasks.docker.publishImage,
+//    tasks.server.startServer
+    tasks.test.postDeployment
   ]
 })
 
