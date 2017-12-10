@@ -2,10 +2,13 @@
 
 const neodoc = require('neodoc')
 const cli = require('./src/build-cli')
+const handlers = require('@rgrannell1/utils').handlers
 
 process.on('unhandledRejection', err => {
   throw err
 })
+
+process.on('exit', handlers.onExit)
 
 const docs = { }
 
