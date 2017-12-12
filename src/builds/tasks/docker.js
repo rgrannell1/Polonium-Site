@@ -1,17 +1,19 @@
 
 const {
+  ADD,
+  CMD,
+  COPY,
+  ENV,
+  EXPOSE,
   FILE,
   FROM,
+  HEALTHCHECK,
   LABEL,
-  EXPOSE,
-  ENV,
-  COPY,
-  CMD,
   RUN,
-  HEALTHCHECK
+  WORKDIR
 } = require('@rgrannell1/utils').docker
 
-module.exports = function (env) {
+const poloniumServer = env => {
   return FILE([
     FROM('ubuntu'),
     LABEL({
@@ -24,13 +26,24 @@ module.exports = function (env) {
       NODE_ENV: 'production'
     }),
     RUN(['mkdir -p /usr/local/app/src']),
+
     EXPOSE('8080'),
     RUN([
       'apt-get update && apt-get install -y curl git snapd',
       'curl -sL https://deb.nodesource.com/setup_9.x | bash -',
-      'apt-get update && apt-get install --assume-yes nodejs letsencrypt',
+      'apt-get update && apt-get install --assume-yes nodejs letsencrypt build-essential',
       'npm install --global yarn'
     ]),
+
+    ADD('dist /usr/local/app/dist'),
+    WORKDIR('/usr/local/app'),
+
+    RUN([
+      'cd /usr/local/app/dist/ && yarn install',
+      'mkdir -p /usr/local/app/dist/client/.well-known/acme-challenge',
+      'mkdir /etc/letsencrypt/archive/polonium.rgrannell.world -p'
+    ]),
+
     COPY('config/credentials/certs /etc/letsencrypt/archive/polonium.rgrannell.world'),
 
     HEALTHCHECK({
@@ -38,6 +51,10 @@ module.exports = function (env) {
       timeout: '5s'
     }, CMD(['curl -f https://localhost:8080 || exit 1'])),
 
-    CMD(['node dist/server/app/index.js'])
+    CMD(['node', 'dist/server/app/index.js'])
   ])
+}
+
+module.exports = {
+  poloniumServer
 }

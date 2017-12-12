@@ -8,7 +8,7 @@ const exec = require('execa')
 const spawn = require('child_process').spawn
 const puppeteer = require('puppeteer')
 const postDeploymentTests = require('../../../tests/post-deployment-test')
-const buildDockerFile = require('../../dockerfiles/build')
+const Database = require('better-sqlite3')
 
 const path = require('path')
 const config = require('config')
@@ -19,6 +19,7 @@ const constants = require('../constants')
 const PROJECT_PATH = path.join(__dirname, '../../..')
 const CLIENT_PATH = path.join(PROJECT_PATH, 'src/client')
 const DIST_PATH = path.join(PROJECT_PATH, 'dist')
+const docker = require('./docker')
 
 const tasks = {
   build: {},
@@ -48,7 +49,7 @@ tasks.docker.buildImage = new Task({
   run: async () => {
     // -- load, then save
 
-    const tpath = await utils.fs.writeTmpFile(buildDockerFile(), __dirname)
+    const tpath = await utils.fs.writeTmpFile(docker.poloniumServer(), __dirname)
 
     const cmd = `docker build -t ${config.get('docker.imageName')}:latest -f ${tpath} .`
     const result = exec.shell(cmd)
@@ -334,6 +335,13 @@ tasks.test.postDeployment = new Build({
   tasks: [
     tasks.test.checkSSL
   ]
+})
+
+tasks.build.setupDeploymentDatabase = new Task({
+  title: 'Set up a local SQL database',
+  run: async () => {
+    global.SQL_DEPLOYMENT_DB = new Database(path.join(__dirname, '../../../data/deployment.db'))
+  }
 })
 
 module.exports = tasks

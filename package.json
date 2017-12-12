@@ -7,11 +7,12 @@
     "build:watch": "find ./src | entr -s 'node cli.js build dist-folder || true'",
     "start:watch": "find ./dist  | entr -r -s 'sleep 2;node cli.js run local-server || true'"
   },
-  "author": "",
+  "author": "Ryan Grannell",
   "license": "MIT",
   "dependencies": {
-    "@rgrannell1/utils": "github:rgrannell1/utils",
+    "@rgrannell1/utils": "rgrannell1/utils",
     "babel-runtime": "^6.26.0",
+    "better-sqlite3": "^4.0.3",
     "bunyan": "^1.8.12",
     "chalk": "^2.3.0",
     "clipboard-polyfill": "^2.3.0",
@@ -56,7 +57,6 @@
     "typescript": "^2.5.3",
     "uglify-es": "^3.1.0",
     "uglify-js": "^3.1.0",
-    "uuid": "^3.1.0",
     "webpack": "^2.7.0",
     "webpack-dev-server": "^2.7.1"
   },

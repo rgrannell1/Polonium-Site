@@ -4,9 +4,6 @@
 const path = require('path')
 
 const constants = {
-  urls: {
-    digitalOceanUrl: 'https://api.digitalocean.com/v2'
-  },
   timeouts: {
     awaitNetwork: 45000
   },
