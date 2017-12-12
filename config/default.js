@@ -9,6 +9,7 @@ module.exports = {
     username: credentials.dockerUsername,
     email: credentials.dockerEmail,
     password: credentials.dockerPassword,
-    imageName: 'polonium_site'
+    imageName: 'polonium_site',
+    elasticsearchImageName: 'polonium_elasticsearch'
   }
 }

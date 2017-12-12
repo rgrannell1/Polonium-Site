@@ -62,6 +62,24 @@ tasks.docker.buildImage = new Task({
   },
   skip: conditions.distChanged
 })
+
+tasks.docker.buildElasticSearchImage = new Task({
+  title: 'Build ElasticSearch image',
+  run: async () => {
+    // -- load, then save
+
+    const tpath = await utils.fs.writeTmpFile(docker.elasticSearch(), __dirname)
+    const cmd = `docker build -t ${config.get('docker.elasticsearchImageName')}:latest -f ${tpath} .`
+    const result = exec.shell(cmd)
+
+    result.stdout
+      .on('data', chunk => console.log(chalk.blue(chunk)))
+      .on('end', chunk => console.log(chalk.blue(chunk)))
+
+    return result
+  },
+  skip: conditions.distChanged
+})
 tasks.docker.login = new Task({
   title: 'Login to docker',
   run: async () => {

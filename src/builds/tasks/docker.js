@@ -49,12 +49,25 @@ const poloniumServer = env => {
     HEALTHCHECK({
       interval: '1m',
       timeout: '5s'
-    }, CMD(['curl -f https://localhost:8080 || exit 1'])),
+    }, CMD('curl -f https://localhost:8081 || exit 1')),
 
-    CMD(['node', 'dist/server/app/index.js'])
+    CMD('node dist/server/app/index.js')
+  ])
+}
+
+const elasticSearch = name => {
+  // -- todo write settings.
+
+  return FILE([
+    FROM('docker.elastic.co/elasticsearch/elasticsearch:6.0.1'),
+    COPY('src/builds/tasks/elasticsearch.yaml', ' /usr/share/elasticsearch/config/', {
+      chown: 'elasticsearch:elasticsearch'
+    }),
+    RUN(['echo "vm.max_map_count=262144" | tee -a "/etc/sysctl.conf"'])
   ])
 }
 
 module.exports = {
-  poloniumServer
+  poloniumServer,
+  elasticSearch
 }

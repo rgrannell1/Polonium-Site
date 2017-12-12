@@ -47,6 +47,13 @@ builds.deployRemoteServer = new Build({
   ]
 })
 
+builds.deployElasticSearch = new Build({
+  title: 'Deploy ElasticSearch instance',
+  tasks: [
+    tasks.docker.buildElasticSearchImage
+  ]
+})
+
 builds.openSSHTerminal = new Build({
   title: 'Open an SSH terminal to the DigitalOcean terminal',
   tasks: [

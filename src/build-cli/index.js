@@ -16,7 +16,8 @@ cli.open = {
 }
 
 cli.deploy = {
-  'server': builds.deployRemoteServer
+  'server': builds.deployRemoteServer,
+  'elasticsearch': builds.deployElasticSearch
 }
 
 cli.run = {
