@@ -22,26 +22,6 @@
     tempfile "^2.0.0"
     tmpfile "^0.2.0"
 
-"@rgrannell1/utils@rgrannell1/utils":
-  version "1.0.0"
-  resolved "https://codeload.github.com/rgrannell1/utils/tar.gz/6c7900cde1e1bf4754320d18d7939e67db4da90a"
-  dependencies:
-    cpr "^3.0.1"
-    errors "^0.3.0"
-    looks-same "^3.2.1"
-    mkdirp "^0.5.1"
-    mkdirp-promise "^5.0.1"
-    neodoc "^1.4.0"
-    node-ssllabs "^0.5.0"
-    pixelmatch "^4.0.2"
-    pngjs "^3.3.1"
-    puppeteer "^0.13.0"
-    request "^2.83.0"
-    request-promise-native "^1.0.5"
-    rmfr "^1.0.3"
-    tempfile "^2.0.0"
-    tmpfile "^0.2.0"
-
 abab@^1.0.0:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.4.tgz#5faad9c2c07f60dd76770f71cf025b62a63cfd4e"

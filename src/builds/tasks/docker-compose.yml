@@ -2,9 +2,18 @@ version: "2"
 services:
   polonium_server:
     image: rgrannell1/polonium_site
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ports:
       - 8080:80
-    ports:
       - 8081:443
   polonium_elasticsearch:
     image: rgrannell1/polonium_elasticsearch
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - esnet
+
+networks:
+  esnet:

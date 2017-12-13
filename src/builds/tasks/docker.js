@@ -63,7 +63,11 @@ const elasticSearch = name => {
     COPY('src/builds/tasks/elasticsearch.yml', ' /usr/share/elasticsearch/config/', {
       chown: 'elasticsearch:elasticsearch'
     }),
-    RUN(['echo "vm.max_map_count=262144" | tee -a "/etc/sysctl.conf"'])
+    RUN([
+      'echo "vm.max_map_count=262144" | tee -a "/etc/sysctl.conf"',
+      'echo "elasticsearch soft memlock unlimited" | tee -a /etc/security/limits.conf',
+      'echo "elasticsearch hard memlock unlimited" | tee -a /etc/security/limits.conf'
+    ])
   ])
 }
 
