@@ -35,8 +35,8 @@ conditions.distChanged = async () => {
   const checksumPath = `${PROJECT_PATH}/dist.checksum`
   const currentSum = (await exec.shell(`rhash -r ${DIST_PATH} --simple | sha256sum | cut -d " " -f1`)).stdout
   const previousSum = (await utils.fs.testFile(checksumPath))
-      ? (await utils.fs.readFile(checksumPath)).toString()
-      : ''
+    ? (await utils.fs.readFile(checksumPath)).toString()
+    : ''
 
   await utils.fs.writeFile(checksumPath, currentSum)
 
@@ -44,42 +44,30 @@ conditions.distChanged = async () => {
   return false
 }
 
-tasks.docker.buildImage = new Task({
-  title: 'Build docker-image',
-  run: async () => {
+function dockerBuild (dockerFile, imageName) {
+  return new Task({
+    title: 'Build docker-image',
+    run: async () => {
     // -- load, then save
 
-    const tpath = await utils.fs.writeTmpFile(docker.poloniumServer(), __dirname)
+      const tpath = await utils.fs.writeTmpFile(dockerFile, __dirname)
 
-    const cmd = `docker build -t ${config.get('docker.imageName')}:latest -f ${tpath} .`
-    const result = exec.shell(cmd)
+      const cmd = `docker build -t ${imageName}:latest -f ${tpath} .`
+      const result = exec.shell(cmd)
 
-    result.stdout
-      .on('data', chunk => console.log(chalk.blue(chunk)))
-      .on('end', chunk => console.log(chalk.blue(chunk)))
+      result.stdout
+        .on('data', chunk => console.log(chalk.blue(chunk)))
+        .on('end', chunk => console.log(chalk.blue(chunk)))
 
-    return result
-  },
-  skip: conditions.distChanged
-})
+      return result
+    },
+    skip: conditions.distChanged
+  })
+}
 
-tasks.docker.buildElasticSearchImage = new Task({
-  title: 'Build ElasticSearch image',
-  run: async () => {
-    // -- load, then save
+tasks.docker.buildImage = dockerBuild(docker.poloniumServer(), config.get('docker.imageName'))
+tasks.docker.buildElasticSearchImage = dockerBuild(docker.elasticSearch(), config.get('docker.elasticsearchImageName'))
 
-    const tpath = await utils.fs.writeTmpFile(docker.elasticSearch(), __dirname)
-    const cmd = `docker build -t ${config.get('docker.elasticsearchImageName')}:latest -f ${tpath} .`
-    const result = exec.shell(cmd)
-
-    result.stdout
-      .on('data', chunk => console.log(chalk.blue(chunk)))
-      .on('end', chunk => console.log(chalk.blue(chunk)))
-
-    return result
-  },
-  skip: conditions.distChanged
-})
 tasks.docker.login = new Task({
   title: 'Login to docker',
   run: async () => {
@@ -88,21 +76,26 @@ tasks.docker.login = new Task({
   },
   skip: conditions.distChanged
 })
-tasks.docker.publishImage = new Task({
-  title: 'Publish docker-image',
-  run: async () => {
-    await exec.shell(`docker tag ${config.get('docker.imageName')} ${config.get('docker.username')}/${config.get('docker.imageName')}:latest`)
 
-    const result = exec.shell(`docker push ${config.get('docker.username')}/${config.get('docker.imageName')}`)
+function publishDockerImage (imageName) {
+  return new Task({
+    title: 'Publish docker-image',
+    run: async () => {
+      await exec.shell(`docker tag ${imageName} ${config.get('docker.username')}/${imageName}:latest`)
 
-    result.stdout
+      const result = exec.shell(`docker push ${config.get('docker.username')}/${imageName}`)
+
+      result.stdout
       .on('data', chunk => console.log(chalk.blue(chunk)))
       .on('end', chunk => console.log(chalk.blue(chunk)))
 
-    await result
-  },
-  skip: conditions.distChanged
-})
+      await result
+    },
+    skip: conditions.distChanged
+  })
+}
+tasks.docker.publishImage = publishDockerImage(config.get('docker.imageName'))
+tasks.docker.publishElasticSearchImage = publishDockerImage(config.get('docker.elasticsearchImageName'))
 
 tasks.security.openTerminal = new Task({
   title: 'Download SSL certificates from remote server',

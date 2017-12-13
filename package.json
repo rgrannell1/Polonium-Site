@@ -19,6 +19,7 @@
     "config": "^1.26.2",
     "cpr": "^3.0.1",
     "css-loader": "^0.28.7",
+    "debug": "^3.1.0",
     "enumify": "^1.0.4",
     "esdoc": "^1.0.2",
     "esdoc-standard-plugin": "^1.0.0",

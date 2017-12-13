@@ -50,7 +50,8 @@ builds.deployRemoteServer = new Build({
 builds.deployElasticSearch = new Build({
   title: 'Deploy ElasticSearch instance',
   tasks: [
-    tasks.docker.buildElasticSearchImage
+    tasks.docker.buildElasticSearchImage,
+    tasks.docker.publishElasticSearchImage
   ]
 })
 

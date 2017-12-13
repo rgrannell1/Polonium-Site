@@ -1,0 +1,10 @@
+version: "2"
+services:
+  polonium_server:
+    image: rgrannell1/polonium_site
+    ports:
+      - 8080:80
+    ports:
+      - 8081:443
+  polonium_elasticsearch:
+    image: rgrannell1/polonium_elasticsearch

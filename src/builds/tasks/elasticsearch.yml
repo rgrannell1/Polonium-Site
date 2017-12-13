@@ -1,0 +1,16 @@
+
+cluster:
+  name: 'poloinum-logs'
+  routing:
+    allocation:
+      disk:
+        watermark:
+          low: "2gb"
+          high: "1gb"
+          flood_stage: "500mb"
+node:
+  name: 'primary'
+  master: true
+  data: true
+bootstrap:
+  memory_lock: true
