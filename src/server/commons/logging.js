@@ -11,16 +11,14 @@ const logStream = ({host}) => {
   return new stream.Writable({
     objectMode: true,
     write (log, encoding, next) {
-      const parsed = JSON.parse(log)
-      const body = Object.assign({ }, JSON.parse(log))
-
-//    const index = moment(log.timestamp).format('YYYY.MM.DD')
+      const body = Object.assign({time: Date.now()}, JSON.parse(log))
       const index = 'logs'
 
       client.index({index, type: 'logs', body}, (err, res) => {
         if (err) {
           this.emit('error', err)
         }
+        next()
       })
     }
   })
@@ -38,7 +36,7 @@ logging.logger = () => {
       },
       {
         stream: logStream({host: 'localhost:9200'}).on('error', err => {
-
+          console.error(err)
         })
       },
       {

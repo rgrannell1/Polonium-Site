@@ -1,15 +1,15 @@
 
-const Rx = require('rxjs')
+const events = require('events')
 const util = require('util')
 const {logger} = require('./logging')
 
 const facts = {}
 
 const streams = {}
-streams.facts = new Rx.Subject()
+streams.facts = new events.EventEmitter()
 
 facts.note = entity => {
-  streams.facts.next(entity)
+  streams.facts.emit('note', entity)
 }
 
 const log = logger()
@@ -17,7 +17,7 @@ const log = logger()
 /**
  * Log all entities to a file.
  */
-streams.facts.subscribe(entity => {
+streams.facts.on('note', entity => {
   log.info(entity)
 })
 

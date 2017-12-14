@@ -42,4 +42,8 @@ entities.UserRequest = config => {
   return config
 }
 
+entities.Event = config => {
+  return config
+}
+
 module.exports = entities
