@@ -11,11 +11,10 @@ const logStream = ({host}) => {
   return new stream.Writable({
     objectMode: true,
     write (log, encoding, next) {
-      const body = Object.assign({ }, JSON.parse(log), {
-        '@timestamp': Date.now()
-      })
+      const parsed = JSON.parse(log)
+      const body = Object.assign({ }, JSON.parse(log))
 
-//      const index = moment(log.timestamp).format('YYYY.MM.DD')
+//    const index = moment(log.timestamp).format('YYYY.MM.DD')
       const index = 'logs'
 
       client.index({index, type: 'logs', body}, (err, res) => {

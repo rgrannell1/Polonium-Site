@@ -4,11 +4,19 @@
 const compress = require('koa-compress')
 const staticFiles = require('koa-static')
 const constants = require('../commons/constants')
-const entities = require('../schemas')
 const facts = require('../commons/facts')
 const {logger} = require('../commons/logging')
 
 const routes = { }
+
+const observations = {
+  REQUEST_MADE: 'REQUEST_MADE',
+  USER_INTERACTION: 'USER_INTERACTION',
+  USER_REQUEST_MADE: 'USER_REQUEST_MADE',
+  types: {
+    DIRECT: 'direct'
+  }
+}
 
 /**
  *
@@ -16,16 +24,43 @@ const routes = { }
  *
  */
 routes.registerRequest = async (ctx, next) => {
-  const requestData = entities.request({
-    user: entities.user({
+  const data = {
+    user: {
       ip: ctx.ip,
       agent: ctx.headers['user-agent']
-    }),
-    url: ctx.originalUrl,
-    time: Date.now()
-  })
+    },
+    request: {
+      url: ctx.originalUrl,
+      time: Date.now()
+    }
+  }
 
-  facts.note(requestData)
+  facts.note(Object.assign(data.user, {
+    ctx: {
+      observation: observations.USER_INTERACTION,
+      type: observations.types.DIRECT
+    }
+  }))
+
+  facts.note(Object.assign(data.request, {
+    ctx: {
+      observation: observations.REQUEST_MADE,
+      type: observations.types.DIRECT
+    }
+  }))
+
+  facts.note(Object.assign({ }, {
+    user: data.user,
+    request: data.request,
+    ctx: {
+      observation: observations.USER_REQUEST_MADE,
+      type: observations.types.DIRECT
+    }
+  }))
+
+  ctx.state.user = data.user
+  ctx.state.request = data.request
+
   await next()
 }
 
@@ -38,7 +73,7 @@ routes.logging = async (ctx, next) => {
   logger.info({
     url: ctx.url,
     ips: ctx.ips,
-    method: ctx.method
+    method: ctx.method0
   })
   await next()
 }

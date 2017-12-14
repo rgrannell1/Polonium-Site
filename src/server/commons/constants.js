@@ -13,5 +13,13 @@ module.exports = {
   },
   timeouts: {
     htst: 31536000 // seconds.
+  },
+  observations: {
+    REQUEST_RECEIVED: 'REQUEST_RECEIVED',
+    USER_INTERACTION: 'USER_INTERACTION',
+    USER_REQUEST_MADE: 'USER_REQUEST_MADE',
+    types: {
+      DIRECT: 'direct'
+    }
   }
 }
