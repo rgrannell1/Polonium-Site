@@ -202,11 +202,27 @@ tasks.server.runLocalServer = new Task({
 tasks.server.createVM = new Task({
   title: 'Setup a VM',
   run: async () => {
-    return new DigitalOcean(config.get('digitalOcean.token'))
+    await new DigitalOcean(config.get('digitalOcean.token'))
       .setVM(config.get('vm'), {
         sshKeyPath: config.get('digitalOcean.sshKeyPath'),
         sshKeyName: config.get('digitalOcean.sshKeyName'),
         vmName: config.get('vm.name')
+      })
+
+    const addresses = ['0.0.0.0/0', '::/0']
+
+    await new DigitalOcean(config.get('digitalOcean.token'))
+      .setFirewall({
+        vmName: config.get('vm.name'),
+        firewallName: 'primary',
+        inbound: [
+          {ports: '22', addresses},
+          {ports: '80', addresses},
+          {ports: '443', addresses}
+        ],
+        outbound: [
+          {ports: 'all', addresses}
+        ]
       })
   }
 })

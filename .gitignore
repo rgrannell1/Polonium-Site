@@ -4,3 +4,4 @@ config/credentials
 *.retry
 dist.checksum
 screenshots/
+src/server-logs.log.jsonl
