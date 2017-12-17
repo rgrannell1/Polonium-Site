@@ -16,16 +16,26 @@ const monitorElasticsearch = () => {
     })
     try {
       const status = await client.health()
+      let statusDescription = ''
+
+      if (status.status === 'green') {
+        statusDescription = constants.statuses.FUNCTIONAL
+      } else if (status.status === 'yellow') {
+        statusDescription = constants.statuses.IMPARED
+      } else if (status.status === 'red') {
+        statusDescription = constants.statuses.NOT_FUNCTIONAL
+      }
+
       facts.note(entities.MonitorStatus({
         ctx: {status},
-        name: 'elasticsearch-health',
-        status: 'ok'
+        name: constants.monitorNames.elasticsearchHealth,
+        status: statusDescription
       }))
     } catch (err) {
       facts.note(entities.MonitorStatus({
         ctx: {err},
-        name: 'elasticsearch-health',
-        status: 'not_ok'
+        name: constants.monitorNames.elasticsearchHealth,
+        status: constants.statuses.NOT_FUNCTIONAL
       }))
     }
   }, constants.intervals.monitorElasticsearch)

@@ -1,7 +1,7 @@
 
 const uuidv4 = require('uuid/v4')
 
-const {observations} = require('../../commons/constants')
+const {observations, subsystems} = require('../../commons/constants')
 const facts = require('../../commons/facts')
 
 /**

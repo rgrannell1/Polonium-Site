@@ -71,12 +71,14 @@ const configureElasticsearch = async () => {
   })
 }
 
-// new Elasticsearch({host: 'http://localhost:9200'})
-
-const main = async () => {
+/**
+ * start a polonium server instance
+ * @return {Promise} a result promise
+ */
+const startPolonium = async () => {
   await configureElasticsearch()
-//  await startMonitors()
-//  await startServer()
+  await startMonitors()
+  await startServer()
 }
 
-main()
+startPolonium()

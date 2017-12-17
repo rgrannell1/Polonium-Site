@@ -5,7 +5,7 @@
  */
 const logs = () => {
   return {
-    template: 'logs-*',
+    index_patterns: ['logs-*'],
     settings: {
       number_of_shards: 1
     },

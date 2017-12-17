@@ -29,4 +29,19 @@ constants.observations = {
   }
 }
 
+constants.monitorNames = {
+  elasticsearchHealth: 'elasticsearch-health'
+}
+
+constants.subsystems = {
+  LOGGING: 'logging'
+}
+
+constants.statuses = {
+  FUNCTIONAL: 'ok',
+  NOT_FUNCTIONAL: 'not_functional',
+  IMPARED: 'impared'
+
+}
+
 module.exports = constants
