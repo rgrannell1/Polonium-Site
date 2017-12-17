@@ -2,11 +2,20 @@
 const bunyan = require('bunyan')
 const constants = require('./constants')
 const stream = require('stream')
-const elasticsearch = require('elasticsearch')
-const moment = require('moment')
+const Elasticsearch = require('@rgrannell1/utils').elasticsearch
 
+/**
+ *
+ * @param {object} config supplied configuration.
+ * @param {string} config.host the protocol+domain+port to connect to.
+ *
+ * @return {Writeable} a writeable stream.
+ *
+ */
 const logStream = ({host}) => {
-  const client = new elasticsearch.Client({host, log: null})
+  const client = new Elasticsearch({
+    host: 'http://localhost:9200'
+  })
 
   return new stream.Writable({
     objectMode: true,
@@ -26,6 +35,12 @@ const logStream = ({host}) => {
 
 const logging = {}
 
+/**
+ * create a stdout + elasticsearch logger.
+ *
+ * @return {bunyanLogger} a logger instance.
+ *
+ */
 logging.logger = () => {
   return bunyan.createLogger({
     name: constants.appName,
@@ -38,10 +53,6 @@ logging.logger = () => {
         stream: logStream({host: 'localhost:9200'}).on('error', err => {
           console.error(err)
         })
-      },
-      {
-        level: bunyan.TRACE,
-        path: constants.paths.logs
       }
     ]
   })

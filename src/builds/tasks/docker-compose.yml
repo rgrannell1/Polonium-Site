@@ -1,21 +1,15 @@
 version: "2"
 services:
   polonium_server:
+    container_name: polonium_server
     image: rgrannell1/polonium_site
-
-#  polonium_kibana:
-#    image: docker.elastic.co/kibana/kibana:6.1.0
-#    depends_on:
-#      - polonium_elasticsearch
-#      - polonium_server
-#    environment:
-#      - ELASTICSEARCH_URL=http://localhost:9200
-#      - server.host=localhost
-#      - elasticsearch.username=
-#      - elasticsearch.password=
+    ports:
+      - 80:8080
+      - 443:8081
 
   polonium_elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
+    container_name: polonium_elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.0
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - discovery.zen.minimum_master_nodes=1

@@ -46,4 +46,8 @@ entities.Event = config => {
   return config
 }
 
+entities.MonitorStatus = config => {
+  return config
+}
+
 module.exports = entities

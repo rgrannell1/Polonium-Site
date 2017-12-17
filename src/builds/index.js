@@ -34,16 +34,16 @@ builds.deployRemoteServer = new Build({
     tasks.build.setupDeploymentDatabase,
     tasks.build.cleanDistFolder,
     tasks.build.buildDistFolder,
-    tasks.server.createVM
-//    tasks.server.setupVM,
-//    tasks.security.getCerts,
-//    tasks.build.cleanDistFolder,
-//    tasks.build.buildDistFolder,
-//    tasks.docker.buildImage,
-//    tasks.docker.login,
-//    tasks.docker.publishImage,
+    tasks.server.createVM,
+    tasks.server.setupVM,
+    tasks.security.getCerts,
+    tasks.build.cleanDistFolder,
+    tasks.build.buildDistFolder,
+    tasks.docker.buildImage,
+    tasks.docker.login,
+    tasks.docker.publishImage
 //    tasks.server.startServer,
-//    tasks.test.postDeployment
+  //  tasks.test.postDeployment
   ]
 })
 

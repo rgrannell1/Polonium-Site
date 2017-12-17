@@ -11,8 +11,11 @@ const routers = require('../routers')
 const entities = require('../commons/entities')
 const config = require('config')
 const facts = require('../commons/facts')
+const monitors = require('../monitors')
+const Elasticsearch = require('@rgrannell1/utils').elasticsearch
+const templates = require('../templates')
 
-function run () {
+const startServer = () => {
   const apps = {
     http: new Koa(),
     https: new Koa()
@@ -56,4 +59,24 @@ function run () {
   })
 }
 
-run()
+const startMonitors = async () => {
+  monitors.elasticsearch()
+}
+
+const configureElasticsearch = async () => {
+  const client = new Elasticsearch({host: 'http://localhost:9200'})
+  client.setDynamicMapping({
+    name: 'logs',
+    body: templates.logs()
+  })
+}
+
+// new Elasticsearch({host: 'http://localhost:9200'})
+
+const main = async () => {
+  await configureElasticsearch()
+//  await startMonitors()
+//  await startServer()
+}
+
+main()
