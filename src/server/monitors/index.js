@@ -1,4 +1,5 @@
 
 module.exports = {
-  elasticsearch: require('./elasticsearch')
+  elasticsearch: require('./elasticsearch'),
+  resources: require('./resources')
 }

@@ -61,6 +61,7 @@ const startServer = () => {
 
 const startMonitors = async () => {
   monitors.elasticsearch()
+  monitors.resources()
 }
 
 const configureElasticsearch = async () => {
