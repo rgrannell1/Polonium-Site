@@ -5,9 +5,14 @@ const constants = require('../commons/constants')
 
 const monitorResources = () => {
   const pid = setInterval(async () => {
+    const usage = process.memoryUsage()
     facts.note(entities.MonitorStatus({
       ctx: {
-        memory: process.memoryUsage()
+        memory: {
+          heapTotalMB: usage.heapTotal / 1e6,
+          heapUsedMB: usage.heapUsed / 1e6,
+          externalMB: usage.external / 1e6
+        }
       }
     }))
   }, 5000)
