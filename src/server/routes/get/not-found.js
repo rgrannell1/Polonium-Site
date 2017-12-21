@@ -33,7 +33,9 @@ pages.outline = () => {
  */
 module.exports = async (ctx, next) => {
   if (httpResponses.is.NotFound(ctx)) {
-    ctx.body = await render(pages.outline())
+    Object.assign(ctx, httpResponses.NotFound({
+      body: await render(pages.outline())
+    }))
   }
 
   next()

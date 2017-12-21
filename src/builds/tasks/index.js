@@ -199,6 +199,18 @@ tasks.server.runLocalServer = new Task({
   }
 })
 
+tasks.server.runLocalInfrastructure = new Task({
+  title: 'Run Polonium & surrounding servers locally',
+  run: () => {
+    const child = spawn('docker-compose', ['--file', `${PROJECT_PATH}/src/builds/tasks/docker-compose.yml`, 'up'])
+    child.stdout.pipe(process.stdout)
+    child.stderr.pipe(process.stderr)
+    child.on('exit', (code, signal) => {
+      console.log(`exited with code ${code} & signal ${signal}`)
+    })
+  }
+})
+
 tasks.server.createVM = new Task({
   title: 'Setup a VM',
   run: async () => {

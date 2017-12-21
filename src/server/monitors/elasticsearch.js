@@ -12,7 +12,7 @@ const constants = require('../commons/constants')
 const monitorElasticsearch = () => {
   const pid = setInterval(async () => {
     const client = new Elasticsearch({
-      host: 'http://localhost:9200'
+      host: 'http://polonium_elasticsearch:9200'
     })
     try {
       const status = await client.health()

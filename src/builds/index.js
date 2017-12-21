@@ -25,6 +25,13 @@ builds.runLocalServer = new Build({
   ]
 })
 
+builds.runLocalInfrastructure = new Build({
+  title: 'Run infrastructure locally',
+  tasks: [
+    tasks.server.runLocalInfrastructure
+  ]
+})
+
 /**
  * Deploy a server to DigitalOcean.
  */
@@ -47,11 +54,36 @@ builds.deployRemoteServer = new Build({
   ]
 })
 
+builds.publishServerImage = new Build({
+  title: 'Deploy to DigitalOcean',
+  tasks: [
+    tasks.build.setupDeploymentDatabase,
+    tasks.build.cleanDistFolder,
+    tasks.build.buildDistFolder,
+    tasks.server.createVM,
+    tasks.server.setupVM,
+    tasks.security.getCerts,
+    tasks.build.cleanDistFolder,
+    tasks.build.buildDistFolder,
+    tasks.docker.buildImage,
+    tasks.docker.login,
+    tasks.docker.publishImage
+  ]
+})
+
 builds.deployElasticSearch = new Build({
   title: 'Deploy ElasticSearch instance',
   tasks: [
     tasks.docker.buildElasticSearchImage,
     tasks.docker.publishElasticSearchImage
+  ]
+})
+
+builds.deployLocalInfrastructure = new Build({
+  title: 'Deploy to DigitalOcean',
+  tasks: [
+    builds.publishServerImage,
+    builds.deployElasticSearch
   ]
 })
 

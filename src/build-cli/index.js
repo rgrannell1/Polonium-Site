@@ -22,11 +22,16 @@ cli.deploy = {
 
 cli.run = {
   'depcheck': builds.runDepcheck,
-  'local-server': builds.runLocalServer
+  'local-server': builds.runLocalServer,
+  'local-infrastructure': builds.runLocalInfrastructure
 }
 
 cli.get = {
   'ssl-certificate': builds.fetchSSLCertificate
+}
+
+cli.publish = {
+  'images': builds.deployLocalInfrastructure
 }
 
 module.exports = cli

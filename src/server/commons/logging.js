@@ -14,7 +14,7 @@ const Elasticsearch = require('@rgrannell1/utils').elasticsearch
  */
 const logStream = ({host}) => {
   const client = new Elasticsearch({
-    host: 'http://localhost:9200'
+    host: 'http://polonium_elasticsearch:9200'
   })
 
   return new stream.Writable({
