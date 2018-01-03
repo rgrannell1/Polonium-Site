@@ -387,8 +387,11 @@ tasks.test.checkAccess = new Task({
   title: 'Check the site is accessible',
   run: async () => {
     deps.check([
+      new deps.Domain({
+        host: `${config.get('vm.subDomain')}.${config.get('vm.domain')}`
+      }),
       new deps.HttpResponse({
-        url: `${config.get('vm.subDomain')}.${config.get('vm.domain')}`
+        url: `https://${config.get('vm.subDomain')}.${config.get('vm.domain')}`
       })
     ])
   }

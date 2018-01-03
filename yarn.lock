@@ -4,7 +4,7 @@
 
 "@rgrannell1/utils@github:rgrannell1/utils":
   version "1.0.0"
-  resolved "https://codeload.github.com/rgrannell1/utils/tar.gz/7eb52ec92c0f4edb54b8fdfd8f5a072aa0e5c1f0"
+  resolved "https://codeload.github.com/rgrannell1/utils/tar.gz/29eb541ecb6c9980437e270b26d9770801888896"
   dependencies:
     chalk "^2.3.0"
     cpr "^3.0.1"
