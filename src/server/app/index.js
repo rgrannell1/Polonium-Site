@@ -1,6 +1,11 @@
 
 'use strict'
 
+const apm = require('elastic-apm-node').start({
+  appName: 'polonium',
+  serverUrl: 'http://polonium_apm:8200'
+})
+
 const utils = require('@rgrannell1/utils')
 const fs = require('fs')
 const Koa = require('koa')

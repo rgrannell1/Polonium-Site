@@ -2,18 +2,16 @@
 const {Build, Task} = require('../../build-framework')
 const utils = require('@rgrannell1/utils')
 const DigitalOcean = require('@rgrannell1/utils').digitalOcean
+const deps = require('@rgrannell1/utils').dependencies
 const minify = require('../../utils/minify')
 const chalk = require('chalk')
 const exec = require('execa')
 const spawn = require('child_process').spawn
-const puppeteer = require('puppeteer')
-const postDeploymentTests = require('../../../tests/post-deployment-test')
 const Database = require('better-sqlite3')
 
 const path = require('path')
 const config = require('config')
 const ansible = require('../../utils/ansible')
-const deps = require('../../utils/dependencies')
 const constants = require('../constants')
 
 const PROJECT_PATH = path.join(__dirname, '../../..')
@@ -51,6 +49,10 @@ function dockerBuild (dockerFile, imageName) {
     // -- load, then save
 
       const tpath = await utils.fs.writeTmpFile(dockerFile, __dirname)
+
+      await deps.check([
+        new deps.Path({path: tpath})
+      ])
 
       const cmd = `docker build -t ${imageName}:latest -f ${tpath} .`
       const result = exec.shell(cmd)
@@ -242,6 +244,10 @@ tasks.server.createVM = new Task({
 tasks.server.setupVM = new Task({
   title: 'Install software on the VM',
   run: async () => {
+    await deps.check([
+      new deps.Path({path: constants.paths.ansible.setupVm})
+    ])
+
     return ansible.runPlaybook(constants.paths.ansible.setupVm)
   }
 })
@@ -249,6 +255,10 @@ tasks.server.setupVM = new Task({
 tasks.server.startServer = new Task({
   title: 'Start Polonium on the remote server',
   run: async () => {
+    await deps.check([
+      new deps.Path({path: constants.paths.ansible.startServer})
+    ])
+
     return ansible.runPlaybook(constants.paths.ansible.startServer)
   }
 })
@@ -334,6 +344,10 @@ tasks.build.minifyJS = new Task({
 tasks.build.createWebPackArtifacts = new Task({
   title: 'Create WebPack artifacts',
   run: async () => {
+    deps.check([
+      new deps.Path({path: constants.bin.webpack})
+    ])
+
     return Promise.all([
       exec.shell(`${constants.bin.webpack} --config webpack/webpack.config.js`),
       exec.shell(`${constants.bin.webpack} --config webpack/webpack-service-worker.config.js`),
@@ -369,9 +383,21 @@ tasks.test.checkSSL = new Task({
   }
 })
 
+tasks.test.checkAccess = new Task({
+  title: 'Check the site is accessible',
+  run: async () => {
+    deps.check([
+      new deps.HttpResponse({
+        url: `${config.get('vm.subDomain')}.${config.get('vm.domain')}`
+      })
+    ])
+  }
+})
+
 tasks.test.postDeployment = new Build({
   title: 'Test that the website is superficially working',
   tasks: [
+    tasks.test.checkAccess,
     tasks.test.checkSSL
   ]
 })
@@ -384,14 +410,3 @@ tasks.build.setupDeploymentDatabase = new Task({
 })
 
 module.exports = tasks
-
-/*
-const chrome = await puppeteer.launch({headless: true})
-const page = await chrome.newPage()
-await page.goto(`https://polonium.rgrannell.world/#!/`)
-
-const capturer = new utils.browser.ScreenCapture({page})
-const screenshot = await capturer.capture()
-*/
-
-/// utils.browser.ScreenCapture.compare(1, 2)

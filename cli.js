@@ -4,6 +4,8 @@ const neodoc = require('neodoc')
 const cli = require('./src/build-cli')
 const handlers = require('@rgrannell1/utils').handlers
 
+process.env.NODE_CONFIG_STRICT_MODE = true
+
 process.on('unhandledRejection', err => {
   throw err
 })

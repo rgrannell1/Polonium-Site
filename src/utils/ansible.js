@@ -13,7 +13,7 @@ const ansible = {}
 
 async function runPlaybook (ansiblePlaybook) {
   return exec.shell(`export ANSIBLE_CONFIG="${constants.paths.ansibleCfg}" && ansible-playbook --inventory "${constants.paths.ansibleInventory}" "${ansiblePlaybook}"`).then(result => {
-    // console.log(result.stdout)
+    console.log(result.stdout)
   })
 }
 

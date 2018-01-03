@@ -34,4 +34,8 @@ cli.publish = {
   'images': builds.deployLocalInfrastructure
 }
 
+cli.test = {
+  'external-site': builds.testExternalSite
+}
+
 module.exports = cli

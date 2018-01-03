@@ -1,6 +1,5 @@
 
 const events = require('events')
-const util = require('util')
 const {logger} = require('./logging')
 
 const facts = {}

@@ -1,5 +1,6 @@
 version: "2"
 services:
+
   polonium_server:
     container_name: polonium_server
     image: rgrannell1/polonium_site
@@ -13,7 +14,7 @@ services:
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - discovery.zen.minimum_master_nodes=1
-      - cluster.name=poloinum-logs
+      - cluster.name=polonuim-logs
       - cluster.routing.allocation.disk.watermark.low=2gb
       - cluster.routing.allocation.disk.watermark.high=2gb
       - cluster.routing.allocation.disk.watermark.flood_stage=2gb
@@ -23,6 +24,14 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
+
+  polonium_apm:
+    container_name: polonium_apm
+    image: docker.elastic.co/apm/apm-server:6.1.1
+    links:
+      - polonium_elasticsearch
+    environment:
+      ELASTICSEARCH_URL: http://polonium_elasticsearch:9200
 
   polonium_kibana:
     container_name: polonium_kibana

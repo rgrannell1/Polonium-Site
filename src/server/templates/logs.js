@@ -14,9 +14,7 @@ const logs = () => {
         _source: {
           enabled: true
         },
-        properties: {
-
-        }
+        properties: { }
       }
     }
   }

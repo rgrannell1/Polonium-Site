@@ -104,4 +104,11 @@ builds.runDepcheck = new Build({
   tasks: []
 })
 
+builds.testExternalSite = new Build({
+  title: 'test external site',
+  tasks: [
+    tasks.test.postDeployment
+  ]
+})
+
 module.exports = builds
