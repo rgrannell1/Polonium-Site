@@ -1,4 +1,5 @@
 
+const config = require('config')
 const bunyan = require('bunyan')
 const constants = require('./constants')
 const stream = require('stream')
@@ -13,9 +14,7 @@ const Elasticsearch = require('@rgrannell1/utils').elasticsearch
  *
  */
 const logStream = ({host}) => {
-  const client = new Elasticsearch({
-    host: 'http://polonium_elasticsearch:9200'
-  })
+  const client = new Elasticsearch({host})
 
   return new stream.Writable({
     objectMode: true,
@@ -23,12 +22,14 @@ const logStream = ({host}) => {
       const body = Object.assign({time: Date.now()}, JSON.parse(log))
       const index = 'logs'
 
-      client.index({index, type: 'logs', body}, (err, res) => {
-        if (err) {
+      client.index({index, type: 'logs', body})
+        .then(() => {
+          next()
+        })
+        .catch(err => {
           this.emit('error', err)
-        }
-        next()
-      })
+          next()
+        })
     }
   })
 }
@@ -50,9 +51,10 @@ logging.logger = () => {
         stream: process.stdout
       },
       {
-        stream: logStream({host: 'localhost:9200'}).on('error', err => {
-          console.error(err)
-        })
+        stream: logStream({host: config.get('elasticsearch.url')})
+          .on('error', err => {
+            console.error(err)
+          })
       }
     ]
   })

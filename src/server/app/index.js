@@ -2,6 +2,21 @@
 'use strict'
 
 const config = require('config')
+const chalk = require('chalk')
+
+const displayStartupMessage = () => {
+  const app = chalk.underline.green('\nPolonium:')
+  const summary = {
+    nodeEnv: process.env.NODE_ENV,
+    elasticsearchUrl: config.get('elasticsearch.url')
+  }
+
+  console.log(`${app} Server Starting.`)
+  console.log(`${app} ${JSON.stringify(summary, null, 2)}`)
+}
+
+displayStartupMessage()
+
 const apm = require('elastic-apm-node').start({
   appName: 'polonium',
   serverUrl: config.get('elasticsearch.url')

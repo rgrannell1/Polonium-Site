@@ -55,7 +55,7 @@ builds.deployRemoteServer = new Build({
 })
 
 builds.publishServerImage = new Build({
-  title: 'Deploy to DigitalOcean',
+  title: 'Publish Docker Images',
   tasks: [
     tasks.build.setupDeploymentDatabase,
     tasks.build.cleanDistFolder,

@@ -267,7 +267,7 @@ tasks.server.startServer = new Task({
  *
  */
 
-tasks.security.publishSSHCert = new Task({
+tasks.security.kbhSSHCert = new Task({
   title: 'Publish an SSH certificate to DigitalOcean',
   run: async () => {
     await exec.shell(``)
@@ -361,7 +361,7 @@ tasks.build.buildDistFolder = new Build({
   tasks: [
     tasks.security.addSSHCert,
     tasks.security.addLocalSSLCert,
-    tasks.security.publishSSHCert,
+//    tasks.security.publishSSHCert,
     tasks.build.copyStaticFiles,
     tasks.security.addLocalSSLCert,
     tasks.build.minifyCss,

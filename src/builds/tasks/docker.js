@@ -35,7 +35,7 @@ const poloniumServer = (env, local = false) => {
       'npm install --global yarn'
     ]),
 
-    ADD('dist /usr/local/app/dist'),
+    ADD(['dist'], '/usr/local/app/dist'),
     WORKDIR('/usr/local/app'),
 
     RUN([
@@ -44,7 +44,7 @@ const poloniumServer = (env, local = false) => {
       'mkdir /etc/letsencrypt/archive/polonium.rgrannell.world -p'
     ]),
 
-    COPY('config/credentials/certs /etc/letsencrypt/archive/polonium.rgrannell.world'),
+    COPY('config/credentials/certs', '/etc/letsencrypt/archive/polonium.rgrannell.world'),
 
     HEALTHCHECK({
       interval: '1m',
