@@ -13,7 +13,7 @@ const {
   WORKDIR
 } = require('@rgrannell1/utils').docker
 
-const poloniumServer = env => {
+const poloniumServer = (env, local = false) => {
   return FILE([
     FROM('ubuntu'),
     LABEL({

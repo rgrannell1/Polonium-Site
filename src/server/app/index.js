@@ -1,9 +1,10 @@
 
 'use strict'
 
+const config = require('config')
 const apm = require('elastic-apm-node').start({
   appName: 'polonium',
-  serverUrl: 'http://polonium_apm:8200'
+  serverUrl: config.get('elasticsearch.url')
 })
 
 const utils = require('@rgrannell1/utils')
@@ -14,7 +15,6 @@ const constants = require('../commons/constants')
 const {observations} = require('../commons/constants')
 const routers = require('../routers')
 const entities = require('../commons/entities')
-const config = require('config')
 const facts = require('../commons/facts')
 const monitors = require('../monitors')
 const Elasticsearch = require('@rgrannell1/utils').elasticsearch
@@ -70,7 +70,7 @@ const startMonitors = async () => {
 }
 
 const configureElasticsearch = async () => {
-  const client = new Elasticsearch({host: 'http://localhost:9200'})
+  const client = new Elasticsearch({host: config.get('elasticsearch.url')})
   client.setDynamicMapping({
     name: 'logs',
     body: templates.logs()

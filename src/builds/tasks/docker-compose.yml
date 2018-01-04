@@ -4,6 +4,8 @@ services:
   polonium_server:
     container_name: polonium_server
     image: rgrannell1/polonium_site
+    environment:
+      ELASTICSEARCH_URL: http://polonium_elasticsearch:9200
     ports:
       - 80:8080
       - 443:8081

@@ -11,5 +11,8 @@ module.exports = {
     password: credentials.dockerPassword,
     imageName: 'polonium_site',
     elasticsearchImageName: 'polonium_elasticsearch'
+  },
+  elasticsearch: {
+    url: process.env.ELASTICSEARCH_URL || 'http://localhost:9200'
   }
 }
