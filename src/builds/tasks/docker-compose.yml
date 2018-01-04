@@ -31,7 +31,9 @@ services:
     links:
       - polonium_elasticsearch
     environment:
+    environment:
       ELASTICSEARCH_URL: http://polonium_elasticsearch:9200
+    command: apm-server -e -E output.elasticsearch.hosts=$${ELASTICSEARCH_URL}
 
   polonium_kibana:
     container_name: polonium_kibana
