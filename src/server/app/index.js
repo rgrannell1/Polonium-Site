@@ -19,7 +19,7 @@ displayStartupMessage()
 
 const apm = require('elastic-apm-node').start({
   appName: 'polonium',
-  serverUrl: config.get('elasticsearch.url')
+  serverUrl: config.get('apm.url')
 })
 
 const utils = require('@rgrannell1/utils')

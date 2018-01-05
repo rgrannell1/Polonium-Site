@@ -14,5 +14,8 @@ module.exports = {
   },
   elasticsearch: {
     url: process.env.ELASTICSEARCH_URL || 'http://localhost:9200'
+  },
+  apm: {
+    url: process.env.APM_URL || 'http://localhost:8200'
   }
 }

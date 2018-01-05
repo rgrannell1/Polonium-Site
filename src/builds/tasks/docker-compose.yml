@@ -8,6 +8,7 @@ services:
       - polonium_elasticsearch
     environment:
       ELASTICSEARCH_URL: http://polonium_elasticsearch:9200
+      APM_URL: http://polonium_apm:8200
     ports:
       - 80:8080
       - 443:8081

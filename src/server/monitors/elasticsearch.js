@@ -15,19 +15,19 @@ const monitorElasticsearch = () => {
       host: 'http://polonium_elasticsearch:9200'
     })
     try {
-      const status = await client.health()
+      const clusterHealth = await client.health()
       let statusDescription = ''
 
-      if (status.status === 'green') {
+      if (clusterHealth.status === 'green') {
         statusDescription = constants.statuses.FUNCTIONAL
-      } else if (status.status === 'yellow') {
+      } else if (clusterHealth.status === 'yellow') {
         statusDescription = constants.statuses.IMPARED
-      } else if (status.status === 'red') {
+      } else if (clusterHealth.status === 'red') {
         statusDescription = constants.statuses.NOT_FUNCTIONAL
       }
 
       facts.note(entities.MonitorStatus({
-        ctx: {status},
+        ctx: {clusterHealth},
         name: constants.monitorNames.elasticsearchHealth,
         status: statusDescription
       }))
