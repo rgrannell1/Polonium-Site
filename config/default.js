@@ -13,7 +13,8 @@ module.exports = {
     elasticsearchImageName: 'polonium_elasticsearch'
   },
   elasticsearch: {
-    url: process.env.ELASTICSEARCH_URL || 'http://localhost:9200'
+    url: process.env.ELASTICSEARCH_URL || 'http://localhost:9200',
+    index: 'logs'
   },
   apm: {
     url: process.env.APM_URL || 'http://localhost:8200'

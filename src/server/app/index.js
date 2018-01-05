@@ -22,7 +22,6 @@ const apm = require('elastic-apm-node').start({
   serverUrl: config.get('apm.url')
 })
 
-const utils = require('@rgrannell1/utils')
 const fs = require('fs')
 const Koa = require('koa')
 const http2 = require('http2')
@@ -79,15 +78,25 @@ const startServer = () => {
   })
 }
 
+/**
+ * start system and dependency monitoring.
+ *
+ * @return {undefined}
+ */
 const startMonitors = async () => {
   monitors.elasticsearch()
   monitors.resources()
 }
 
+/**
+ * set up ElasticSearch server
+ *
+ * @return {undefined}
+ */
 const configureElasticsearch = async () => {
   const client = new Elasticsearch({host: config.get('elasticsearch.url')})
   client.setDynamicMapping({
-    name: 'logs',
+    name: config.get('elasticsearch.index'),
     body: templates.logs()
   })
 }

@@ -1,12 +1,10 @@
 
-'use strict'
-
 const m = require('mithril')
 
-const about = {
-  view: () => {
-    return m('p', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+module.exports = state => {
+  return {
+    view: () => {
+      return m('p', 'fooooooooooo')
+    }
   }
 }
-
-module.exports = about

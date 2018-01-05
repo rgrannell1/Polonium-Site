@@ -299,20 +299,19 @@ tasks.build.copyStaticFiles = new Task({
       utils.fs.mkdir(`${DIST_PATH}/client/css`),
       utils.fs.mkdir(`${DIST_PATH}/client/fonts`),
       utils.fs.mkdir(`${DIST_PATH}/client/core`),
+      utils.fs.mkdir(`${DIST_PATH}/client/icons`),
       utils.fs.mkdir(`${DIST_PATH}/server`)
     ])
 
     await Promise.all([
       utils.fs.copyDir(`${CLIENT_PATH}/fonts`, `${DIST_PATH}/client/fonts`),
       utils.fs.copyDir(`${CLIENT_PATH}/css`, `${DIST_PATH}/client/css`),
+      utils.fs.copyDir(`${CLIENT_PATH}/icons`, `${DIST_PATH}/client/icons`),
       utils.fs.copyDir(`${CLIENT_PATH}/core`, `${DIST_PATH}/client/core`),
       utils.fs.copyDir(`${PROJECT_PATH}/src/server`, `${DIST_PATH}/server`),
       utils.fs.copyDir(`${PROJECT_PATH}/config`, `${DIST_PATH}/config`),
       utils.fs.copy(`${CLIENT_PATH}/templates/index.html`, `${DIST_PATH}/client/index.html`),
       utils.fs.copy(`${CLIENT_PATH}/manifest.json`, `${DIST_PATH}/client/manifest.json`),
-      utils.fs.copy(`${CLIENT_PATH}/favicon.ico`, `${DIST_PATH}/client/favicon.ico`),
-      utils.fs.copy(`${CLIENT_PATH}/icon-256.png`, `${DIST_PATH}/client/icon-256.png`),
-      utils.fs.copy(`${CLIENT_PATH}/icon-512.png`, `${DIST_PATH}/client/icon-512.png`),
       utils.fs.copy(`${PROJECT_PATH}/package.json`, `${DIST_PATH}/package.json`)
     ])
   }

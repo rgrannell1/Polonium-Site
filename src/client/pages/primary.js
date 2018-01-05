@@ -1,4 +1,6 @@
 
+/*
+
 'use strict'
 
 const m = require('mithril')
@@ -38,12 +40,15 @@ view.button.error = vnode => {
 }
 
 const reactions = { }
+ */
 
 /**
  * @param {object} vnode
  *
  * When the password button is pressed, calculate the sub-password.
  */
+/**
+
 reactions.onPasswordSubmit = async vnode => {
   poloniumWorker.postMessage({})
   view.button.active(vnode)
@@ -66,6 +71,7 @@ reactions.onPasswordSubmit = async vnode => {
 
   await Promise.race([onMessage, onTimeout])
 }
+ */
 
 /**
  * @param {object} vnode

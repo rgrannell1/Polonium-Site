@@ -1,15 +1,10 @@
 
-'use strict'
-
 const m = require('mithril')
 
-const settings = {
-  controller: () => {
-    m.redraw.strategy('diff')
-  },
-  view: () => {
-    return m('p', 'xxxxxxxxxxxxx')
+module.exports = state => {
+  return {
+    view: () => {
+      return m('p', 'xxxxxxxxxxxxxx')
+    }
   }
 }
-
-module.exports = settings

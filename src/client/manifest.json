@@ -1,19 +1,19 @@
 {
-	"name":      "Polonium; a stateless password manager",
-	"short_name": "Polonium",
-	"start_url": "/#!/",
-	"display":   "standalone",
-	"background_color": "#5d51d6",
-	"theme_color": "#5d51d6",
-	"description": "stateless password manager",
-	"icons": [
-		{
-			"src": "images/icon-256.png",
-			"sizes": "256x256"
-		},
-		{
-			"src": "images/icon-512.png",
-			"sizes": "512x512"
-		}
-	]
+  "name":      "Polonium; a stateless password manager",
+  "short_name": "Polonium",
+  "start_url": "/#!/",
+  "display":   "standalone",
+  "background_color": "#5d51d6",
+  "theme_color": "#5d51d6",
+  "description": "stateless password manager",
+  "icons": [
+    {
+      "src": "icons/icon-256.png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512"
+    }
+  ]
 }

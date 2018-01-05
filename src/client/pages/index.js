@@ -1,8 +1,12 @@
 
 'use strict'
 
+const primary = require('./primary-new')
+const settings = require('./settings')
+const about = require('./about')
+
 module.exports = {
-  '/': require('./primary'),
-  '/about': require('./about'),
-  '/settings': require('./settings')
+  '/': primary({ }),
+  '/about': about(),
+  '/settings': settings()
 }
